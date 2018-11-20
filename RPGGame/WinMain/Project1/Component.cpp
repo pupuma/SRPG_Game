@@ -9,6 +9,7 @@ Component::Component(std::string _name)
 
 	name = _name;
 	COMSYS->AddComponent(name, this);
+	tilePosition = { 0,0 };
 }
 
 

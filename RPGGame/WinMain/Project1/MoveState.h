@@ -7,5 +7,11 @@ class MoveState
 public:
 	MoveState(Character* _character);
 	~MoveState();
+public:
+	void Start();
+	void Stop();
+	void Update();
+
+	void UpdateMove();
 };
 

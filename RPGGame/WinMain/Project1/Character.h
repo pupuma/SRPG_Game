@@ -17,18 +17,25 @@ class Action;
 
 class Character : public Component
 {
-private:
+protected:
+	bool isMoving;
+	bool isLive;
+	
+	int iMaxMoving;
+	eStateType eType;
+	eDirection nextDirection;
+
+protected:
 	State* state;
 	std::map<eStateType, State*> stateMap;
-
-private:
+protected:
 	Image* img;
 	Action* act;
 public:
 	Character(std::string _name);
 	~Character();
 public:
-	bool Init();
+	bool Init( );
 	void Deinit();
 	void Update();
 	void Render(HDC hdc);
@@ -39,5 +46,19 @@ public:
 	virtual void InitState();
 public:
 	void ChangeState(eStateType stateType);
-
+public:
+	void UpdateAI();
+public:
+	void MoveStart(TilePoint newTilePosition);
+	void MoveStop();
+	bool IsMoving();
+	bool IsLive();
+public:
+	int GetMaxMoving() { return iMaxMoving; }
+	State* GetState() { return state; }
+public:
+#if defined(_DEBUG_TEST)
+	void SetStateType(eStateType _type) { eType = _type; }
+	eStateType GetType() { return eType; }
+#endif // StateTYpe Render Test 
 };

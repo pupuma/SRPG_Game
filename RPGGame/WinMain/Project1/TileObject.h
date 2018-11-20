@@ -2,8 +2,12 @@
 class TileObject
 	: public Component
 {
+private:
+	Image* image;
+	int tileX;
+	int tileY;
 public:
-	TileObject(std::string _name);
+	TileObject(std::string _name, Image* _image, int _tileX, int _tileY);
 	~TileObject();
 public:
 	bool Init();

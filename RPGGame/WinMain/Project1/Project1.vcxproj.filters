@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -70,9 +66,6 @@
     <Filter Include="MainGame\01.Scene">
       <UniqueIdentifier>{e4240f4f-d89f-474e-a347-1b6ab6e73c41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\01.Scene\Test">
-      <UniqueIdentifier>{eec867cc-dd17-44ae-a34e-432bc88ceace}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\02.GameObject">
       <UniqueIdentifier>{107438f2-915b-4300-b39c-50d8dc5e03dd}</UniqueIdentifier>
     </Filter>
@@ -87,6 +80,22 @@
     </Filter>
     <Filter Include="MainGame\02.GameObject\Tile">
       <UniqueIdentifier>{32bbf10e-f198-47d3-a55b-5acf59d6b66f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Test">
+      <UniqueIdentifier>{b000849e-854d-4192-b766-47f2c6d2141a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="MainGame\UI">
+      <UniqueIdentifier>{f9150919-652b-4fe3-88b5-8cba45117330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\03.Func">
+      <UniqueIdentifier>{cb69fc13-bfe1-4ff7-b09c-fb0d68d09213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\02.GameObject\Viewer">
+      <UniqueIdentifier>{161484d8-c5a7-41ef-b9d2-e8f3bf1cd1b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +177,6 @@
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\02.GameObject\Character</Filter>
     </ClCompile>
-    <ClCompile Include="BattleSceneTest.cpp">
-      <Filter>MainGame\01.Scene\Test</Filter>
-    </ClCompile>
     <ClCompile Include="State.cpp">
       <Filter>2DFrameWork\State</Filter>
     </ClCompile>
@@ -189,14 +195,26 @@
     <ClCompile Include="MoveState.cpp">
       <Filter>2DFrameWork\State</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>2DFrameWork\MapTool</Filter>
-    </ClCompile>
     <ClCompile Include="TileObject.cpp">
       <Filter>MainGame\02.GameObject\Tile</Filter>
     </ClCompile>
     <ClCompile Include="TileCell.cpp">
       <Filter>MainGame\02.GameObject\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleSceneTest.cpp">
+      <Filter>00.Test</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>2DFrameWork\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MainGame\02.GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>MainGame\02.GameObject\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer.cpp">
+      <Filter>MainGame\02.GameObject\Viewer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +302,6 @@
     <ClInclude Include="Action.h">
       <Filter>2DFrameWork\Action</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>2DFrameWork\Component</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentMessage.h">
       <Filter>2DFrameWork\Component</Filter>
     </ClInclude>
@@ -295,9 +310,6 @@
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\02.GameObject\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleSceneTest.h">
-      <Filter>MainGame\01.Scene\Test</Filter>
     </ClInclude>
     <ClInclude Include="State.h">
       <Filter>2DFrameWork\State</Filter>
@@ -317,14 +329,29 @@
     <ClInclude Include="MoveState.h">
       <Filter>2DFrameWork\State</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>2DFrameWork\MapTool</Filter>
-    </ClInclude>
     <ClInclude Include="TileObject.h">
       <Filter>MainGame\02.GameObject\Tile</Filter>
     </ClInclude>
     <ClInclude Include="TileCell.h">
       <Filter>MainGame\02.GameObject\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleSceneTest.h">
+      <Filter>00.Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>2DFrameWork\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>2DFrameWork\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MainGame\02.GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>MainGame\02.GameObject\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer.h">
+      <Filter>MainGame\02.GameObject\Viewer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

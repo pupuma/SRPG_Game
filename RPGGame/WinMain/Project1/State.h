@@ -2,13 +2,29 @@
 
 enum eStateType;
 class Character;
+class TileCell;
 
 
 class State
 {
 protected:
+	typedef struct tagTileInfo
+	{
+		TileCell* tile;
+		Image* tileImg;
+	}TileInfo;
+
+	TileInfo tileInfo;
+
+protected:
+	int distSize;
+
+
+protected:
 	Character* character;
 	eStateType nextState;
+protected:
+	std::list<TileInfo> tileCellOpenList;
 public:
 	State(Character* _character);
 	virtual ~State();
@@ -20,6 +36,11 @@ public:
 
 	virtual void Release();
 	virtual void Reset();
+public:
+	void PathFindingIdle();
+	void PathFindingMove();
+	void MovingAbleTile(int _distSize, TilePoint _prevPos);
+
 public:
 	void ChangeState(eStateType _nextState) { nextState = _nextState; }
 };

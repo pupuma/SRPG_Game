@@ -1,6 +1,9 @@
 #pragma once
 
 #include "State.h"
+
+class Character;
+
 class IdleState
 	: public State
 {
@@ -10,5 +13,8 @@ public:
 public:
 	void Start();
 	void Update();
+	
+	//
+	void Render(HDC hdc);
 };
 

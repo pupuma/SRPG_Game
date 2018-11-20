@@ -5,6 +5,7 @@
 
 TileCell::TileCell()
 {
+	position = { 0,0 };
 }
 
 
@@ -14,15 +15,24 @@ TileCell::~TileCell()
 
 bool TileCell::Init(int _tileX, int _tileY)
 {
-	return false;
+	tilePostion.x = _tileX;
+	tilePostion.y = _tileY;
+	return true;
 }
 
 void TileCell::Update()
 {
 }
 
-void TileCell::Render()
+void TileCell::Render(HDC hdc)
 {
+	std::list<Component*>::iterator it;
+
+	for (it = componentList.begin(); it != componentList.end(); it++)
+	{
+		(*it)->SetPosition(position);
+		(*it)->Render(hdc);
+	}
 }
 
 void TileCell::Release()

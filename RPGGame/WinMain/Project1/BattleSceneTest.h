@@ -1,13 +1,15 @@
 #pragma once
 
 class Character;
+class Map;
 class BattleSceneTest
 	: public GameNode
 {
 private:
 	std::list<Component*> stageComponentList;
 private:
-	Character* test;
+	Character*	test;
+	Map*		mapTest;
 public:
 	BattleSceneTest();
 	~BattleSceneTest();

@@ -53,7 +53,21 @@ typedef struct _Point
 
 
 //
+typedef struct _TilePoint
+{
+	int x;
+	int y;
+} TilePoint;
 
+//
+enum eDirection
+{
+	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_NONE,
+};
 
 
 // 사용자 정의 타입

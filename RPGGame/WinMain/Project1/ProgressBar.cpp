@@ -12,18 +12,18 @@ ProgressBar::~ProgressBar()
 
 bool ProgressBar::Init(int x, int y, int width, int height)
 {
-	_x = x;
-	_y = y;
+	_x = (float)x;
+	_y = (float)y;
 	
 
-	_rcProgress = RectMake(_x, _y, width, height);
+	_rcProgress = RectMake((int)_x, (int)_y, width, height);
 
 
 	_progressBarTop = IMAGEMANAGER->AddImage(TEXT("FrontBar"), TEXT("../Resource/SpaceShip/hpBarTop.bmp"),
-		_x, _y, width, height, true, COLOR_M);
+		(int)_x, (int)_y, width, height, true, COLOR_M);
 
 	_progressBarBottom = IMAGEMANAGER->AddImage(TEXT("BackBar"), TEXT("../Resource/SpaceShip/hpBarBottom.bmp"),
-		_x, _y, width, height, true, COLOR_M);
+		(int)_x, (int)_y, width, height, true, COLOR_M);
 
 	_width = _progressBarTop->GetWidth();
 
@@ -34,11 +34,11 @@ bool ProgressBar::Init(int x, int y, int width, int height)
 bool ProgressBar::Init(std::string strTop, std::string strBack, int x, int y, int width, int height)
 {
 
-	_x = x;
-	_y = y;
+	_x = (float)x;
+	_y = (float)y;
 
 
-	_rcProgress = RectMake(_x, _y, width, height);
+	_rcProgress = RectMake((int)_x, (int)_y, width, height);
 
 
 	_progressBarTop = IMAGEMANAGER->FindImage(strTop);
@@ -61,7 +61,7 @@ void ProgressBar::Release()
 
 void ProgressBar::Update()
 {
-	_rcProgress = RectMakeCenter(_x, _y, _progressBarTop->GetWidth(), _progressBarTop->GetHeight());
+	_rcProgress = RectMakeCenter((int)_x, (int)_y, _progressBarTop->GetWidth(), _progressBarTop->GetHeight());
 }
 
 void ProgressBar::Render(HDC hdc)

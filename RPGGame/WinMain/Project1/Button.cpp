@@ -19,8 +19,8 @@ bool Button::Init(const std::string imageName, int x, int y, POINT btnDownFrameP
 	_callBackFunc = pFunc;
 	_direction = BUTTONDIR_NONE;
 
-	_x = x;
-	_y = y;
+	_x = (float)x;
+	_y = (float)y;
 
 	_btnDownFramePoint = btnDownFramePoint;
 	_btnUpFramePoint = btnUpFramePoint;
@@ -28,7 +28,7 @@ bool Button::Init(const std::string imageName, int x, int y, POINT btnDownFrameP
 	_imageName = imageName;
 
 	_image = IMAGEMANAGER->FindImage(_imageName);
-	_rc = RectMakeCenter(_x, _y, _image->GetFrameWidth(), _image->GetFrameHeight());
+	_rc = RectMakeCenter((int)_x, (int)_y, _image->GetFrameWidth(), _image->GetFrameHeight());
 
 
 

@@ -11,7 +11,9 @@
 //#define _PIXEL_TEST
 //#define _EFFECT_TEST
 //#define _MOVE_TEST
-#define _MAPTOOL_TEST
+//#define _MAPTOOL_TEST
+#define _DEBUG_TEST
+
 
 #if defined(_UNICODE)
 typedef  std::wstring		tstring;  //std::basic_string<wchar>
@@ -66,3 +68,4 @@ typedef  std::string		tstring;   //std::basic_string<char>
 #define TEXTDATA		TextData::GetSingleton()
 #define ANIMANAGER		AnimationManager::GetSingleton()
 #define COMSYS			ComponentSystem::GetInstance()
+#define	RESOURCEMANAGER	ResourceManager::GetSingleton()
