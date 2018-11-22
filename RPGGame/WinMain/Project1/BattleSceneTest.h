@@ -2,6 +2,7 @@
 
 class Character;
 class Map;
+
 class BattleSceneTest
 	: public GameNode
 {

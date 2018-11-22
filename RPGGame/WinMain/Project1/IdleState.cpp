@@ -2,6 +2,8 @@
 #include "IdleState.h"
 
 #include "Character.h"
+#include "Map.h"
+#include "ComponentSystem.h"
 #include "TileCell.h"
 
 IdleState::IdleState(Character* _character)
@@ -20,7 +22,7 @@ void IdleState::Start()
 
 	// PathFinding
 	{
-		PathFindingIdle();
+		//PathFindingIdle();
 	}
 
 }
@@ -29,20 +31,26 @@ void IdleState::Update()
 {
 	State::Update();
 
-	//
-	if (eStateType::ST_NONE != nextState)
 	{
-		character->ChangeState(nextState);
+		if (eStateType::ST_NONE != nextState)
+		{
+			character->ChangeState(nextState);
 #if defined(_DEBUG_TEST)
-		character->SetStateType(nextState);
+			character->SetStateType(nextState);
 #endif // 
-		return;
+			return;
+		}
 	}
-	character->UpdateAI();
+	//
+
+	
+	//character->UpdateAI();
 }
 
 void IdleState::Render(HDC hdc)
 {
 	State::Render(hdc);
-	
+
+	// 
+
 }

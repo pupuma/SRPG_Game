@@ -97,6 +97,9 @@
     <Filter Include="MainGame\02.GameObject\Viewer">
       <UniqueIdentifier>{161484d8-c5a7-41ef-b9d2-e8f3bf1cd1b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\02.GameObject\Map">
+      <UniqueIdentifier>{771e6ee8-12cf-4f10-9074-a87887c96595}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -211,10 +214,7 @@
       <Filter>MainGame\02.GameObject\Character</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
-      <Filter>MainGame\02.GameObject\Tile</Filter>
-    </ClCompile>
-    <ClCompile Include="Viewer.cpp">
-      <Filter>MainGame\02.GameObject\Viewer</Filter>
+      <Filter>MainGame\02.GameObject\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -348,10 +348,7 @@
       <Filter>MainGame\02.GameObject\Character</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>MainGame\02.GameObject\Tile</Filter>
-    </ClInclude>
-    <ClInclude Include="Viewer.h">
-      <Filter>MainGame\02.GameObject\Viewer</Filter>
+      <Filter>MainGame\02.GameObject\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

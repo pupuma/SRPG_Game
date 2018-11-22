@@ -2,7 +2,8 @@
 
 // 사용자 정의 자료형
 
-
+class TileCell;
+class Image;
 
 enum TERRAIN
 {
@@ -60,6 +61,15 @@ typedef struct _TilePoint
 } TilePoint;
 
 //
+//bool operator==(const TilePoint &a, const TilePoint &b)
+//{
+//	if (a.x == b.y && a.y == b.y)
+//	{
+//		return true;
+//	}
+//	return false;
+//}
+//
 enum eDirection
 {
 	DIR_LEFT,
@@ -68,6 +78,14 @@ enum eDirection
 	DIR_DOWN,
 	DIR_NONE,
 };
+
+//
+
+typedef struct tagTileInfo
+{
+	TileCell* tile;
+	Image* tileImg;
+}TileInfo;
 
 
 // 사용자 정의 타입
@@ -84,4 +102,6 @@ extern HWND			_hWndAvi;
 #if defined(_MOVE_TEST)
 
 # endif //
+
+//
 

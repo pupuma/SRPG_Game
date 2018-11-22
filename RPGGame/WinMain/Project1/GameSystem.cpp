@@ -22,3 +22,13 @@ POINT GameSystem::GetMousePosition()
 {
 	return _ptMouse;
 }
+//
+//void GameSystem::SetMoveTileList(std::list<TileInfo> _moveTileList)
+//{
+//	this->moveTileList = _moveTileList;
+//}
+//
+//std::list<TileInfo> GameSystem::GetMoveTileList()
+//{
+//	return this->moveTileList;
+//}

@@ -21,7 +21,6 @@ protected:
 	bool isMoving;
 	bool isLive;
 	
-	int iMaxMoving;
 	eStateType eType;
 	eDirection nextDirection;
 
@@ -54,7 +53,6 @@ public:
 	bool IsMoving();
 	bool IsLive();
 public:
-	int GetMaxMoving() { return iMaxMoving; }
 	State* GetState() { return state; }
 public:
 #if defined(_DEBUG_TEST)

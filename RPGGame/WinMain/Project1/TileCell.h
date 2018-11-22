@@ -3,8 +3,9 @@ class TileCell
 {
 private:
 	POINT position;
-	POINT tilePostion;
-
+	TilePoint tilePostion;
+	bool _pathfindingSearch;
+	float deep;
 private:
 	std::list<Component*> componentList;
 public:
@@ -24,5 +25,9 @@ public:
 public:
 	void SetPosition(POINT _pos) { position = _pos; }
 	POINT GetPosition() { return position; }
+	TilePoint GetTilePosition() { return tilePostion; }
+
+	bool IsSearchPathfinding() { return _pathfindingSearch; }
+	void SetSearchPathfinding(bool _search) { _pathfindingSearch = _search; }
 };
 

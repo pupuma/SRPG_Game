@@ -8,14 +8,7 @@ class TileCell;
 class State
 {
 protected:
-	typedef struct tagTileInfo
-	{
-		TileCell* tile;
-		Image* tileImg;
-	}TileInfo;
-
 	TileInfo tileInfo;
-
 protected:
 	int distSize;
 
@@ -25,6 +18,7 @@ protected:
 	eStateType nextState;
 protected:
 	std::list<TileInfo> tileCellOpenList;
+	std::list<Image*> moveTileList;
 public:
 	State(Character* _character);
 	virtual ~State();
@@ -37,11 +31,13 @@ public:
 	virtual void Release();
 	virtual void Reset();
 public:
-	void PathFindingIdle();
-	void PathFindingMove();
-	void MovingAbleTile(int _distSize, TilePoint _prevPos);
+	//void PathFindingIdle();
+	//void PathFindingMove();
+	//void MovingAbleTile(int _distSize, TilePoint _prevPos);
 
 public:
 	void ChangeState(eStateType _nextState) { nextState = _nextState; }
+public:
+	std::list<Image*> GetMoveTileList() { return moveTileList; }
 };
 

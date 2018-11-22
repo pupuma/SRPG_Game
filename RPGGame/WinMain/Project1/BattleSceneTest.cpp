@@ -9,7 +9,6 @@
 
 //
 #include "Player.h"
-#include "Viewer.h"
 
 BattleSceneTest::BattleSceneTest()
 {
@@ -80,6 +79,7 @@ void BattleSceneTest::Render(HDC hdc)
 	
 	{
 		mapTest->Render(hdc);
+		
 	}
 
 #if defined(_DEBUG_TEST)

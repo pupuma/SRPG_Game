@@ -69,3 +69,4 @@ typedef  std::string		tstring;   //std::basic_string<char>
 #define ANIMANAGER		AnimationManager::GetSingleton()
 #define COMSYS			ComponentSystem::GetInstance()
 #define	RESOURCEMANAGER	ResourceManager::GetSingleton()
+#define GAMESYS			GameSystem::GetSingleton()

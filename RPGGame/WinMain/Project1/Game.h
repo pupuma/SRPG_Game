@@ -60,3 +60,4 @@
 #include "TextData.h"
 #include "AnimationManager.h"
 #include "ResourceManager.h"
+#include "GameSystem.h"

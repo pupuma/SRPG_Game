@@ -13,13 +13,14 @@ enum eComponentType
 class Component
 {
 protected:
+	int iMaxMoving;
+
 	eComponentType type;
 	std::string name;
 
 	POINT position;
 
 	TilePoint tilePosition;
-
 	//bool _isLive;
 public:
 	Component(std::string _name);
@@ -34,10 +35,14 @@ public:
 	virtual void Reset() = 0;
 public:
 	virtual void ReceiveMsg(const sMessageParam& _param);
+	void SetPosition(POINT _pos);
+
 public:
-	void SetPosition(POINT _pos) { position = _pos; }
 	POINT GetPosition() { return position; }
 	TilePoint GetTilePosition() { return tilePosition; }
+	int GetMaxMoving() { return iMaxMoving; }
+
+
 
 };
 
