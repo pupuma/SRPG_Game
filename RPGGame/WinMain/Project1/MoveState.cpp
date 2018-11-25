@@ -2,7 +2,7 @@
 #include "MoveState.h"
 
 #include "Character.h"
-
+#include "TileCell.h"
 
 MoveState::MoveState(Character* _character)
 	: State(_character)
@@ -18,11 +18,12 @@ MoveState::~MoveState()
 void MoveState::Start()
 {
 	State::Start();
-
 }
 
 void MoveState::Stop()
 {
+	State::Stop();
+
 	character->MoveStop();
 }
 
@@ -39,7 +40,7 @@ void MoveState::Update()
 #endif // 
 		return;
 	}
-	UpdateMove();
+	//UpdateMove();
 }
 
 void MoveState::UpdateMove()
@@ -55,6 +56,5 @@ void MoveState::UpdateMove()
 	}
 	
 	nextState = eStateType::ST_IDLE;
-
-	
 }
+

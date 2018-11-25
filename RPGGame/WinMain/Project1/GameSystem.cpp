@@ -1,9 +1,12 @@
 #include "Game.h"
 #include "GameSystem.h"
 
+#include "Map.h"
 
 GameSystem::GameSystem()
 {
+	isAction = false;
+	isAttacking = false;
 }
 
 
@@ -21,6 +24,14 @@ void GameSystem::SetMousePosition(LPARAM lParam)
 POINT GameSystem::GetMousePosition()
 {
 	return _ptMouse;
+}
+void GameSystem::ResetTarget()
+{
+	g_Map->ResetViewer();
+}
+void GameSystem::SetMap(Map * _map)
+{
+	g_Map = _map;
 }
 //
 //void GameSystem::SetMoveTileList(std::list<TileInfo> _moveTileList)

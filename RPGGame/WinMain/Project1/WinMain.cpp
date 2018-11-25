@@ -71,6 +71,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lPszCm
 
 	ShowWindow(_hWnd, cmdShow);
 
+	MoveWindow(_hWnd, 30, 30, WINSIZEX, WINSIZEY, TRUE);
 	HDC hdc = GetDC(_hWnd);
 
 	while (true)

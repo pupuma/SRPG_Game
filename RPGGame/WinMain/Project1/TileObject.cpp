@@ -2,8 +2,8 @@
 #include "TileObject.h"
 
 
-TileObject::TileObject(std::string _name, Image * _image, int _tileX, int _tileY) 
-	: Component(_name)
+TileObject::TileObject(std::string _name, Image * _image, int _tileX, int _tileY, float _deep) 
+	: Component(_name, _deep)
 {
 	image = _image;
 	tilePosition.x = _tileX;
@@ -30,7 +30,7 @@ void TileObject::Update()
 
 void TileObject::Render(HDC hdc)
 {
-	image->FrameRender(hdc, position.x, position.y);
+	image->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y);
 }
 
 void TileObject::Release()

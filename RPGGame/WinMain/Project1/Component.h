@@ -19,11 +19,13 @@ protected:
 	std::string name;
 
 	POINT position;
-
 	TilePoint tilePosition;
+	float deep;
+	bool canMove;
+
 	//bool _isLive;
 public:
-	Component(std::string _name);
+	Component(std::string _name, float _deep);
 	~Component();
 public:
 	virtual bool Init( ) = 0;
@@ -36,13 +38,12 @@ public:
 public:
 	virtual void ReceiveMsg(const sMessageParam& _param);
 	void SetPosition(POINT _pos);
-
 public:
 	POINT GetPosition() { return position; }
 	TilePoint GetTilePosition() { return tilePosition; }
 	int GetMaxMoving() { return iMaxMoving; }
-
-
-
+	float GetDeep() { return deep; }
+	bool CanMove() { return canMove; }
+	void SetCanMove(bool _canMove) { canMove = _canMove; }
 };
 

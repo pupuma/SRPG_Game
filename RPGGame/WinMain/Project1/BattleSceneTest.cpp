@@ -9,6 +9,7 @@
 
 //
 #include "Player.h"
+#include "Monster.h"
 
 BattleSceneTest::BattleSceneTest()
 {
@@ -31,23 +32,32 @@ bool BattleSceneTest::Init()
 	}
 	stageComponentList.push_back(mapTest);
 
-	test = new Player("Test");
+	test = new Player("Test",1.5f);
 	if (!test->Init( ))
 	{
 		return false;
 	}
 
 	stageComponentList.push_back(test);
+	
+	// Monster
+	Character* monster = new Monster("Monster", 1.5f);
+	if (!monster->Init())
+	{
+		return false;
+	}
+	stageComponentList.push_back(monster);
 
+	//Viewer 
 	
 	mapTest->SetViewer(test);
 	//
 	//
 	
-
+	mapTest->SortTile();
 
 	// Test
-	
+	GAMESYS->SetMap(mapTest);
 	return true;
 }
 
@@ -105,6 +115,14 @@ void BattleSceneTest::Render(HDC hdc)
 			break;
 		case eStateType::ST_DEAD:
 			testStr = TEXT("State : STATE_DEAD");
+		case eStateType::ST_PATHFINDING:
+			testStr = TEXT("State : ST_PATHFINDING");
+			break;
+		case eStateType::ST_PATH_IDLE:
+			testStr = TEXT("State : ST_PATH_IDLE");
+			break;
+		case eStateType::ST_PATH_MOVE:
+			testStr = TEXT("State : ST_PATH_MOVE");
 			break;
 
 		}

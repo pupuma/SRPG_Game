@@ -22,6 +22,7 @@
 #include <list>
 #include <map>
 #include <queue>
+#include <stack>
 
 //using std::string;
 //using std::vector;
@@ -57,7 +58,6 @@
 #include "EffectManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
-#include "TextData.h"
 #include "AnimationManager.h"
 #include "ResourceManager.h"
 #include "GameSystem.h"

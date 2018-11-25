@@ -4,14 +4,57 @@
 #include "Map.h"	
 
 
-Player::Player(std::string _name)
-	: Character(_name)
+Player::Player(std::string _name, float _deep)
+	: Character(_name,_deep)
 {
 }
 
 
 Player::~Player()
 {
+}
+
+bool Player::Init()
+{
+	{
+		isLive = true;
+		img = IMAGEMANAGER->FindImage("Actor1");
+		img->SetX(48);
+		img->SetY(48);
+		img->SetFrameX(0);
+		img->SetFrameY(0);
+
+		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+		{
+			if (NULL != map)
+			{
+				TilePoint tilePos;
+				tilePos.x = 4;
+				tilePos.y = 5;
+
+
+				tilePosition = tilePos;
+				map->SetTileComponent(tilePosition, this);
+
+			}
+		}
+
+		//act = new Action();
+		//act->Init();
+
+		//act->MoveTo(img, 50, 50, 10.0f);
+
+		InitState();
+		eType = eStateType::ST_PATH_IDLE;
+		ChangeState(eType);
+
+	}
+
+	// Attack List
+	{
+
+	}
+	return true;
 }
 
 void Player::UpdateAI()
@@ -46,8 +89,8 @@ void Player::UpdateAI()
 
 				if (nextDirection != eDirection::DIR_NONE)
 				{
-					//isMoving = true;
-					//TilePoint pos = { 3,3 };
+					isMoving = true;
+					//TilePoint pos = { 7,7 };
 					//MoveStart(pos);
 					eType = eStateType::ST_MOVE;
 					ChangeState(eStateType::ST_MOVE);
@@ -57,4 +100,10 @@ void Player::UpdateAI()
 		}
 
 	}
+}
+
+void Player::AttackPattern(std::vector<Component*>* _list)
+{
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	map->SetAttackRange();
 }

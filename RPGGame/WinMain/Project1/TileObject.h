@@ -7,7 +7,7 @@ private:
 	int tileX;
 	int tileY;
 public:
-	TileObject(std::string _name, Image* _image, int _tileX, int _tileY);
+	TileObject(std::string _name, Image* _image, int _tileX, int _tileY, float _deep);
 	~TileObject();
 public:
 	bool Init();

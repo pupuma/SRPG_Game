@@ -9,6 +9,9 @@ public:
 	AttackState(Character* _character);
 	~AttackState();
 public:
-	
+	void Start();
+	void Stop() {}
+	void Update();
+	void Render(HDC hdc);
 };
 

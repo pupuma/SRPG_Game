@@ -78,12 +78,6 @@
     <Filter Include="2DFrameWork\State">
       <UniqueIdentifier>{eed355b8-a2e1-496b-8795-35df6a2c321b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\02.GameObject\Tile">
-      <UniqueIdentifier>{32bbf10e-f198-47d3-a55b-5acf59d6b66f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Test">
-      <UniqueIdentifier>{b000849e-854d-4192-b766-47f2c6d2141a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -99,6 +93,15 @@
     </Filter>
     <Filter Include="MainGame\02.GameObject\Map">
       <UniqueIdentifier>{771e6ee8-12cf-4f10-9074-a87887c96595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DFrameWork\00.Test">
+      <UniqueIdentifier>{b000849e-854d-4192-b766-47f2c6d2141a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DFrameWork\State\Pathfinder">
+      <UniqueIdentifier>{14797185-636f-4fcb-b2b7-045b40cdd7c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\02.GameObject\Tile">
+      <UniqueIdentifier>{32bbf10e-f198-47d3-a55b-5acf59d6b66f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +165,6 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>2DFrameWork\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="TextData.cpp">
-      <Filter>2DFrameWork\TextIO</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationManager.cpp">
       <Filter>2DFrameWork\Manager</Filter>
     </ClCompile>
@@ -205,7 +205,7 @@
       <Filter>MainGame\02.GameObject\Tile</Filter>
     </ClCompile>
     <ClCompile Include="BattleSceneTest.cpp">
-      <Filter>00.Test</Filter>
+      <Filter>2DFrameWork\00.Test</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>2DFrameWork\Manager</Filter>
@@ -215,6 +215,21 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>MainGame\02.GameObject\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="PathfindingImmedateState.cpp">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathfindingMoveState.cpp">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathfindingldeState.cpp">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathfindingState.cpp">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>MainGame\02.GameObject\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -293,9 +308,6 @@
     <ClInclude Include="SoundManager.h">
       <Filter>2DFrameWork\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="TextData.h">
-      <Filter>2DFrameWork\TextIO</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationManager.h">
       <Filter>2DFrameWork\Manager</Filter>
     </ClInclude>
@@ -336,7 +348,7 @@
       <Filter>MainGame\02.GameObject\Tile</Filter>
     </ClInclude>
     <ClInclude Include="BattleSceneTest.h">
-      <Filter>00.Test</Filter>
+      <Filter>2DFrameWork\00.Test</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>2DFrameWork\Manager</Filter>
@@ -349,6 +361,21 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>MainGame\02.GameObject\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfindingImmedateState.h">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfindingMoveState.h">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfindingldeState.h">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfindingState.h">
+      <Filter>2DFrameWork\State\Pathfinder</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>MainGame\02.GameObject\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

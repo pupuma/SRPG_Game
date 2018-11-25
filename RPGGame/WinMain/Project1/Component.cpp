@@ -3,7 +3,7 @@
 
 
 
-Component::Component(std::string _name)
+Component::Component(std::string _name, float _deep)
 {
 	type = eComponentType::CT_DEFAULT;
 
@@ -11,7 +11,8 @@ Component::Component(std::string _name)
 	COMSYS->AddComponent(name, this);
 	tilePosition = { 0,0 };
 	iMaxMoving = 0;
-
+	deep = _deep;
+	canMove = true;
 }
 
 

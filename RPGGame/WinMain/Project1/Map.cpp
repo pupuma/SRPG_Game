@@ -2,9 +2,9 @@
 #include "Map.h"
 #include "TileCell.h"
 #include "TileObject.h"
-
+#include "Animation.h"
 Map::Map(std::string _name)
-	: Component(_name)
+	: Component(_name,0)
 {
 }
 
@@ -17,6 +17,24 @@ bool Map::Init( )
 {
 	width = TILEWIDTH;
 	height = TILEHEIGHT;
+
+	
+
+	{
+		mousePosImg = IMAGEMANAGER->FindImage(TEXT("Select"));
+		assert(mousePosImg != NULL);
+
+		//
+		mouseMovePosImg = IMAGEMANAGER->FindImage(TEXT("SelectObject"));
+		assert(mouseMovePosImg != NULL);
+
+		isSelectMove = false;
+		mouseMovePosAni = new Animation();
+		mouseMovePosAni->Init(mouseMovePosImg);
+		mouseMovePosAni->SetFPS(1);
+		mouseMovePosAni->SetDefPlayFrame(false, true);
+	}
+
 
 	{
 		int srcX = 0;
@@ -48,6 +66,7 @@ bool Map::Init( )
 	
 	{
 		//viewer = new Viewer(TEXT("Viewer"));
+		
 	}
 	CreateTileMap();
 
@@ -59,8 +78,10 @@ bool Map::Init( )
 		renderWidth = WINSIZEX / tileSize + 1;
 		renderHeight = WINSIZEY / tileSize + 1;
 
-		mousePosImg = IMAGEMANAGER->FindImage(TEXT("Select"));
-		assert(mousePosImg != NULL);
+		
+	}
+
+	{
 	}
 	return true;
 }
@@ -71,14 +92,112 @@ void Map::Deinit()
 
 void Map::Update()
 {
-	for (int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		if (GAMESYS->IsAttacking())
 		{
-			tileArray[y][x]->Update();
+
 		}
 	}
+	//for (int y = 0; y < height; y++)
+	//{
+	//	for (int x = 0; x < width; x++)
+	//	{
+	//		tileArray[y][x]->Update();
+	//	}
+	//}
+
+	//{
+	//	int midTileCountX = renderWidth / 2;
+	//	int midTileCountY = renderHeight / 2;
+
+	//	int iCameraX = CAMERA->GetPosition()->x;
+	//	int iCameraY = CAMERA->GetPosition()->y;
+	//	int startTileX = viewer->GetTilePosition().x - iCameraX - midTileCountX - 1;
+	//	int startTileY = viewer->GetTilePosition().y - iCameraY - midTileCountY - 1;
+
+	//	int endTileX = startTileX + renderWidth + 1;
+	//	int endTileY = startTileY + renderHeight + 1;
+
+	//	if (width < endTileX)
+	//	{
+	//		endTileX = width;
+	//	}
+	//	if (height < endTileY)
+	//	{
+	//		endTileY = height;
+	//	}
+
+	//	POINT renderPos;
+	//	renderPos.x = 0;
+	//	renderPos.y = 0;
+	//	int tileSize = 48;
+	//	for (int j = startTileY; j < endTileY; j++)
+	//	{
+	//		if (0 <= j)
+	//		{
+	//			for (int i = startTileX; i < endTileX; i++)
+	//			{
+	//				if (0 <= i)
+	//				{
+	//					tileArray[j][i]->SetPosition(renderPos);
+	//					//rect = RectMake(tileArray[j][i]->GetPosition().x, tileArray[j][i]->GetPosition().y,48,48);
+	//					//rectList.push_back(rect);
+	//				}
+	//				renderPos.x += tileSize;
+	//			}
+	//		}
+	//		renderPos.x = 0.0f;
+	//		renderPos.y += tileSize;
+	//	}
+
+	//}
 	//viewer->Update();
+
+	//
+#if defined(_DEBUG_TEST)
+
+
+		RECT rc1, rcClient;
+		GetClientRect(_hWnd, &rc1);
+
+		POINT pt1, pt2;
+		pt1.x = rc1.left;
+		pt1.y = rc1.top;
+		pt2.x = rc1.right;
+		pt2.y = rc1.bottom;
+
+
+		ClientToScreen(_hWnd, &pt1);
+		ClientToScreen(_hWnd, &pt2);
+
+		rcClient.left = pt1.x;
+		rcClient.right = pt2.x;
+		rcClient.top = pt1.y;
+		rcClient.bottom = pt2.y;
+
+		ClipCursor(&rcClient);
+	//if (KEYMANAGER->IsOnceKeyDown(VK_LEFT))
+	//{
+	//	pt.x--;
+	//}
+
+	//if (KEYMANAGER->IsOnceKeyDown(VK_RIGHT))
+	//{
+	//	pt.x++;
+	//}
+
+	//if (KEYMANAGER->IsOnceKeyDown(VK_UP))
+	//{
+	//	pt.y--;
+	//}
+
+	//if (KEYMANAGER->IsOnceKeyDown(VK_DOWN))
+	//{
+	//	pt.y++;
+	//}
+	CAMERA->setPosition(&pt);
+#endif
+	CAMERA->Update();
 	UpdateViewer();
 }
 
@@ -89,8 +208,10 @@ void Map::Render(HDC hdc)
 		int midTileCountX = renderWidth / 2;
 		int midTileCountY = renderHeight / 2;
 
-		int startTileX = viewer->GetTilePosition().x - midTileCountX - 1;
-		int startTileY = viewer->GetTilePosition().y - midTileCountY - 1;
+		int iCameraX = CAMERA->GetPosition()->x;
+		int iCameraY = CAMERA->GetPosition()->y;
+		int startTileX = viewer->GetTilePosition().x - iCameraX - midTileCountX - 1;
+		int startTileY = viewer->GetTilePosition().y - iCameraY - midTileCountY - 1;
 
 		int endTileX = startTileX + renderWidth + 1;
 		int endTileY = startTileY + renderHeight + 1;
@@ -132,6 +253,7 @@ void Map::Render(HDC hdc)
 	{
 		if (viewer != NULL)
 		{
+			// 캐릭터 이동 거리 
 			MaxTravelDistanceRender(hdc);
 		}
 
@@ -141,6 +263,7 @@ void Map::Render(HDC hdc)
 		//{
 		//	DrawObject(hdc, (*it), 1, RGB(125, 25, 125), RECTANGLE);
 		//}
+
 		TCHAR str[256];
 		_stprintf(str, TEXT("Mouse [X] : %d , || [Y] : %d"), mouseTargetX, mouseTargetY);
 		TextOut(hdc, 10, 30, str, _tcslen(str));
@@ -151,7 +274,18 @@ void Map::Render(HDC hdc)
 
 	{
 		// Mouse
-		mousePosImg->Render(hdc, rc.left, rc.top);
+
+		int iCameraX = CAMERA->GetPosition()->x;
+		int iCameraY = CAMERA->GetPosition()->y;
+
+		if (!isSelectMove)
+		{
+			mousePosImg->Render(hdc, rc.left - iCameraX, rc.top  - iCameraY);
+		}
+		else
+		{
+			mouseMovePosImg->AniRender(hdc, rc.left- iCameraX, rc.top - iCameraY, mouseMovePosAni);
+		}
 
 	}
 
@@ -174,21 +308,66 @@ void Map::Render(HDC hdc)
 	}
 
 	{
-		int tileSize = 48;
-		int renderWidth = 32;
-		int renderHeight = 32;
-		for (int i = 0; i <= 32; i++)
-		{
-			LineMake(hdc, i * tileSize + tileArray[0][0]->GetPosition().x,
-				tileArray[0][0]->GetPosition().y,
-				i * tileSize + +tileArray[0][0]->GetPosition().x,
-				renderWidth * tileSize + +tileArray[0][0]->GetPosition().y);
-		}
-		for (int i = 0; i <=  32; i++)
-		{
-			LineMake(hdc, tileArray[0][0]->GetPosition().x, i * tileSize + tileArray[0][0]->GetPosition().y,
-				renderHeight * tileSize + tileArray[0][0]->GetPosition().x, i * tileSize + tileArray[0][0]->GetPosition().y);
-		}
+		//int midTileCountX = renderWidth / 2;
+		//int midTileCountY = renderHeight / 2;
+
+		//int startTileX = viewer->GetTilePosition().x - midTileCountX - 1;
+		//int startTileY = viewer->GetTilePosition().y - midTileCountY - 1;
+
+		//int endTileX = startTileX + renderWidth + 1;
+		//int endTileY = startTileY + renderHeight + 1;
+
+		//if (width < endTileX)
+		//{
+		//	endTileX = width;
+		//}
+		//if (height < endTileY)
+		//{
+		//	endTileY = height;
+		//}
+
+	
+		//int tileSize = 48;
+
+		//int iRenderWidth = 32;
+		//int iRenderHeight = 32;
+
+		//for (int j = startTileY; j < endTileY; j++)
+		//{
+		//	if (0 <= j)
+		//	{
+		//		for (int i = startTileX; i < endTileX; i++)
+		//		{
+		//			if (0 <= i)
+		//			{
+		//				LineMake(hdc, i * tileSize + tileArray[j][i]->GetPosition().x,
+		//					tileArray[j][i]->GetPosition().y,
+		//					i * tileSize + +tileArray[j][i]->GetPosition().x,
+		//					iRenderWidth * tileSize + +tileArray[j][i]->GetPosition().y);
+
+		//				//LineMake(hdc, tileArray[j][i]->GetPosition().x, i * tileSize + tileArray[j][i]->GetPosition().y,
+		//				//	iRenderHeight * tileSize + tileArray[j][i]->GetPosition().x, i * tileSize + tileArray[j][i]->GetPosition().y);
+
+		//			}
+		//		}
+		//	}
+		//}
+
+		//int tileSize = 48;
+		//int renderWidth = 32;
+		//int renderHeight = 32;
+		//for (int i = 0; i <= 32; i++)
+		//{
+		//	LineMake(hdc, i * tileSize + tileArray[0][0]->GetPosition().x,
+		//		tileArray[0][0]->GetPosition().y,
+		//		i * tileSize + +tileArray[0][0]->GetPosition().x,
+		//		renderWidth * tileSize + +tileArray[0][0]->GetPosition().y);
+		//}
+		//for (int i = 0; i <=  32; i++)
+		//{
+		//	LineMake(hdc, tileArray[0][0]->GetPosition().x, i * tileSize + tileArray[0][0]->GetPosition().y,
+		//		renderHeight * tileSize + tileArray[0][0]->GetPosition().x, i * tileSize + tileArray[0][0]->GetPosition().y);
+		//}
 	}
 }
 
@@ -235,7 +414,7 @@ void Map::CreateTileMap()
 				//wsprintf(name, L"map_layer01_%d_%d", line, x);
 				_stprintf(name, TEXT("map_layer01_%d_%d"), line, x);
 
-				TileObject* tileObject = new TileObject(name, image, x, y);
+				TileObject* tileObject = new TileObject(name, image, x, y, 0.1f);
 				tileCell->AddComponent(tileObject);
 
 				rowList.push_back(tileCell);
@@ -284,7 +463,9 @@ void Map::CreateTileMap()
 					char name[256];
 					_stprintf(name, TEXT("map_layer02_%d_%d"), line, x);
 
-					TileObject* tileObject = new TileObject(name, sprite, x, y);
+					TileObject* tileObject = new TileObject(name, sprite, x, y , 0.2f);
+					tileObject->SetCanMove(false);
+
 					tileCell->AddComponent(tileObject);
 				}
 
@@ -336,9 +517,16 @@ void Map::SetViewer(Component* _com)
 	//	viewer->SetViewer(_com);
 	//}
 	viewer = _com;
+	//tileAttackList = GAMESYS->GetTileAttackList();
 	prevViewTilePosition = viewer->GetTilePosition();
 
+	// 현재 위치 자기 자신의 정보 타겟 -> 
 	//
+	RECT rcClient, rcWorld;
+	rcClient = { 0, 0, WINSIZEX, WINSIZEY };
+	rcWorld = { 0, 0, 5000, 6000 };
+	pt = viewer->GetPosition();
+	CAMERA->Init(&pt, rcClient, rcWorld);
 	MaxTravelDistance(viewer);
 }
 
@@ -348,6 +536,7 @@ void Map::UpdateViewer()
 	{
 		return;
 	}
+
 
 	// 마우스 
 	{
@@ -378,15 +567,44 @@ void Map::UpdateViewer()
 
 
 		TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
-		mouseTargetX = tileCell->GetTilePosition().x;
-		mouseTargetY = tileCell->GetTilePosition().y;
 
 		if (tileCell != NULL)
 		{
+			mouseTargetX = tileCell->GetTilePosition().x;
+			mouseTargetY = tileCell->GetTilePosition().y;
+		}
+		else
+		{
+			mouseTargetX = 0;
+			mouseTargetY = 0;
+		}
+
+		if (tileCell != NULL)
+		{
+			isSelectMove = false;
+
 			rc = RectMake(tileCell->GetPosition().x, tileCell->GetPosition().y, 48, 48);
+			mouseMovePosAni->Stop();
 		}
 
 
+		std::list<TileInfo>::iterator it;
+		if (tileCell != NULL)
+		{
+			for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
+			{
+				if ((*it).tile->GetTilePosition().x == tileCell->GetTilePosition().x &&
+					(*it).tile->GetTilePosition().y == tileCell->GetTilePosition().y)
+				{
+					isSelectMove = true;
+					mouseMovePosAni->Start();
+					rc = RectMake(tileCell->GetPosition().x, tileCell->GetPosition().y, 48, 48);
+					break;
+				}
+				
+			}
+		}
+		mouseMovePosAni->FrameUpdate(TIMEMANAGER->GetElapsedTime() * 10);
 
 	}
 	
@@ -405,8 +623,12 @@ TileCell* Map::FindTileCell(TilePoint _searchTilePosision)
 void Map::MaxTravelDistance(Component * _target)
 {
 	TilePoint startPos = _target->GetTilePosition();
+	
 	targetStartPosition = startPos;
 	targetTileCell = tileArray[startPos.y][startPos.x];
+	//targetTileCell->SetSearchPathfinding(false);
+	tileArray[startPos.y][startPos.x]->SetSearchPathfinding(false);
+	//
 	int distance = _target->GetMaxMoving();
 	bool isSearch = false;
 
@@ -431,30 +653,51 @@ void Map::MaxTravelDistanceRender(HDC hdc)
 	//	}
 	//}
 	{
-		std::list<TileInfo>::iterator it;
-		if (!tileCellOpenList.empty())
+
+		int iCameraX = CAMERA->GetPosition()->x;
+		int iCameraY = CAMERA->GetPosition()->y;
+
+		if (!GAMESYS->IsAction())
 		{
-			for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
+			
+
+
+			std::list<TileInfo>::iterator it;
+			if (!tileCellOpenList.empty())
 			{
-				(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x, (*it).tile->GetPosition().y,150);
+				for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
+				{
+					(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x - iCameraX, (*it).tile->GetPosition().y - iCameraY, 150);
+				}
 			}
 		}
-		
+
+		if (GAMESYS->IsAttacking())
+		{
+			std::vector<TileInfo>::iterator it;
+			if (!tileAttackList.empty())
+			{
+				for (it = tileAttackList.begin(); it != tileAttackList.end(); it++)
+				{
+					(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x - iCameraX, (*it).tile->GetPosition().y - iCameraY, 3);
+				}
+			}
+		}
 	}
 }
 
+// 수정 사항 int _distance, TilePoint _pos
 void Map::MaxPathFinder(int _distance, TilePoint _pos)
 {
 	//
 	{
-		int iMove = 1;
-
-
+		ResetPahtfinding();
 		// first
 		for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 		{
 			TilePoint currentTilePosition = targetTileCell->GetTilePosition();
 			TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+			TileCell*  searchTileCell = FindTileCell(searchTilePosision);
 
 			if (searchTilePosision.x < 0 || searchTilePosision.x > 32 ||
 				searchTilePosision.y < 0 || searchTilePosision.y > 32)
@@ -463,12 +706,11 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 			}
 
 			if (searchTilePosision.x == targetStartPosition.x && searchTilePosision.y == targetStartPosition.y ||
-				tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true)
+				tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true || false == searchTileCell->CanMove())
 			{
 				continue;
 			}
 
-			TileCell*  searchTileCell = FindTileCell(searchTilePosision);
 			searchTileCell->SetSearchPathfinding(true);
 
 			tileInfo.tile = searchTileCell;
@@ -487,19 +729,21 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 		// second 
 
 		//
-		std::priority_queue<TileCell*> prevPathfindingQueue;
+		//std::priority_queue<TileCell*> prevPathfindingQueue;
+		std::queue<TileCell*> prevPathfindingQueue;
 
 		while (_distance > 0)
 		{
 			if (!pathfindingQueue.empty())
 			{
-				targetTileCell = pathfindingQueue.top();
+				targetTileCell = pathfindingQueue.front();
 				pathfindingQueue.pop();
 
 				for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 				{
 					TilePoint currentTilePosition = targetTileCell->GetTilePosition();
 					TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+					TileCell*  searchTileCell = FindTileCell(searchTilePosision);
 
 					if (searchTilePosision.x < 0 || searchTilePosision.x > 32 ||
 						searchTilePosision.y < 0 || searchTilePosision.y > 32)
@@ -508,12 +752,11 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 					}
 
 					if (searchTilePosision.x == targetStartPosition.x && searchTilePosision.y == targetStartPosition.y ||
-						tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true)
+						tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true || false == searchTileCell->CanMove())
 					{
 						continue;
 					}
 
-					TileCell*  searchTileCell = FindTileCell(searchTilePosision);
 					searchTileCell->SetSearchPathfinding(true);
 
 					tileInfo.tile = searchTileCell;
@@ -539,44 +782,44 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 					prevPathfindingQueue.pop();
 				}
 			}
-		
+
 		}
 
 
-	/*
-	for (size_t i = 0; i < pathfindingQueue.size(); i++)
-				{
-					targetTileCell = pathfindingQueue.top();
-					pathfindingQueue.pop();
-
-					for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+		/*
+		for (size_t i = 0; i < pathfindingQueue.size(); i++)
 					{
-						TilePoint currentTilePosition = targetTileCell->GetTilePosition();
-						TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+						targetTileCell = pathfindingQueue.top();
+						pathfindingQueue.pop();
 
-						if (searchTilePosision.x == targetStartPosition.x && searchTilePosision.y == targetStartPosition.y ||
-							tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true)
+						for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 						{
-							continue;
+							TilePoint currentTilePosition = targetTileCell->GetTilePosition();
+							TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+
+							if (searchTilePosision.x == targetStartPosition.x && searchTilePosision.y == targetStartPosition.y ||
+								tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true)
+							{
+								continue;
+							}
+
+							TileCell*  searchTileCell = FindTileCell(searchTilePosision);
+							searchTileCell->SetSearchPathfinding(true);
+
+							tileInfo.tile = searchTileCell;
+							tileInfo.tileImg = new Image();
+							tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+
+							tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+							tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+
+							tileCellOpenList.push_back(tileInfo);
+
+							std::pair<TileCell*, int> p_data;
+							prevPathfindingQueue.push(searchTileCell);
 						}
+		*/
 
-						TileCell*  searchTileCell = FindTileCell(searchTilePosision);
-						searchTileCell->SetSearchPathfinding(true);
-
-						tileInfo.tile = searchTileCell;
-						tileInfo.tileImg = new Image();
-						tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-						tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-						tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-						tileCellOpenList.push_back(tileInfo);
-
-						std::pair<TileCell*, int> p_data;
-						prevPathfindingQueue.push(searchTileCell);
-					}
-	*/
-		
 
 		//for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 		//{
@@ -607,10 +850,16 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 
 		//MaxPathFinder(_distance, targetTileCell->GetTilePosition());
 
-		
+
 		//
 	}
 
+	{
+		while (!pathfindingQueue.empty())
+		{
+			pathfindingQueue.pop();
+		}
+	}
 	/*{
 
 		if (_distance <= 0 )
@@ -744,10 +993,15 @@ TileCell* Map::FindTileCellByMousePosition(int _mouseX, int _mouseY)
 	int midX = WINSIZEX / 2;
 	int midY = WINSIZEY/ 2;
 
-	int minX = viewer->GetTilePosition().x - (midX / tileSize) - 2;
-	int maxX = viewer->GetTilePosition().x + (midX / tileSize) + 2;
-	int minY = viewer->GetTilePosition().y - (midY / tileSize) - 2;
-	int maxY = viewer->GetTilePosition().y + (midY / tileSize) + 2;
+
+	int iCameraX = CAMERA->GetPosition()->x;
+	int iCameraY = CAMERA->GetPosition()->y;
+
+
+	int minX = viewer->GetTilePosition().x - iCameraX - (midX / tileSize) - 1;
+	int maxX = viewer->GetTilePosition().x - iCameraX + (midX / tileSize) + 1;
+	int minY = viewer->GetTilePosition().y - iCameraY - (midY / tileSize) - 1;
+	int maxY = viewer->GetTilePosition().y - iCameraY + (midY / tileSize) + 1;
 
 	if (minX < 0)
 	{
@@ -790,4 +1044,138 @@ TileCell* Map::FindTileCellByMousePosition(int _mouseX, int _mouseY)
 		}
 	}
 	return NULL;
+}
+
+void Map::ResetPahtfinding()
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			TilePoint tilePosition;
+			tilePosition.x = x;
+			tilePosition.y = y;
+			FindTileCell(tilePosition)->ResetPathfinding();
+		}
+	}
+
+	{
+		/*std::list<TileInfo>::iterator it;
+		for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
+		{
+			TilePoint tilePosition;
+			tilePosition.x = (*it).tile->GetTilePosition().x;
+			tilePosition.y = (*it).tile->GetTilePosition().y;
+
+			FindTileCell(tilePosition)->ResetPathfinding();
+		}
+*/
+	}
+}
+
+void Map::SortTile()
+{
+	for (int j = 0; j < TILEHEIGHT; j++)
+	{
+		for (int i = 0; i < TILEWIDTH; i++)
+		{
+			tileArray[j][i]->DeepSort();
+		}
+	}
+}
+
+void Map::ResetViewer()
+{
+	ReleaseOpenList();
+	prevViewTilePosition = viewer->GetTilePosition();
+	MaxTravelDistance(viewer);
+}
+
+void Map::ReleaseOpenList()
+{
+	std::list<TileInfo>::iterator it;
+	for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
+	{
+		(*it).tileImg->Release();
+		delete it->tileImg;
+	}
+
+	
+	tileCellOpenList.clear();
+
+
+}
+
+std::vector<Component*> Map::SetAttackRange()
+{
+
+	{
+		TileInfo tileInfo;
+		
+		TilePoint t1 = viewer->GetTilePosition();
+		t1.x--;
+		TileCell*  searchTileCell = FindTileCell(t1);
+
+		tileInfo.tile = searchTileCell;
+		tileInfo.tileImg = new Image();
+		tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+
+
+		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+
+		tileAttackList.push_back(tileInfo);
+
+		//
+		TilePoint t2 = viewer->GetTilePosition();
+		t2.x++;
+		searchTileCell = FindTileCell(t2);
+
+		tileInfo.tile = searchTileCell;
+		tileInfo.tileImg = new Image();
+		tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+
+
+		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+
+		tileAttackList.push_back(tileInfo);
+
+		//
+		//
+		TilePoint t3 = viewer->GetTilePosition();
+		t3.y--;
+		searchTileCell = FindTileCell(t3);
+
+		tileInfo.tile = searchTileCell;
+		tileInfo.tileImg = new Image();
+		tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+
+
+		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+
+		tileAttackList.push_back(tileInfo);
+
+		//
+		//
+		TilePoint t4 = viewer->GetTilePosition();
+		t4.y++;
+		searchTileCell = FindTileCell(t4);
+
+		tileInfo.tile = searchTileCell;
+		tileInfo.tileImg = new Image();
+		tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+
+
+		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+
+		tileAttackList.push_back(tileInfo);
+
+
+	}
+
+
+	return std::vector<Component*>();
 }

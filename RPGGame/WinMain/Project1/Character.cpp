@@ -9,18 +9,25 @@
 #include "DefenseState.h"	
 #include "DeadState.h"
 
+#include "PathfindingldeState.h"
+#include "PathfindingImmedateState.h"
+#include "PathfindingMoveState.h"
+
 //
 #include "Map.h"
 
-Character::Character(std::string _name) 
-	: Component(_name)
+
+Character::Character(std::string _name, float _deep)
+	: Component(_name, _deep)
 {
 	type = eComponentType::CT_PLAYER;
-	nextDirection = eDirection::DIR_LEFT;
+	nextDirection = eDirection::DIR_LEFT; 
 	isMoving = false;
 
-	iMaxMoving = 5;
-
+	attackPoint = 5;
+	iMaxMoving = 3;
+	moveTime = (float)(rand() % 100 + 50) / 100.0f;
+	SetCanMove(false);
 }
 
 
@@ -30,36 +37,38 @@ Character::~Character()
 
 bool Character::Init( )
 {
-	isLive = true;
-	img = IMAGEMANAGER->FindImage("Actor1");
-	img->SetX(48);
-	img->SetY(48);
-	img->SetFrameX(0);
-	img->SetFrameY(0);
+	//{
+	//	isLive = true;
+	//	img = IMAGEMANAGER->FindImage("Actor1");
+	//	img->SetX(48);
+	//	img->SetY(48);
+	//	img->SetFrameX(0);
+	//	img->SetFrameY(0);
 
-	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-	{
-		if (NULL != map)
-		{
-			TilePoint tilePos;
-			tilePos.x =15;
-			tilePos.y = 15;
-		
+	//	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	//	{
+	//		if (NULL != map)
+	//		{
+	//			TilePoint tilePos;
+	//			tilePos.x = 4;
+	//			tilePos.y = 5;
 
-			tilePosition = tilePos;
-			map->SetTileComponent(tilePosition, this);
 
-		}
-	}
+	//			tilePosition = tilePos;
+	//			map->SetTileComponent(tilePosition, this);
 
-	//act = new Action();
-	//act->Init();
+	//		}
+	//	}
 
-	//act->MoveTo(img, 50, 50, 10.0f);
+	//	//act = new Action();
+	//	//act->Init();
 
-	InitState();
-	eType = eStateType::ST_IDLE;
-	ChangeState(eType);
+	//	//act->MoveTo(img, 50, 50, 10.0f);
+
+	//	InitState();
+	//	eType = eStateType::ST_PATH_IDLE;
+	//	ChangeState(eType);
+	//}
 
 	return true;
 }
@@ -78,7 +87,7 @@ void Character::Render(HDC hdc)
 {
 	//img->Render(hdc);
 	state->Render(hdc);
-	img->FrameRender(hdc, position.x, position.y);
+	img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y);
 
 
 #if defined(_DEBUG_TEST)
@@ -125,6 +134,23 @@ void Character::InitState()
 		State* state = new DeadState(this);
 		stateMap[eStateType::ST_DEAD] = state;
 	}
+
+	//
+	{
+		State* state = new PathfindingImmedateState(this);
+		stateMap[eStateType::ST_PATHFINDING] = state;
+	}
+
+	{
+		State* state = new PathfindingldeState(this);
+		stateMap[eStateType::ST_PATH_IDLE] = state;
+	}
+	
+	{
+		State* state = new PathfindingMoveState(this);
+		stateMap[eStateType::ST_PATH_MOVE] = state;
+	}
+
 }
 
 void Character::ChangeState(eStateType stateType)
@@ -149,6 +175,18 @@ void Character::UpdateAI()
 	}
 	
 	
+}
+
+void Character::AttackPattern(std::vector<Component*>* _list)
+{
+	//map->FindTileCell(this->GetTilePosition());
+}
+
+void Character::ReceiveMsg(const sMessageParam & param)
+{
+	if (TEXT("Attack") == param.message)
+	{
+	}
 }
 
 void Character::MoveStart(TilePoint newTilePosition)
@@ -177,4 +215,59 @@ bool Character::IsMoving()
 bool Character::IsLive()
 {
 	return isLive;
+}
+
+TileCell * Character::GetTargetTileCell()
+{
+	return targetTileCell;
+
+}
+
+void Character::SetTargetTileCell(TileCell * _targetTileCell)
+{
+	{
+		targetTileCell = _targetTileCell;
+	}
+}
+
+void Character::PushPathfindingCell(TileCell* _tileCell)
+{
+	pathfindingCellStack.push(_tileCell);
+}
+
+TileCell* Character::PopPathfindingCell()
+{
+	TileCell* tileCell = pathfindingCellStack.top();
+	pathfindingCellStack.pop();
+	return tileCell;
+
+}
+
+float Character::GetMoveTime()
+{
+	return moveTime;
+}
+
+bool Character::IsEmptyPathfindingStack()
+{
+	if (0 != pathfindingCellStack.size())
+	{
+		return false;
+	}
+	return true;
+}
+
+void Character::SetDirection(eDirection _direction)
+{
+	currentDirection = _direction;
+}
+
+std::vector<Component*> Character::GetTargetList()
+{
+	return targetList;
+}
+
+void Character::AddTarget(Component* _target)
+{
+	targetList.push_back(_target);
 }

@@ -1,9 +1,11 @@
 #pragma once
 
 class TileCell;
+class Animation;
 
-#define TILEWIDTH 16
-#define TILEHEIGHT 12
+
+#define TILEWIDTH 33
+#define TILEHEIGHT 33
 
 class Map
 	: public Component
@@ -22,9 +24,15 @@ private:
 	int tileSize;
 	int renderWidth;
 	int renderHeight;
+
+	bool isSelectMove;
+	POINT pt;
 private:
 	Image* img;
 	Image* mousePosImg;
+	Image* mouseMovePosImg;
+	Animation* mouseMovePosAni;
+
 	TileInfo tileInfo;
 	RECT rc;
 	RECT rect;
@@ -32,11 +40,14 @@ private:
 private:
 	std::vector<std::vector<TileCell*>> tileArray;
 	std::vector<Image*> imgList;
-	std::list<TileInfo> moveTileList;
+	//std::list<TileInfo> moveTileList;
 	
 	std::list<TileInfo> tileCellOpenList;
-	std::priority_queue<TileCell*> pathfindingQueue;
+	std::vector<TileInfo> tileAttackList;
+	
+	std::queue<TileCell*> pathfindingQueue;
 
+	//std::priority_queue<TileCell*> pathfindingQueue;
 private:
 	Component* viewer;
 	TilePoint prevViewTilePosition;
@@ -69,7 +80,11 @@ public:
 	void MaxPathFinder(int _distance, TilePoint _pos);
 	TilePoint GetSearchTilePositionByDirection(TilePoint tilePosition, eDirection direction);
 	TileCell* FindTileCellByMousePosition(int _mouseX, int _mouseY);
-
+	void ResetPahtfinding();
+	void SortTile();
+	void ResetViewer();
+	void ReleaseOpenList();
+	std::vector<Component*> SetAttackRange();
 public:
 	//bool operator==(const TilePoint &a, const TilePoint &b)
 	//{
@@ -82,5 +97,7 @@ public:
 
 public:
 	std::vector<std::vector<TileCell*>> GetTileArray() { return tileArray; }
+	std::list<TileInfo> GetOpenTileCellList() { return tileCellOpenList; }
+
 };
 
