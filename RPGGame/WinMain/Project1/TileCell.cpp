@@ -7,6 +7,7 @@ TileCell::TileCell()
 {
 	position = { 0,0 };
 	pathfindingSearch = false;
+	isCharacter = false;
 	//deep = 0.0f;
 }
 
@@ -18,8 +19,8 @@ TileCell::~TileCell()
 
 bool TileCell::Init(int _tileX, int _tileY)
 {
-	tilePostion.x = _tileX;
-	tilePostion.y = _tileY;
+	tilePosition.x = _tileX;
+	tilePosition.y = _tileY;
 
 	
 	return true;
@@ -122,3 +123,9 @@ bool TileCell::CanMove()
 	}
 	return true;
 }
+
+void TileCell::IsCharacter(bool _isCharacter)
+{
+	isCharacter = _isCharacter;
+}
+

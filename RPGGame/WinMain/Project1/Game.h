@@ -61,3 +61,6 @@
 #include "AnimationManager.h"
 #include "ResourceManager.h"
 #include "GameSystem.h"
+
+#include "ParsingSystem.h"
+

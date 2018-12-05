@@ -6,13 +6,13 @@
 #include "TileCell.h"
 
 #include "ComponentSystem.h"
-
 //
 #include "Player.h"
 #include "Monster.h"
 
 BattleSceneTest::BattleSceneTest()
 {
+
 }
 
 
@@ -22,8 +22,20 @@ BattleSceneTest::~BattleSceneTest()
 
 bool BattleSceneTest::Init()
 {
+#if defined(_DEBUG_TEST)
 	{
+		isTest = true;
+
+		rcTopTimer = RectMake(552,0, 96, 96);
+		rcTest1 = RectMake(11, 407, 252, 123);
+		rcTest2 = RectMake(31, 533, 253, 253);
+		rcTest3 = RectMake(320, 549, 141, 220);
+		rcTest4 = RectMake(498, 549, 383, 220);
+		rcTest5 = RectMake(535, 465, 129, 75);
+		rcTest6 = RectMake(917, 533, 253, 253);
+		rcTest7 = RectMake(937, 407, 252, 123);
 	}
+#endif//
 
 	mapTest = new Map("Map");
 	if (!mapTest->Init())
@@ -53,7 +65,8 @@ bool BattleSceneTest::Init()
 	mapTest->SetViewer(test);
 	//
 	//
-	
+	//test->AttackPattern();
+
 	mapTest->SortTile();
 
 	// Test
@@ -75,6 +88,17 @@ void BattleSceneTest::Update()
 	{
 		(*it)->Update();
 	}
+	
+#if defined(_DEBUG_TEST)
+	if (KEYMANAGER->IsOnceKeyDown('3'))
+	{
+		isTest = true;
+	}
+	if (KEYMANAGER->IsOnceKeyDown('4'))
+	{
+		isTest = false;
+	}
+#endif 
 }
 
 void BattleSceneTest::Render(HDC hdc)
@@ -128,5 +152,20 @@ void BattleSceneTest::Render(HDC hdc)
 		}
 		TextOut(hdc, 10, 10, testStr.c_str(), testStr.length());
 	}
+
+
+	// RECT
+	if (isTest)
+	{
+		DrawObject(hdc, rcTopTimer, 1, RGB(255, 0, 0), RECTANGLE);
+		DrawObject(hdc, rcTest1, 1, RGB(125, 0, 125), RECTANGLE);
+		DrawObject(hdc, rcTest2, 1, RGB(125, 255, 125), RECTANGLE);
+		DrawObject(hdc, rcTest3, 1, RGB(125, 125, 125), RECTANGLE);
+		DrawObject(hdc, rcTest4, 1, RGB(125, 125, 125), RECTANGLE);
+		DrawObject(hdc, rcTest5, 1, RGB(255, 255, 125), RECTANGLE);
+		DrawObject(hdc, rcTest6, 1, RGB(125, 255, 125), RECTANGLE);
+		DrawObject(hdc, rcTest7, 1, RGB(125, 0, 125), RECTANGLE);
+	}
+
 #endif //
 }

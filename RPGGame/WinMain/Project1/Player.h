@@ -12,6 +12,6 @@ public:
 	bool Init();
 public:
 	void UpdateAI();
-	void AttackPattern(std::vector<Component*>* _list);
+	void AttackPattern();
 };
 

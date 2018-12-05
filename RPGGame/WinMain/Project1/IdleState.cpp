@@ -18,7 +18,7 @@ IdleState::~IdleState()
 
 void IdleState::Start()
 {
-	//State::Start();
+	State::Start();
 
 	// PathFinding
 	{
@@ -30,6 +30,17 @@ void IdleState::Start()
 void IdleState::Update()
 {
 	State::Update();
+
+	{
+		if (eStateType::ST_NONE != nextState)
+		{
+			character->ChangeState(nextState);
+#if defined(_DEBUG_TEST)
+			character->SetStateType(nextState);
+#endif // 
+			return;
+		}
+	}
 	//character->UpdateAI();
 }
 

@@ -44,7 +44,9 @@ protected:
 	Action* act;
 protected:
 	int attackPoint;
+	int damagePoint;
 
+	int iHp;
 public:
 	Character(std::string _name, float _deep);
 	~Character();
@@ -63,7 +65,7 @@ public:
 public:
 	virtual void UpdateAI();
 public:
-	virtual void AttackPattern(std::vector<Component*>* _list);
+	virtual void AttackPattern();
 public:
 	void ReceiveMsg(const sMessageParam& param);
 public:
@@ -81,13 +83,19 @@ public:
 	void SetDirection(eDirection _direction);
 	std::vector<Component*> GetTargetList();
 	void AddTarget(Component* _target);
+	void ResetTarget();
+	void DecreaseHP(int _damagePoint);
 
 public:
 	State* GetState() { return state; }
 	int GetAttackPoint() { return attackPoint; }
+	void SetTarget(std::vector<Component*> _target) { targetList = _target; }
+	int GetDamagePoint() { return damagePoint; }
 public:
 #if defined(_DEBUG_TEST)
 	void SetStateType(eStateType _type) { eType = _type; }
 	eStateType GetType() { return eType; }
+	
+	
 #endif // StateTYpe Render Test 
 };

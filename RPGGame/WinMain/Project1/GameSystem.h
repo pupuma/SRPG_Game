@@ -3,6 +3,7 @@
 #include "SingletonBase.h"
 
 class Map;
+class Component;
 
 class GameSystem
 	: public SingletonBase<GameSystem>
@@ -11,6 +12,7 @@ private:
 	bool isAction;
 	bool isAttacking;
 	//std::list<TileInfo> moveTileList;
+	TilePoint temp;
 private:
 	Map* g_Map;
 private:
@@ -25,6 +27,7 @@ public:
 public:
 	void ResetTarget();
 	void SetMap(Map* _map);
+	bool TargetCheck(std::vector<Component*> _list);
 
 public:
 	
@@ -34,6 +37,7 @@ public:
 	void SetAttacking(bool _isAttack) { isAttacking = _isAttack; }
 	std::vector<TileInfo> GetTileAttackList() { return g_TileAttackList; }
 	void SetTileAttackList(std::vector<TileInfo> _list) { g_TileAttackList = _list; }
+public:
 
 };
 

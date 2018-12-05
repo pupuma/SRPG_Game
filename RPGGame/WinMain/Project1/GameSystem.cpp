@@ -2,6 +2,7 @@
 #include "GameSystem.h"
 
 #include "Map.h"
+#include "TileCell.h"
 
 GameSystem::GameSystem()
 {
@@ -32,6 +33,25 @@ void GameSystem::ResetTarget()
 void GameSystem::SetMap(Map * _map)
 {
 	g_Map = _map;
+}
+bool GameSystem::TargetCheck(std::vector<Component*> _list)
+{
+	std::vector<TileInfo> tileAttackList = g_Map->GetAttackList();
+	for (auto a : _list)
+	{
+	
+		for (auto b : tileAttackList)
+		{
+			temp = b.tile->GetTilePosition();
+			if (temp == a->GetTilePosition())
+			{
+				return true;
+			}
+		}
+	}
+
+
+	return false;
 }
 //
 //void GameSystem::SetMoveTileList(std::list<TileInfo> _moveTileList)

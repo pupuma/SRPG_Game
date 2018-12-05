@@ -24,10 +24,14 @@ Character::Character(std::string _name, float _deep)
 	nextDirection = eDirection::DIR_LEFT; 
 	isMoving = false;
 
-	attackPoint = 5;
+	attackPoint = 1;
 	iMaxMoving = 3;
 	moveTime = (float)(rand() % 100 + 50) / 100.0f;
 	SetCanMove(false);
+
+	//
+	damagePoint = 0;
+	iHp = 5;
 }
 
 
@@ -91,7 +95,9 @@ void Character::Render(HDC hdc)
 
 
 #if defined(_DEBUG_TEST)
-	
+	TCHAR str[256];
+	_stprintf(str, TEXT("HP : %d "), iHp);
+	TextOut(hdc, position.x, position.y, str, _tcslen(str));
 #endif // Text Render
 }
 
@@ -177,7 +183,7 @@ void Character::UpdateAI()
 	
 }
 
-void Character::AttackPattern(std::vector<Component*>* _list)
+void Character::AttackPattern()
 {
 	//map->FindTileCell(this->GetTilePosition());
 }
@@ -186,6 +192,8 @@ void Character::ReceiveMsg(const sMessageParam & param)
 {
 	if (TEXT("Attack") == param.message)
 	{
+		damagePoint = param.attackPoint;
+		state->ChangeState(eStateType::ST_DEFENSE);
 	}
 }
 
@@ -270,4 +278,21 @@ std::vector<Component*> Character::GetTargetList()
 void Character::AddTarget(Component* _target)
 {
 	targetList.push_back(_target);
+}
+
+void Character::ResetTarget()
+{
+	{
+		targetList.clear();
+	}
+}
+
+void Character::DecreaseHP(int _damagePoint)
+{
+	iHp -= _damagePoint;
+	if (iHp < 0)
+	{
+		isLive = false;
+		iHp = 0;
+	}
 }

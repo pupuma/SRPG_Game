@@ -22,6 +22,7 @@ void PathfindingMoveState::Start()
 	GAMESYS->SetAction(true);
 	movingDuration = character->GetMoveTime();
 	TileCell* tileCell = character->PopPathfindingCell();
+	
 }
 
 void PathfindingMoveState::Stop()
@@ -69,7 +70,7 @@ void PathfindingMoveState::Update()
 		{
 			SetMove(true);
 			nextState = eStateType::ST_PATH_IDLE;
-			//GAMESYS->ResetTarget();
+			GAMESYS->ResetTarget();
 			character->SetTargetTileCell(NULL);
 		}
 

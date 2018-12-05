@@ -9,6 +9,8 @@ TileObject::TileObject(std::string _name, Image * _image, int _tileX, int _tileY
 	tilePosition.x = _tileX;
 	tilePosition.y = _tileY;
 	
+	frameX = 0;
+	frameY = 0;
 }
 
 TileObject::~TileObject()
@@ -30,7 +32,7 @@ void TileObject::Update()
 
 void TileObject::Render(HDC hdc)
 {
-	image->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y);
+	image->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y,frameX, frameY);
 }
 
 void TileObject::Release()
@@ -39,4 +41,13 @@ void TileObject::Release()
 
 void TileObject::Reset()
 {
+}
+
+void TileObject::SetFramePos(int _frameX, int _frameY)
+{
+	frameX = _frameX;
+	frameY = _frameY;
+	image->SetFrameX(_frameX);
+	image->SetFrameY(_frameY);
+
 }

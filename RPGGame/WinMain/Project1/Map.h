@@ -4,12 +4,15 @@ class TileCell;
 class Animation;
 
 
-#define TILEWIDTH 33
-#define TILEHEIGHT 33
+//#define TILEWIDTH 33
+//#define TILEHEIGHT 33
 
 class Map
 	: public Component
 {
+private:
+	ImgInfo imgTileInfo;
+	ImgInfo imgObjectInfo;
 private:
 	//
 #if defined(_DEBUG_TEST)
@@ -39,7 +42,10 @@ private:
 	std::vector<RECT> rectList;
 private:
 	std::vector<std::vector<TileCell*>> tileArray;
-	std::vector<Image*> imgList;
+	//std::vector<Image*> imgList;
+	std::vector<ImgInfo> imgTileList;
+	std::vector<ImgInfo> imgObjectList;
+
 	//std::list<TileInfo> moveTileList;
 	
 	std::list<TileInfo> tileCellOpenList;
@@ -67,6 +73,8 @@ public:
 public:
 	void CreateTileMap();
 	void SetTileComponent(TilePoint tilePosition, Component* component);
+	void SetTileComponent(TilePoint tilePosition, Component* component,bool _isCharacter);
+
 	void ResetTileComponent(TilePoint tilePosition, Component* component);
 public:
 	void SetViewer(Component* _com);
@@ -85,8 +93,16 @@ public:
 	void ResetViewer();
 	void ReleaseOpenList();
 	std::vector<Component*> SetAttackRange();
+	std::vector<Component*> GetComponentList(TileCell* _tileCell);
+	void ResetAttackList();
 public:
-	//bool operator==(const TilePoint &a, const TilePoint &b)
+	void LayerBase();
+	void LayerTile();
+	void LayerObject();
+	void TileMapCreateSampleTile();
+	void TileMapCreateSampleObject();
+public:
+	//bool operator==(const TilePoint &a)
 	//{
 	//	if (a.x == b.y && a.y == b.y)
 	//	{
@@ -98,6 +114,6 @@ public:
 public:
 	std::vector<std::vector<TileCell*>> GetTileArray() { return tileArray; }
 	std::list<TileInfo> GetOpenTileCellList() { return tileCellOpenList; }
-
+	std::vector<TileInfo> GetAttackList() { return tileAttackList; }
 };
 

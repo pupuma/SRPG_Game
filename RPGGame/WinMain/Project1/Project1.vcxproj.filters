@@ -231,6 +231,9 @@
     <ClCompile Include="Monster.cpp">
       <Filter>MainGame\02.GameObject\Character</Filter>
     </ClCompile>
+    <ClCompile Include="ParsingSystem.cpp">
+      <Filter>2DFrameWork\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>MainGame\02.GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="ParsingSystem.h">
+      <Filter>2DFrameWork\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

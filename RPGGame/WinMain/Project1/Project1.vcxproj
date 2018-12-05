@@ -169,6 +169,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MoveState.cpp" />
+    <ClCompile Include="ParsingSystem.cpp" />
     <ClCompile Include="PathfindingImmedateState.cpp" />
     <ClCompile Include="PathfindingldeState.cpp" />
     <ClCompile Include="PathfindingMoveState.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MoveState.h" />
+    <ClInclude Include="ParsingSystem.h" />
     <ClInclude Include="PathfindingImmedateState.h" />
     <ClInclude Include="PathfindingldeState.h" />
     <ClInclude Include="PathfindingMoveState.h" />

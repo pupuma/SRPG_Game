@@ -6,7 +6,8 @@ class TileCell
 {
 private:
 	POINT position;
-	TilePoint tilePostion;
+	TilePoint tilePosition;
+	bool isCharacter;
 private:
 	bool pathfindingSearch;
 	TileCell* prevTileCell;
@@ -31,11 +32,14 @@ public:
 	void ResetPathfinding();
 	void DeepSort();
 	bool CanMove();
-
+	void IsCharacter(bool _isCharacter);
 public:
+	
+public:
+	bool GetGharacter() { return isCharacter; }
 	void SetPosition(POINT _pos) { position = _pos; }
 	POINT GetPosition() { return position; }
-	TilePoint GetTilePosition() { return tilePostion; }
+	TilePoint GetTilePosition() { return tilePosition; }
 
 	bool IsSearchPathfinding() { return pathfindingSearch; }
 	void SetSearchPathfinding(bool _search) { pathfindingSearch = _search; }
@@ -46,7 +50,7 @@ public:
 
 	float GetDistanceFromStart() { return distanceFromStart; }
 	void SetDistanceFromStart(float _distanceFromStart) { distanceFromStart = _distanceFromStart; }
-
+	std::list<Component*> GetTileComponentList() { return componentList; }
 	
 };
 

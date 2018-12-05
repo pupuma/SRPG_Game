@@ -37,7 +37,7 @@ bool Monster::Init()
 
 
 				tilePosition = tilePos;
-				map->SetTileComponent(tilePosition, this);
+				map->SetTileComponent(tilePosition, this,true);
 
 			}
 		}

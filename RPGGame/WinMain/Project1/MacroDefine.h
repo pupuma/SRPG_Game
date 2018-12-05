@@ -34,25 +34,13 @@ typedef  std::string		tstring;   //std::basic_string<char>
 #define SAFE_RELEASE(p)	{if(p) {(p)->Release(); (p) = NULL;}}
 
 // 윈도우 사이즈 관련 매크로
-#define WINSTYLE	WS_CAPTION | WS_SYSMENU
+#define WINSTYLE	 WS_SYSMENU | WS_CAPTION
 
-#define WINSIZEX	1000
+
+#define WINSIZEX	1200
 #define WINSIZEY	800
-#define WINSTARTX	100
-#define WINSTARTY	100
-
-// MAPTOOL or Tile관련 메크로 
-#define TILESIZE		32
-
-#define TILEX			20
-#define TILEY			20
-
-#define TILESIZEX		TILESIZE * TILEX
-#define TILESIZEY		TILESIZE * TILEY
-
-#define SAMPLETILEX		20
-#define SAMPLETILEY		9
-
+#define WINSTARTX	0
+#define WINSTARTY	0
 
 
 // 싱글턴 객체 매크로
@@ -70,3 +58,4 @@ typedef  std::string		tstring;   //std::basic_string<char>
 #define COMSYS			ComponentSystem::GetInstance()
 #define	RESOURCEMANAGER	ResourceManager::GetSingleton()
 #define GAMESYS			GameSystem::GetSingleton()
+#define PARSING			ParsingSystem::GetSingleton()

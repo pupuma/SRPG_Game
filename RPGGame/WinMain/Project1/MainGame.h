@@ -5,7 +5,7 @@
 class MainGame : public GameNode
 {
 private:
-
+	Image* backGround;
 public:
 	MainGame();
 	~MainGame();

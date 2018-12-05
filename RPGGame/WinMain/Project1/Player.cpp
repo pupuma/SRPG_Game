@@ -29,12 +29,12 @@ bool Player::Init()
 			if (NULL != map)
 			{
 				TilePoint tilePos;
-				tilePos.x = 4;
-				tilePos.y = 5;
+				tilePos.x = 6;
+				tilePos.y = 6;
 
 
 				tilePosition = tilePos;
-				map->SetTileComponent(tilePosition, this);
+				map->SetTileComponent(tilePosition, this , true);
 
 			}
 		}
@@ -102,7 +102,7 @@ void Player::UpdateAI()
 	}
 }
 
-void Player::AttackPattern(std::vector<Component*>* _list)
+void Player::AttackPattern()
 {
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 	map->SetAttackRange();

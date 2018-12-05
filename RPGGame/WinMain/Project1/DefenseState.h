@@ -8,5 +8,8 @@ class DefenseState
 public:
 	DefenseState(Character* _character);
 	~DefenseState();
+public:
+	void Start();
+	void Update();
 };
 

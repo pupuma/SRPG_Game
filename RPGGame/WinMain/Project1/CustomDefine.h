@@ -58,7 +58,30 @@ typedef struct _TilePoint
 {
 	int x;
 	int y;
+
+
+	bool operator==(const _TilePoint& a)
+	{
+		if (x == a.x && y == a.y)
+		{
+			return true;
+		}
+		return false;
+	}
 } TilePoint;
+
+
+typedef struct tagImgInfo
+{
+	Image* img;
+	//int index;
+	
+	int destX;
+	int destY;
+	
+	int frameX;
+	int frameY;
+}ImgInfo;
 
 //
 //bool operator==(const TilePoint &a, const TilePoint &b)

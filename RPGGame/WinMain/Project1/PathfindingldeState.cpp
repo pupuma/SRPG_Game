@@ -22,6 +22,11 @@ void PathfindingldeState::Start()
 {
 	State::Start();
 	GAMESYS->SetAction(false);
+
+	if (true == GetMove())
+	{
+		character->AttackPattern();
+	}
 }
 
 void PathfindingldeState::Update()
@@ -80,6 +85,11 @@ void PathfindingldeState::Update()
 			TileCell* targetTileCell = character->GetTargetTileCell();
 			if (NULL != targetTileCell)
 			{
+				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+				TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
+				tileCell->IsCharacter(false);
+
 				nextState = eStateType::ST_PATHFINDING;
 				SetMove(true);
 			}
@@ -87,11 +97,29 @@ void PathfindingldeState::Update()
 		else
 		{
 			GAMESYS->SetAttacking(true);
-			character->AttackPattern(&attackList);
 
 
 			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 			{
+
+
+				GetCursorPos(&_ptMouse);
+				ScreenToClient(_hWnd, &(_ptMouse));
+				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+				int mouseX = (int)_ptMouse.x;
+				int mouseY = (int)_ptMouse.y;
+
+				TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
+				
+
+				// 공격한 타일을 저장 
+				std::vector<Component*> targetList = map->GetComponentList(tileCell);
+				if(0 < targetList.size())
+				{
+					character->SetTarget(targetList);
+					nextState = eStateType::ST_ATTACK;
+				}
 
 			}
 		}

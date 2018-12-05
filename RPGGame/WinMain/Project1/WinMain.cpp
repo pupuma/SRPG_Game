@@ -71,7 +71,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lPszCm
 
 	ShowWindow(_hWnd, cmdShow);
 
-	MoveWindow(_hWnd, 30, 30, WINSIZEX, WINSIZEY, TRUE);
+	//MoveWindow(_hWnd, 0, 0, WINSIZEX, WINSIZEY, TRUE);
 	HDC hdc = GetDC(_hWnd);
 
 	while (true)
@@ -113,7 +113,7 @@ void setWindowsSize(int x, int y, int width, int height)
 	winRect.right = width;
 	winRect.bottom = height;
 
-	AdjustWindowRect(&winRect, WINSTYLE, NULL);
+	AdjustWindowRect(&winRect, WINSTYLE, FALSE);
 
 	SetWindowPos(_hWnd, NULL, x, y, (winRect.right - winRect.left),
 		(winRect.bottom - winRect.top), SWP_NOZORDER | SWP_NOMOVE);
