@@ -26,7 +26,10 @@ class Character
 protected:
 	bool isMoving;
 	bool isLive;
+	bool isTurn;
 	float moveTime;
+	int frameX;
+	int frameY;
 
 	eStateType eType;
 	eDirection nextDirection;
@@ -38,10 +41,9 @@ protected:
 	std::stack<TileCell*> pathfindingCellStack;
 	std::vector<TileInfo> attackList;
 	std::vector<Component*> targetList;
-
 protected:
 	Image* img;
-	Action* act;
+	//Action* act;
 protected:
 	int attackPoint;
 	int damagePoint;
@@ -80,21 +82,28 @@ public:
 	TileCell* PopPathfindingCell();
 	float GetMoveTime();
 	bool IsEmptyPathfindingStack();
+	void SetNextDirection(eDirection _direction);
 	void SetDirection(eDirection _direction);
 	std::vector<Component*> GetTargetList();
 	void AddTarget(Component* _target);
 	void ResetTarget();
 	void DecreaseHP(int _damagePoint);
+	void SetTilePosition(int _tilePosX, int _tilePosY);
+	void SetImgFrame(int _frameX, int _frameY);
+	void SetTurn(bool _isTurn);
 
 public:
 	State* GetState() { return state; }
 	int GetAttackPoint() { return attackPoint; }
 	void SetTarget(std::vector<Component*> _target) { targetList = _target; }
 	int GetDamagePoint() { return damagePoint; }
+	eDirection GetDirection() { return currentDirection; }
+	eDirection GetNextDirection() { return nextDirection; }
 public:
 #if defined(_DEBUG_TEST)
 	void SetStateType(eStateType _type) { eType = _type; }
 	eStateType GetType() { return eType; }
+	bool IsTurn() { return isTurn; }
 	
 	
 #endif // StateTYpe Render Test 

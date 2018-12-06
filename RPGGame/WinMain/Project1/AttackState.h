@@ -13,5 +13,6 @@ public:
 	void Stop() {}
 	void Update();
 	void Render(HDC hdc);
+public:
 };
 

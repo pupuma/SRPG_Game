@@ -10,6 +10,7 @@ private:
 	std::list<Component*> stageComponentList;
 private:
 	Character*	test;
+	Character* test2;
 	Map*		mapTest;
 private:
 #if defined(_DEBUG_TEST)

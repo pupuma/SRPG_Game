@@ -52,7 +52,6 @@ void PathfindingMoveState::Update()
 			if (character->GetMoveTime() <= movingDuration)
 			{
 				movingDuration = 0.0f;
-
 				TileCell* tileCell = character->PopPathfindingCell();
 
 				TilePoint toPosition = tileCell->GetTilePosition();

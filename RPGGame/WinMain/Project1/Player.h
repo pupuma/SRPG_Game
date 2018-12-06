@@ -10,6 +10,7 @@ public:
 	~Player();
 public:
 	bool Init();
+	//void Render(HDC hdc);
 public:
 	void UpdateAI();
 	void AttackPattern();

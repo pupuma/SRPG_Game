@@ -6,7 +6,7 @@
 #include "TileCell.h"
 
 #include "ComponentSystem.h"
-//
+
 #include "Player.h"
 #include "Monster.h"
 
@@ -24,7 +24,7 @@ bool BattleSceneTest::Init()
 {
 #if defined(_DEBUG_TEST)
 	{
-		isTest = true;
+		isTest = false;
 
 		rcTopTimer = RectMake(552,0, 96, 96);
 		rcTest1 = RectMake(11, 407, 252, 123);
@@ -38,6 +38,7 @@ bool BattleSceneTest::Init()
 #endif//
 
 	mapTest = new Map("Map");
+
 	if (!mapTest->Init())
 	{
 		return false;
@@ -45,13 +46,29 @@ bool BattleSceneTest::Init()
 	stageComponentList.push_back(mapTest);
 
 	test = new Player("Test",1.5f);
+	test->SetTilePosition(8, 8);
+
 	if (!test->Init( ))
 	{
 		return false;
 	}
+	
 
 	stageComponentList.push_back(test);
 	
+	test2 = new Player("Test2", 1.5f);
+	test2->SetTurn(true);
+	test2->SetTilePosition(8, 6);
+
+	if (!test2->Init())
+	{
+		return false;
+	}
+	test2->ChangeState(eStateType::ST_PATH_IDLE);
+
+	stageComponentList.push_back(test2);
+
+
 	// Monster
 	Character* monster = new Monster("Monster", 1.5f);
 	if (!monster->Init())
@@ -60,9 +77,14 @@ bool BattleSceneTest::Init()
 	}
 	stageComponentList.push_back(monster);
 
+	// Chacter
+	GAMESYS->AddCharacterList(test);
+	GAMESYS->AddCharacterList(test2);
+	GAMESYS->AddCharacterList(monster);
+
 	//Viewer 
 	
-	mapTest->SetViewer(test);
+	mapTest->SetViewer(test2);
 	//
 	//
 	//test->AttackPattern();
@@ -119,7 +141,7 @@ void BattleSceneTest::Render(HDC hdc)
 #if defined(_DEBUG_TEST)
 	{
 		std::string testStr;
-		eStateType eType = test->GetType();
+		eStateType eType = test2->GetType();
 		switch (eType)
 		{
 		case eStateType::ST_NONE:

@@ -40,8 +40,16 @@ void IdleState::Update()
 #endif // 
 			return;
 		}
+		else
+		{
+#if defined(_DEBUG_TEST)
+			character->SetStateType(nextState);
+#endif // 
+		}
 	}
-	//character->UpdateAI();
+
+	
+	character->UpdateAI();
 }
 
 void IdleState::Render(HDC hdc)

@@ -45,5 +45,6 @@ public:
 	float GetDeep() { return deep; }
 	bool CanMove() { return canMove; }
 	void SetCanMove(bool _canMove) { canMove = _canMove; }
+	eComponentType GetComponetType() { return type; }
 };
 

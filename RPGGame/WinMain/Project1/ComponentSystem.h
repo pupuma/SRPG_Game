@@ -1,5 +1,6 @@
 #pragma once
 
+enum eComponentType;
 
 class ComponentSystem
 {
@@ -18,7 +19,6 @@ public:
 public:
 	void AddComponent(std::string _name, Component* _component);
 	Component* FindComponent(std::string _name);
-
 //
 private:
 	std::queue<sMessageParam> c_MsgQueue;

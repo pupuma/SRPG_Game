@@ -46,6 +46,8 @@ Component * ComponentSystem::FindComponent(std::string _name)
 	return NULL;
 }
 
+
+
 void ComponentSystem::SendMsg(const sMessageParam & _param)
 {
 	c_MsgQueue.push(_param);

@@ -296,13 +296,12 @@ void Map::SetViewer(Component* _com)
 	viewer = _com;
 	//tileAttackList = GAMESYS->GetTileAttackList();
 	prevViewTilePosition = viewer->GetTilePosition();
-
 	// 현재 위치 자기 자신의 정보 타겟 -> 
 	//
 	RECT rcClient, rcWorld;
 	rcClient = { 0, 0, WINSIZEX, WINSIZEY };
 	rcWorld = { 0, 0, 5000, 6000 };
-	pt = { viewer->GetPosition().x , viewer->GetPosition().y };
+	pt = { 0 , 0};
 	CAMERA->Init(&pt, rcClient, rcWorld);
 	MaxTravelDistance(viewer);
 }
@@ -368,18 +367,36 @@ void Map::UpdateViewer()
 		std::list<TileInfo>::iterator it;
 		if (tileCell != NULL)
 		{
-			for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
+			if (!tileCellOpenList.empty())
 			{
-				if ((*it).tile->GetTilePosition().x == tileCell->GetTilePosition().x &&
-					(*it).tile->GetTilePosition().y == tileCell->GetTilePosition().y)
+				for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
 				{
-					isSelectMove = true;
-					mouseMovePosAni->Start();
-					rc = RectMake(tileCell->GetPosition().x, tileCell->GetPosition().y, 48, 48);
-					break;
+					if ((*it).tile->GetTilePosition().x == tileCell->GetTilePosition().x &&
+						(*it).tile->GetTilePosition().y == tileCell->GetTilePosition().y)
+					{
+						isSelectMove = true;
+						mouseMovePosAni->Start();
+						rc = RectMake(tileCell->GetPosition().x, tileCell->GetPosition().y, 48, 48);
+						break;
+					}
+
 				}
-				
 			}
+
+			if (tileAttackList.size() >= 1)
+			{
+				for (size_t i = 0; i < tileAttackList.size(); i++)
+				{
+					if(tileAttackList[i].tile->GetTilePosition().x == tileCell->GetTilePosition().x &&
+						tileAttackList[i].tile->GetTilePosition().y == tileCell->GetTilePosition().y)
+					{
+						isSelectMove = true;
+						mouseMovePosAni->Start();
+						rc = RectMake(tileCell->GetPosition().x, tileCell->GetPosition().y, 48, 48);
+					}
+				}
+			}
+			
 		}
 		mouseMovePosAni->FrameUpdate(TIMEMANAGER->GetElapsedTime() * 10);
 
@@ -436,9 +453,6 @@ void Map::MaxTravelDistanceRender(HDC hdc)
 
 		if (!GAMESYS->IsAction())
 		{
-			
-
-
 			std::list<TileInfo>::iterator it;
 			if (!tileCellOpenList.empty())
 			{
@@ -767,8 +781,8 @@ TileCell* Map::FindTileCellByMousePosition(int _mouseX, int _mouseY)
 {
 
 	
-	int midX = (WINSIZEX + 350) / 2;
-	int midY = (WINSIZEY + 350) / 2;
+	int midX = (WINSIZEX) / 2;
+	int midY = (WINSIZEY) / 2;
 
 
 	int iCameraX = CAMERA->GetPosition()->x;
@@ -865,7 +879,7 @@ void Map::ResetViewer()
 {
 	ReleaseOpenList();
 	prevViewTilePosition = viewer->GetTilePosition();
-	MaxTravelDistance(viewer);
+	//MaxTravelDistance(viewer);
 }
 
 void Map::ReleaseOpenList()

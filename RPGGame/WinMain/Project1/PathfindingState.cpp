@@ -20,6 +20,7 @@ void PathfindingState::Start()
 {
 	State::Start();
 
+	
 	// PathFinding
 	{
 		map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));

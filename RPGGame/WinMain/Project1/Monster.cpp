@@ -20,12 +20,13 @@ Monster::~Monster()
 bool Monster::Init()
 {
 	{
+		currentDirection = eDirection::DIR_DOWN;
 		isLive = true;
 		img = IMAGEMANAGER->FindImage("Evil");
 		img->SetX(48);
 		img->SetY(48);
-		img->SetFrameX(0);
-		img->SetFrameY(0);
+		//img->SetFrameX(0);
+		//mg->SetFrameY(0);
 
 		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 		{
@@ -35,10 +36,8 @@ bool Monster::Init()
 				tilePos.x = 5;
 				tilePos.y = 6;
 
-
 				tilePosition = tilePos;
 				map->SetTileComponent(tilePosition, this,true);
-
 			}
 		}
 

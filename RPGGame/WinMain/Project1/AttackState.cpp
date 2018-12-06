@@ -22,11 +22,12 @@ void AttackState::Start()
 	std::vector<Component*> targetList = character->GetTargetList();
 
 
-	bool isTarget = GAMESYS->TargetCheck(targetList);
+	bool isTarget = GAMESYS->TargetCheck(targetList, character);
 
 	
 	if (isTarget)
 	{
+		character->SetDirection(GAMESYS->LookAtCharacter(targetList, character));
 		for (int i = 0; i < targetList.size(); i++)
 		{
 			// 적이면 공격

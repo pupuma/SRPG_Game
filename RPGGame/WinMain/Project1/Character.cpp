@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Character.h"
-#include "Action.h"
 
 // State
 #include "IdleState.h"
@@ -15,19 +14,27 @@
 
 //
 #include "Map.h"
+#include "Animation.h"
+
 
 
 Character::Character(std::string _name, float _deep)
 	: Component(_name, _deep)
 {
 	type = eComponentType::CT_PLAYER;
-	nextDirection = eDirection::DIR_LEFT; 
+	nextDirection = eDirection::DIR_NONE;
+	currentDirection = eDirection::DIR_LEFT;
 	isMoving = false;
 
 	attackPoint = 1;
 	iMaxMoving = 3;
+	isTurn = false;
 	moveTime = (float)(rand() % 100 + 50) / 100.0f;
 	SetCanMove(false);
+
+
+	frameX = 0;
+	frameY = 0;
 
 	//
 	damagePoint = 0;
@@ -41,38 +48,6 @@ Character::~Character()
 
 bool Character::Init( )
 {
-	//{
-	//	isLive = true;
-	//	img = IMAGEMANAGER->FindImage("Actor1");
-	//	img->SetX(48);
-	//	img->SetY(48);
-	//	img->SetFrameX(0);
-	//	img->SetFrameY(0);
-
-	//	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-	//	{
-	//		if (NULL != map)
-	//		{
-	//			TilePoint tilePos;
-	//			tilePos.x = 4;
-	//			tilePos.y = 5;
-
-
-	//			tilePosition = tilePos;
-	//			map->SetTileComponent(tilePosition, this);
-
-	//		}
-	//	}
-
-	//	//act = new Action();
-	//	//act->Init();
-
-	//	//act->MoveTo(img, 50, 50, 10.0f);
-
-	//	InitState();
-	//	eType = eStateType::ST_PATH_IDLE;
-	//	ChangeState(eType);
-	//}
 
 	return true;
 }
@@ -85,19 +60,89 @@ void Character::Update()
 {
 	//act->Update();
 	state->Update();
+
+	if (KEYMANAGER->IsOnceKeyDown(VK_F1))
+	{
+		GAMESYS->GameTurn();
+	}
 }
 
 void Character::Render(HDC hdc)
 {
 	//img->Render(hdc);
 	state->Render(hdc);
-	img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y);
+
+	img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y,
+		frameX, frameY);
 
 
 #if defined(_DEBUG_TEST)
+	// HP
 	TCHAR str[256];
 	_stprintf(str, TEXT("HP : %d "), iHp);
 	TextOut(hdc, position.x, position.y, str, _tcslen(str));
+
+	memset(str, 0, sizeof(TCHAR) * 256);
+
+	//
+	std::string testStr;
+	switch (currentDirection)
+	{
+	case eDirection::DIR_LEFT:
+		testStr = TEXT("State : LEFT");
+		break;
+	case eDirection::DIR_RIGHT:
+		testStr = TEXT("State : RIGHT");
+		break;
+	case eDirection::DIR_UP:
+		testStr = TEXT("State : UP");
+		break;
+	case eDirection::DIR_DOWN:
+		testStr = TEXT("State : DOWN");
+		break;
+	case eDirection::DIR_NONE:
+		testStr = TEXT("State : NONE");
+		break;
+	}
+
+	TextOut(hdc, position.x - 15, position.y -15, testStr.c_str(), testStr.length());
+
+	testStr.clear();
+
+	//
+	eStateType eType = GetType();
+	switch (eType)
+	{
+	case eStateType::ST_NONE:
+		testStr = TEXT("State : STATE_NONE");
+		break;
+	case eStateType::ST_IDLE:
+		testStr = TEXT("State : STATE_IDLE");
+		break;
+	case eStateType::ST_MOVE:
+		testStr = TEXT("State : STATE_MOVE");
+		break;
+	case eStateType::ST_ATTACK:
+		testStr = TEXT("State : STATE_ATTACK");
+		break;
+	case eStateType::ST_DEFENSE:
+		testStr = TEXT("State : STATE_DEFFENSE");
+		break;
+	case eStateType::ST_DEAD:
+		testStr = TEXT("State : STATE_DEAD");
+	case eStateType::ST_PATHFINDING:
+		testStr = TEXT("State : PATHFINDING");
+		break;
+	case eStateType::ST_PATH_IDLE:
+		testStr = TEXT("State : PATH_IDLE");
+		break;
+	case eStateType::ST_PATH_MOVE:
+		testStr = TEXT("State : PATH_MOVE");
+		break;
+	}
+
+	TextOut(hdc, position.x - 30, position.y - 30, testStr.c_str(), testStr.length());
+
 #endif // Text Render
 }
 
@@ -178,6 +223,7 @@ void Character::UpdateAI()
 		//	eType = eStateType::ST_MOVE;
 		//	ChangeState(eType);
 		//}
+		
 	}
 	
 	
@@ -265,6 +311,11 @@ bool Character::IsEmptyPathfindingStack()
 	return true;
 }
 
+void Character::SetNextDirection(eDirection _direction)
+{
+	nextDirection = _direction;
+}
+
 void Character::SetDirection(eDirection _direction)
 {
 	currentDirection = _direction;
@@ -295,4 +346,38 @@ void Character::DecreaseHP(int _damagePoint)
 		isLive = false;
 		iHp = 0;
 	}
+}
+
+void Character::SetTilePosition(int _tilePosX, int _tilePosY)
+{
+	TilePoint tilePos;
+
+	
+	tilePos.x = _tilePosX;
+	tilePos.y = _tilePosY;
+
+	tilePosition = tilePos;
+
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	map->SetTileComponent(tilePosition, this, true);
+
+}
+
+void Character::SetImgFrame(int _frameX, int _frameY)
+{
+	//img->SetFrameX(_frameX);
+	//img->SetFrameY(_frameY);
+	frameX = _frameX;
+	frameY = _frameY;
+	
+
+}
+
+void Character::SetTurn(bool _isTurn)
+{
+	isTurn = _isTurn;
+	//Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	//map->ResetViewer();
+	//map->SetViewer((Component*)this);
+
 }

@@ -62,6 +62,8 @@ public:
 	virtual void Release();
 	virtual void Reset();
 public:
+	void Direction();
+public:
 	//void UpdatePathfinding();
 	//void UpdateBuildPath();
 	//TilePoint GetSearchTilePositionByDirection(TilePoint _tilePosition, eDirection _direction);
