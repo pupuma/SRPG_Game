@@ -48,8 +48,13 @@ void IdleState::Update()
 		}
 	}
 
+	if (character->GetComponetType() == eComponentType::CT_MONSTER)
+	{
+		nextState = ST_PATH_NAVI;
+	}
 	
-	character->UpdateAI();
+
+	//character->UpdateAI();
 }
 
 void IdleState::Render(HDC hdc)

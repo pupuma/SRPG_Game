@@ -5,6 +5,7 @@
 
 #include "Map.h"
 #include "TileCell.h"
+#include "NaviGationSystem.h"
 
 PathfindingState::PathfindingState(Character* _character)
 	: State(_character)
@@ -96,7 +97,7 @@ void PathfindingState::UpdatePathfinding()
 			for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 			{
 				TilePoint currentTilePosition = command.tileCell->GetTilePosition();
-				TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+				TilePoint searchTilePosision = NaviGationSystem::GetSingleton()->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
 				TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
 
 				

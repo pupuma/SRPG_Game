@@ -11,7 +11,7 @@
 #include "PathfindingldeState.h"
 #include "PathfindingImmedateState.h"
 #include "PathfindingMoveState.h"
-
+#include "NavigationState.h"
 //
 #include "Map.h"
 #include "Animation.h"
@@ -39,6 +39,7 @@ Character::Character(std::string _name, float _deep)
 	//
 	damagePoint = 0;
 	iHp = 5;
+	//job = eJobClass::JOB_NONE;
 }
 
 
@@ -130,6 +131,7 @@ void Character::Render(HDC hdc)
 		break;
 	case eStateType::ST_DEAD:
 		testStr = TEXT("State : STATE_DEAD");
+		break;
 	case eStateType::ST_PATHFINDING:
 		testStr = TEXT("State : PATHFINDING");
 		break;
@@ -138,6 +140,8 @@ void Character::Render(HDC hdc)
 		break;
 	case eStateType::ST_PATH_MOVE:
 		testStr = TEXT("State : PATH_MOVE");
+	case eStateType::ST_PATH_NAVI:
+		testStr = TEXT("State : PATH_NAVI");
 		break;
 	}
 
@@ -202,6 +206,10 @@ void Character::InitState()
 		stateMap[eStateType::ST_PATH_MOVE] = state;
 	}
 
+	{
+		State* state = new NavigationState(this);
+		stateMap[eStateType::ST_PATH_NAVI] = state;
+	}
 }
 
 void Character::ChangeState(eStateType stateType)

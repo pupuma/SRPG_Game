@@ -8,5 +8,8 @@ class DeadState
 public:
 	DeadState(Character* _character);
 	~DeadState();
+public:
+	void Start();
+	void Update();
 };
 

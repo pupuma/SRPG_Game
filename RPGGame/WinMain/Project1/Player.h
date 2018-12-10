@@ -5,6 +5,7 @@
 class Player 
 	: public Character
 {
+private:
 public:
 	Player(std::string _name, float _deep);
 	~Player();

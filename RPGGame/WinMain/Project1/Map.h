@@ -95,12 +95,15 @@ public:
 	std::vector<Component*> SetAttackRange();
 	std::vector<Component*> GetComponentList(TileCell* _tileCell);
 	void ResetAttackList();
+	
 public:
 	void LayerBase();
 	void LayerTile();
 	void LayerObject();
 	void TileMapCreateSampleTile();
 	void TileMapCreateSampleObject();
+	void MapSearchClear();
+	
 public:
 	//bool operator==(const TilePoint &a)
 	//{

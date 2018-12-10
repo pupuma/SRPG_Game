@@ -103,6 +103,9 @@
     <Filter Include="MainGame\02.GameObject\Tile">
       <UniqueIdentifier>{32bbf10e-f198-47d3-a55b-5acf59d6b66f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2DFrameWork\State\Navi">
+      <UniqueIdentifier>{856559b2-1af4-4653-873a-4609e09c566a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -232,6 +235,15 @@
       <Filter>MainGame\02.GameObject\Character</Filter>
     </ClCompile>
     <ClCompile Include="ParsingSystem.cpp">
+      <Filter>2DFrameWork\System</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationState.cpp">
+      <Filter>2DFrameWork\State\Navi</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviGationSystem.cpp">
+      <Filter>2DFrameWork\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTurnManager.cpp">
       <Filter>2DFrameWork\System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -381,6 +393,15 @@
       <Filter>MainGame\02.GameObject\Character</Filter>
     </ClInclude>
     <ClInclude Include="ParsingSystem.h">
+      <Filter>2DFrameWork\System</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationState.h">
+      <Filter>2DFrameWork\State\Navi</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviGationSystem.h">
+      <Filter>2DFrameWork\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTurnManager.h">
       <Filter>2DFrameWork\System</Filter>
     </ClInclude>
   </ItemGroup>

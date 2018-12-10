@@ -68,6 +68,16 @@ typedef struct _TilePoint
 		}
 		return false;
 	}
+
+	bool operator!=(const _TilePoint& a)
+	{
+		if (x != a.x && y != a.y)
+		{
+			return true;
+		}
+		return false;
+	}
+
 } TilePoint;
 
 
@@ -108,6 +118,7 @@ typedef struct tagTileInfo
 {
 	TileCell* tile;
 	Image* tileImg;
+	int distance;
 }TileInfo;
 
 

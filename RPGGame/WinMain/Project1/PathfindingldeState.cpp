@@ -53,82 +53,97 @@ void PathfindingldeState::Update()
 	//
 
 	{
-		if (true == character->IsTurn())
+		if (character->GetComponetType() == eComponentType::CT_PLAYER)
 		{
-			if (false == GetMove())
+			if (true == character->IsTurn())
 			{
-				if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+				if (false == GetMove())
 				{
-					GetCursorPos(&_ptMouse);
-					ScreenToClient(_hWnd, &(_ptMouse));
-					Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-					int mouseX = (int)_ptMouse.x;
-					int mouseY = (int)_ptMouse.y;
-
-					TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
-
-					// 
-					std::list<TileInfo> openList = map->GetOpenTileCellList();
-					std::list<TileInfo>::iterator it;
-
-					if (!openList.empty())
+					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 					{
-						for (it = openList.begin(); it != openList.end(); it++)
+						GetCursorPos(&_ptMouse);
+						ScreenToClient(_hWnd, &(_ptMouse));
+						Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+						int mouseX = (int)_ptMouse.x;
+						int mouseY = (int)_ptMouse.y;
+
+						TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
+
+						// 
+						std::list<TileInfo> openList = map->GetOpenTileCellList();
+						std::list<TileInfo>::iterator it;
+
+						if (!openList.empty())
 						{
-							if (tileCell == (*it).tile)
+							for (it = openList.begin(); it != openList.end(); it++)
 							{
-								if (NULL != tileCell)
+								if (tileCell == (*it).tile)
 								{
-									character->SetTargetTileCell(tileCell);
+									if (NULL != tileCell)
+									{
+										character->SetTargetTileCell(tileCell);
+									}
+									break;
 								}
-								break;
 							}
 						}
+
 					}
 
-				}
-
-				TileCell* targetTileCell = character->GetTargetTileCell();
-				if (NULL != targetTileCell)
-				{
-					Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-					TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
-					tileCell->IsCharacter(false);
-
-					nextState = eStateType::ST_PATHFINDING;
-					SetMove(true);
-				}
-			}
-			else
-			{
-				GAMESYS->SetAttacking(true);
-
-
-				if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
-				{
-					GetCursorPos(&_ptMouse);
-					ScreenToClient(_hWnd, &(_ptMouse));
-					Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-					int mouseX = (int)_ptMouse.x;
-					int mouseY = (int)_ptMouse.y;
-
-					TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
-
-
-					// 공격한 타일을 저장 
-					std::vector<Component*> targetList = map->GetComponentList(tileCell);
-					if (0 < targetList.size())
+					TileCell* targetTileCell = character->GetTargetTileCell();
+					if (NULL != targetTileCell)
 					{
-						character->SetTarget(targetList);
-						nextState = eStateType::ST_ATTACK;
-					}
+						Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
+						TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
+						tileCell->IsCharacter(false);
+
+						nextState = eStateType::ST_PATHFINDING;
+						SetMove(true);
+					}
+				}
+				else
+				{
+					GAMESYS->SetAttacking(true);
+
+
+					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+					{
+						GetCursorPos(&_ptMouse);
+						ScreenToClient(_hWnd, &(_ptMouse));
+						Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+						int mouseX = (int)_ptMouse.x;
+						int mouseY = (int)_ptMouse.y;
+
+						TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
+
+
+						// 공격한 타일을 저장 
+						std::vector<Component*> targetList = map->GetComponentList(tileCell);
+						if (0 < targetList.size())
+						{
+							character->SetTarget(targetList);
+							nextState = eStateType::ST_ATTACK;
+						}
+					}
 				}
 			}
 		}
+		else
+		{
+			TileCell* tileCell = GAMESYS->GetTargetTileCell();
+			Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+			std::vector<Component*> targetList = map->GetComponentList(tileCell);
+			if (0 < targetList.size())
+			{
+				character->SetTarget(targetList);
+				nextState = eStateType::ST_ATTACK;
+			}
+		}
+		
 
 	}
 

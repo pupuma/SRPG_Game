@@ -39,7 +39,7 @@ bool MainGame::Init()
 	// 이미지 매니져 초기화 
 	IMAGEMANAGER->Init();
 	IMAGEMANAGER->AddImage(TEXT("Player"), TEXT("../Resource/SpaceShip/rocket.bmp"), 52, 64, true, COLOR_M);
-	
+	GAMESYS->Init();
 	// 이미지 프레임
 	{
 		IMAGEMANAGER->AddFrameImage(TEXT("Actor1"), TEXT("../Resource/Images/Actor1.bmp"), 573, 384, 12, 8, true, COLOR_M);
@@ -53,9 +53,14 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddFrameImage(TEXT("TileMap_Cell_B"), TEXT("../Resource/Images/TileMap_Cell_B.bmp"), 768, 14736, 16, 307, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("TileMap_OBJ_B"), TEXT("../Resource/Images/TileMap_OBJ_B.bmp"), 768, 9216, 16, 192, true, COLOR_M);
 		backGround = IMAGEMANAGER->AddImage(TEXT("Background"), TEXT("../Resource/Images/BackGround.bmp"), 1200,800, false, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("UI_Button"), TEXT("../Resource/Images/BUTTON.bmp"), 260, 192, 2, 4, true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("UI1"), TEXT("../Resource/Images/UI1.bmp"), 252, 123,true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("UI2"), TEXT("../Resource/Images/UI2.bmp"), 253, 253,true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("UI3"), TEXT("../Resource/Images/UI3.bmp"), 140, 220,true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("UI4"), TEXT("../Resource/Images/UI4.bmp"), 383, 220,true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("UI5"), TEXT("../Resource/Images/UI5.bmp"), 130, 75,true, COLOR_M);
 
 	}
-
 
 	{
 		RESOURCEMANAGER->AddScript(TEXT("MapData"));

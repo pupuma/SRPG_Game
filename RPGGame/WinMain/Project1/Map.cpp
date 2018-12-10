@@ -65,47 +65,24 @@ void Map::Update()
 {
 
 #if defined(_DEBUG_TEST)
-		//TileCell* tset = tileArray[6][5];
-		//tset;
+	RECT rc1, rcClient;
+	GetClientRect(_hWnd, &rc1);
 
-		RECT rc1, rcClient;
-		GetClientRect(_hWnd, &rc1);
-
-		POINT pt1, pt2;
-		pt1.x = rc1.left;
-		pt1.y = rc1.top;
-		pt2.x = rc1.right;
-		pt2.y = rc1.bottom;
+	POINT pt1, pt2;
+	pt1.x = rc1.left;
+	pt1.y = rc1.top;
+	pt2.x = rc1.right;
+	pt2.y = rc1.bottom;
 
 
-		ClientToScreen(_hWnd, &pt1);
-		ClientToScreen(_hWnd, &pt2);
+	ClientToScreen(_hWnd, &pt1);
+	ClientToScreen(_hWnd, &pt2);
 
-		rcClient.left = pt1.x;
-		rcClient.right = pt2.x;
-		rcClient.top = pt1.y;
-		rcClient.bottom = pt2.y;
+	rcClient.left = pt1.x;
+	rcClient.right = pt2.x;
+	rcClient.top = pt1.y;
+	rcClient.bottom = pt2.y;
 
-		//ClipCursor(&rcClient);
-	//if (KEYMANAGER->IsOnceKeyDown(VK_LEFT))
-	//{
-	//	pt.x--;
-	//}
-
-	//if (KEYMANAGER->IsOnceKeyDown(VK_RIGHT))
-	//{
-	//	pt.x++;
-	//}
-
-	//if (KEYMANAGER->IsOnceKeyDown(VK_UP))
-	//{
-	//	pt.y--;
-	//}
-
-	//if (KEYMANAGER->IsOnceKeyDown(VK_DOWN))
-	//{
-	//	pt.y++;
-	//}
 	CAMERA->setPosition(&pt);
 #endif
 	CAMERA->Update();
@@ -478,6 +455,7 @@ void Map::MaxTravelDistanceRender(HDC hdc)
 }
 
 // 수정 사항 int _distance, TilePoint _pos
+
 void Map::MaxPathFinder(int _distance, TilePoint _pos)
 {
 	//
@@ -510,7 +488,7 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 
 			tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
 			tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
+			tileInfo.distance = _distance;
 			tileCellOpenList.push_back(tileInfo);
 
 			std::pair<TileCell*, int> p_data;
@@ -556,6 +534,7 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 
 					tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
 					tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+					tileInfo.distance = _distance;
 
 					tileCellOpenList.push_back(tileInfo);
 
@@ -575,74 +554,6 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 			}
 
 		}
-
-
-		/*
-		for (size_t i = 0; i < pathfindingQueue.size(); i++)
-					{
-						targetTileCell = pathfindingQueue.top();
-						pathfindingQueue.pop();
-
-						for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
-						{
-							TilePoint currentTilePosition = targetTileCell->GetTilePosition();
-							TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
-
-							if (searchTilePosision.x == targetStartPosition.x && searchTilePosision.y == targetStartPosition.y ||
-								tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true)
-							{
-								continue;
-							}
-
-							TileCell*  searchTileCell = FindTileCell(searchTilePosision);
-							searchTileCell->SetSearchPathfinding(true);
-
-							tileInfo.tile = searchTileCell;
-							tileInfo.tileImg = new Image();
-							tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-							tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-							tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-							tileCellOpenList.push_back(tileInfo);
-
-							std::pair<TileCell*, int> p_data;
-							prevPathfindingQueue.push(searchTileCell);
-						}
-		*/
-
-
-		//for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
-		//{
-		//	TilePoint currentTilePosition = targetTileCell->GetTilePosition();
-		//	TilePoint searchTilePosision = GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
-		//	
-		//	if (searchTilePosision.x == targetStartPosition.x && searchTilePosision.y == targetStartPosition.y ||
-		//		tileArray[searchTilePosision.y][searchTilePosision.x]->IsSearchPathfinding() == true)
-		//	{
-		//		continue;
-		//	}
-
-		//	TileCell*  searchTileCell = FindTileCell(searchTilePosision);
-		//	searchTileCell->SetSearchPathfinding(true);
-
-		//	tileInfo.tile = searchTileCell;
-		//	tileInfo.tileImg = new Image();
-		//	tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-		//	tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-		//	tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-		//	tileCellOpenList.push_back(tileInfo);
-		//	
-		//	std::pair<TileCell*, int> p_data;
-		//	pathfindingQueue.push(searchTileCell);
-		//}
-
-		//MaxPathFinder(_distance, targetTileCell->GetTilePosition());
-
-
-		//
 	}
 
 	{
@@ -650,106 +561,12 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 		{
 			pathfindingQueue.pop();
 		}
+
+		for (auto a : tileCellOpenList)
+		{
+			a.tile->SetSearchPathfinding(false);
+		}
 	}
-	/*{
-
-		if (_distance <= 0 )
-		{
-			return;
-		}
-
-		
-		TilePoint upTile = { _pos.x , _pos.y - 1 };
-		TilePoint downTile = { _pos.x , _pos.y + 1 };
-		TilePoint leftTile = { _pos.x - 1, _pos.y };
-		TilePoint rightTile = { _pos.x + 1,_pos.y };
-		
-		
-		if (upTile.x == targetStartPosition.x &&  upTile.y == targetStartPosition.y ||
-			downTile.x == targetStartPosition.x &&  downTile.y == targetStartPosition.y ||
-			leftTile.x == targetStartPosition.x &&  leftTile.y == targetStartPosition.y ||
-			rightTile.x == targetStartPosition.x &&  rightTile.y == targetStartPosition.y)
-		{
-			_distance++;
-			return;
-		}
-
-
-		if (tileArray[upTile.y][upTile.x] != NULL && upTile.y > 0 &&
-			tileArray[upTile.y][upTile.x]->IsSearchPathfinding() == false)
-		{
-			
-			tileInfo.tile = tileArray[upTile.y][upTile.x];
-			tileInfo.tileImg = new Image();
-			tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-			tileInfo.tileImg->SetX(tileArray[upTile.y][upTile.x]->GetPosition().x);
-			tileInfo.tileImg->SetY(tileArray[upTile.y][upTile.x]->GetPosition().y);
-
-
-			tileCellOpenList.push_back(tileInfo);
-			tileArray[upTile.y][upTile.x]->SetSearchPathfinding(true);
-			 
-
-			MaxPathFinder(_distance - 1, upTile);
-		}
-
-		if (tileArray[downTile.y][downTile.x] != NULL && downTile.y < 33 &&
-			tileArray[downTile.y][downTile.x]->IsSearchPathfinding() == false)
-		{
-		
-			tileInfo.tile = tileArray[downTile.y][downTile.x];
-			tileInfo.tileImg = new Image();
-			tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-			tileInfo.tileImg->SetX(tileArray[downTile.y][downTile.x]->GetPosition().x);
-			tileInfo.tileImg->SetY(tileArray[downTile.y][downTile.x]->GetPosition().y);
-
-			tileCellOpenList.push_back(tileInfo);
-			tileArray[downTile.y][downTile.x]->SetSearchPathfinding(true);
-			 
-
-			MaxPathFinder(_distance - 1, downTile);
-		}
-
-		if (tileArray[leftTile.y][leftTile.x] != NULL && leftTile.x > 0 &&
-			tileArray[leftTile.y][leftTile.x]->IsSearchPathfinding() == false)
-		{
-			
-			tileInfo.tile = tileArray[leftTile.y][leftTile.x];
-			tileInfo.tileImg = new Image();
-			tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-			tileInfo.tileImg->SetX(tileArray[leftTile.y][leftTile.x]->GetPosition().x);
-			tileInfo.tileImg->SetY(tileArray[leftTile.y][leftTile.x]->GetPosition().y);
-
-			tileCellOpenList.push_back(tileInfo);
-			tileArray[leftTile.y][leftTile.x]->SetSearchPathfinding(true);
-			 
-
-			MaxPathFinder(_distance - 1, leftTile);
-		}
-
-		if (tileArray[rightTile.y][rightTile.x] != NULL && rightTile.x < 33 &&
-			tileArray[rightTile.y][rightTile.x]->IsSearchPathfinding() == false)
-		{
-			
-			tileInfo.tile = tileArray[rightTile.y][rightTile.x];
-			tileInfo.tileImg = new Image();
-			tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
-
-			tileInfo.tileImg->SetX(tileArray[rightTile.y][rightTile.x]->GetPosition().x);
-			tileInfo.tileImg->SetY(tileArray[rightTile.y][rightTile.x]->GetPosition().y);
-
-			tileCellOpenList.push_back(tileInfo);
-			tileArray[rightTile.y][rightTile.x]->SetSearchPathfinding(true);
-			 
-
-			MaxPathFinder(_distance - 1, rightTile);
-		}
-
-		
-	}*/
 }
 
 
@@ -879,7 +696,7 @@ void Map::ResetViewer()
 {
 	ReleaseOpenList();
 	prevViewTilePosition = viewer->GetTilePosition();
-	//MaxTravelDistance(viewer);
+	MaxTravelDistance(viewer);
 }
 
 void Map::ReleaseOpenList()
@@ -980,8 +797,9 @@ std::vector<Component*> Map::GetComponentList(TileCell * _tileCell)
 	{
 		return componentArray;
 	}
+
 	// 범위 체크 (맵 안에 있는지)
-	if (_tileCell->GetTilePosition().x < 0 || width<= _tileCell->GetTilePosition().x ||
+	if (_tileCell->GetTilePosition().x < 0 || width <= _tileCell->GetTilePosition().x ||
 		_tileCell->GetTilePosition().y < 0 || height <= _tileCell->GetTilePosition().y)
 	{
 		return componentArray;
@@ -1253,6 +1071,17 @@ void Map::TileMapCreateSampleObject()
 			srcX = 0;
 			srcY++;
 			destY += spriteSize;
+		}
+	}
+}
+
+void Map::MapSearchClear()
+{
+	for (size_t i = 0; i < height; i++)
+	{
+		for (size_t j = 0; j < width; j++)
+		{
+			tileArray[i][j]->SetSearchPathfinding(false);
 		}
 	}
 }

@@ -161,6 +161,7 @@
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="GameSystem.cpp" />
+    <ClCompile Include="GameTurnManager.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
@@ -169,6 +170,8 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MoveState.cpp" />
+    <ClCompile Include="NavigationState.cpp" />
+    <ClCompile Include="NaviGationSystem.cpp" />
     <ClCompile Include="ParsingSystem.cpp" />
     <ClCompile Include="PathfindingImmedateState.cpp" />
     <ClCompile Include="PathfindingldeState.cpp" />
@@ -210,6 +213,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameNode.h" />
     <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="GameTurnManager.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
@@ -219,6 +223,8 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MoveState.h" />
+    <ClInclude Include="NavigationState.h" />
+    <ClInclude Include="NaviGationSystem.h" />
     <ClInclude Include="ParsingSystem.h" />
     <ClInclude Include="PathfindingImmedateState.h" />
     <ClInclude Include="PathfindingldeState.h" />

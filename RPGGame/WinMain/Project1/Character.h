@@ -13,7 +13,17 @@ enum eStateType
 	ST_PATHFINDING,
 	ST_PATH_MOVE,
 	ST_PATH_IDLE,
+	ST_PATH_NAVI
 
+};
+
+
+enum eJobClass
+{
+	JOB_NONE,
+	JOB_WARRIOR,
+	JOB_ARCHER,
+	JOB_HEALER,
 };
 
 class State;
@@ -23,6 +33,9 @@ class TileCell;
 class Character 
 	: public Component
 {
+protected:
+	eJobClass job;
+
 protected:
 	bool isMoving;
 	bool isLive;
@@ -99,6 +112,10 @@ public:
 	int GetDamagePoint() { return damagePoint; }
 	eDirection GetDirection() { return currentDirection; }
 	eDirection GetNextDirection() { return nextDirection; }
+	eJobClass GetJobClass() { return job; }
+	void SetJobClass(eJobClass _job) { job = _job; }
+	int GetHp() { return iHp; }
+	void SetHp(int _hp) { iHp = _hp; }
 public:
 #if defined(_DEBUG_TEST)
 	void SetStateType(eStateType _type) { eType = _type; }

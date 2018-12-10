@@ -24,6 +24,15 @@ private:
 	RECT rcTest6;
 	RECT rcTest7;
 
+	Image* imgTest1;
+	Image* imgTest2;
+	Image* imgTest3;
+	Image* imgTest4;
+	Image* imgTest5;
+	Image* imgTest6;
+	Image* imgTest7;
+
+
 #endif//
 public:
 	BattleSceneTest();

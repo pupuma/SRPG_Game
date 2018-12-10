@@ -11,5 +11,6 @@ public:
 	bool Init();
 public:
 	void UpdateAI();
+	void AttackPattern();
 };
 

@@ -12,3 +12,11 @@ DeadState::DeadState(Character* _character)
 DeadState::~DeadState()
 {
 }
+
+void DeadState::Start()
+{
+}
+
+void DeadState::Update()
+{
+}

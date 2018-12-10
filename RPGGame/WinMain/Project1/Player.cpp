@@ -8,6 +8,7 @@ Player::Player(std::string _name, float _deep)
 	: Character(_name,_deep)
 {
 	//isTurn = true;
+
 }
 
 

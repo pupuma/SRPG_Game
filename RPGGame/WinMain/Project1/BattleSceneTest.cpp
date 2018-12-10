@@ -29,11 +29,20 @@ bool BattleSceneTest::Init()
 		rcTopTimer = RectMake(552,0, 96, 96);
 		rcTest1 = RectMake(11, 407, 252, 123);
 		rcTest2 = RectMake(31, 533, 253, 253);
-		rcTest3 = RectMake(320, 549, 141, 220);
+		rcTest3 = RectMake(320, 549, 140, 220);
 		rcTest4 = RectMake(498, 549, 383, 220);
-		rcTest5 = RectMake(535, 465, 129, 75);
+		rcTest5 = RectMake(535, 465, 130, 75);
 		rcTest6 = RectMake(917, 533, 253, 253);
 		rcTest7 = RectMake(937, 407, 252, 123);
+
+		imgTest1 = IMAGEMANAGER->FindImage(TEXT("UI1"));
+		imgTest2 = IMAGEMANAGER->FindImage(TEXT("UI2"));
+		imgTest3 = IMAGEMANAGER->FindImage(TEXT("UI3"));
+		imgTest4 = IMAGEMANAGER->FindImage(TEXT("UI4"));
+		imgTest5 = IMAGEMANAGER->FindImage(TEXT("UI5"));
+		imgTest6 = IMAGEMANAGER->FindImage(TEXT("UI2"));
+		imgTest7 = IMAGEMANAGER->FindImage(TEXT("UI1"));
+
 	}
 #endif//
 
@@ -46,7 +55,7 @@ bool BattleSceneTest::Init()
 	stageComponentList.push_back(mapTest);
 
 	test = new Player("Test",1.5f);
-	test->SetTilePosition(8, 8);
+	test->SetTilePosition(9, 9);
 
 	if (!test->Init( ))
 	{
@@ -56,35 +65,39 @@ bool BattleSceneTest::Init()
 
 	stageComponentList.push_back(test);
 	
-	test2 = new Player("Test2", 1.5f);
-	test2->SetTurn(true);
-	test2->SetTilePosition(8, 6);
+	//test2 = new Player("Test2", 1.5f);
+	//test2->SetTurn(false);
+	//test2->SetTilePosition(6, 6);
 
-	if (!test2->Init())
-	{
-		return false;
-	}
-	test2->ChangeState(eStateType::ST_PATH_IDLE);
+	//if (!test2->Init())
+	//{
+	//	return false;
+	//}
+	//test2->ChangeState(eStateType::ST_IDLE);
 
-	stageComponentList.push_back(test2);
+	//stageComponentList.push_back(test2);
 
 
 	// Monster
 	Character* monster = new Monster("Monster", 1.5f);
+	monster->SetTurn(true);
+	monster->SetTilePosition(5, 6);
+
 	if (!monster->Init())
 	{
 		return false;
 	}
+
 	stageComponentList.push_back(monster);
 
 	// Chacter
 	GAMESYS->AddCharacterList(test);
-	GAMESYS->AddCharacterList(test2);
+	//GAMESYS->AddCharacterList(test2);
 	GAMESYS->AddCharacterList(monster);
 
 	//Viewer 
 	
-	mapTest->SetViewer(test2);
+	mapTest->SetViewer(monster);
 	//
 	//
 	//test->AttackPattern();
@@ -139,7 +152,7 @@ void BattleSceneTest::Render(HDC hdc)
 	}
 
 #if defined(_DEBUG_TEST)
-	{
+	/*{
 		std::string testStr;
 		eStateType eType = test2->GetType();
 		switch (eType)
@@ -174,7 +187,7 @@ void BattleSceneTest::Render(HDC hdc)
 		}
 		TextOut(hdc, 10, 10, testStr.c_str(), testStr.length());
 	}
-
+*/
 
 	// RECT
 	if (isTest)
@@ -187,6 +200,15 @@ void BattleSceneTest::Render(HDC hdc)
 		DrawObject(hdc, rcTest5, 1, RGB(255, 255, 125), RECTANGLE);
 		DrawObject(hdc, rcTest6, 1, RGB(125, 255, 125), RECTANGLE);
 		DrawObject(hdc, rcTest7, 1, RGB(125, 0, 125), RECTANGLE);
+
+		imgTest1->Render(hdc, rcTest1.left, rcTest1.top);
+		imgTest2->Render(hdc, rcTest2.left, rcTest2.top);
+		imgTest3->Render(hdc, rcTest3.left, rcTest3.top);
+		imgTest4->Render(hdc, rcTest4.left, rcTest4.top);
+		imgTest5->Render(hdc, rcTest5.left, rcTest5.top);
+		imgTest6->Render(hdc, rcTest6.left, rcTest6.top);
+		imgTest7->Render(hdc, rcTest7.left, rcTest7.top);
+
 	}
 
 #endif //

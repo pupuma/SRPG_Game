@@ -9,6 +9,7 @@
 Monster::Monster(std::string _name, float _deep)
 	: Character(_name, _deep)
 {
+	type = CT_MONSTER;
 
 }
 
@@ -28,18 +29,18 @@ bool Monster::Init()
 		//img->SetFrameX(0);
 		//mg->SetFrameY(0);
 
-		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-		{
-			if (NULL != map)
-			{
-				TilePoint tilePos;
-				tilePos.x = 5;
-				tilePos.y = 6;
+		//Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+		//{
+		//	if (NULL != map)
+		//	{
+		//		TilePoint tilePos;
+		//		tilePos.x = 5;
+		//		tilePos.y = 6;
 
-				tilePosition = tilePos;
-				map->SetTileComponent(tilePosition, this,true);
-			}
-		}
+		//		tilePosition = tilePos;
+		//		map->SetTileComponent(tilePosition, this,true);
+		//	}
+		//}
 
 		//act = new Action();
 		//act->Init();
@@ -47,7 +48,7 @@ bool Monster::Init()
 		//act->MoveTo(img, 50, 50, 10.0f);
 
 		InitState();
-		eType = eStateType::ST_IDLE;
+		eType = eStateType::ST_PATH_NAVI;
 		ChangeState(eType);
 
 	}
@@ -57,3 +58,13 @@ bool Monster::Init()
 void Monster::UpdateAI()
 {
 }
+
+
+
+void Monster::AttackPattern()
+{
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+	map->SetAttackRange();
+}
+
