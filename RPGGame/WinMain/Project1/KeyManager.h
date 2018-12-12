@@ -20,6 +20,7 @@ public:
 public:
 	bool Init();
 	void Release();
+	void Reset();
 public:
 	bool IsOnceKeyDown(int _key);
 	bool IsOnceKeyUp(int _key);
@@ -31,6 +32,7 @@ public:
 
 	void SetKeyDown(int _key, bool _state);
 	void SetKeyUp(int _key, bool _state);
+	
 
 };
 

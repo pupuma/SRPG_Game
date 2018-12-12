@@ -106,6 +106,9 @@
     <Filter Include="2DFrameWork\State\Navi">
       <UniqueIdentifier>{856559b2-1af4-4653-873a-4609e09c566a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\UI\Button">
+      <UniqueIdentifier>{a6980d6d-a9a6-4724-abbf-55d12d323ef8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -245,6 +248,12 @@
     </ClCompile>
     <ClCompile Include="GameTurnManager.cpp">
       <Filter>2DFrameWork\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>MainGame\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectStateButton.cpp">
+      <Filter>MainGame\UI\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +412,12 @@
     </ClInclude>
     <ClInclude Include="GameTurnManager.h">
       <Filter>2DFrameWork\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h">
+      <Filter>MainGame\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectStateButton.h">
+      <Filter>MainGame\UI\Button</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

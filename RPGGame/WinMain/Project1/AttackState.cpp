@@ -39,7 +39,10 @@ void AttackState::Start()
 			ComponentSystem::GetInstance()->SendMsg(param);
 
 		}
+
 	}
+
+	GAMESYS->SetAttacking(false);
 }
 
 void AttackState::Update()

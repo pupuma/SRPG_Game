@@ -162,6 +162,7 @@
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GameTurnManager.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="ProgressBar.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SelectStateButton.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="TileCell.cpp" />
@@ -214,6 +216,7 @@
     <ClInclude Include="GameNode.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GameTurnManager.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
@@ -235,6 +238,7 @@
     <ClInclude Include="RandomFunction.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SelectStateButton.h" />
     <ClInclude Include="SingletonBase.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="State.h" />

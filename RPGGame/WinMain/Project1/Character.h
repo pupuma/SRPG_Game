@@ -55,6 +55,8 @@ protected:
 	std::vector<TileInfo> attackList;
 	std::vector<Component*> targetList;
 protected:
+	TileCell* targetCharacterTile;
+protected:
 	Image* img;
 	//Action* act;
 protected:
@@ -104,18 +106,21 @@ public:
 	void SetTilePosition(int _tilePosX, int _tilePosY);
 	void SetImgFrame(int _frameX, int _frameY);
 	void SetTurn(bool _isTurn);
-
 public:
 	State* GetState() { return state; }
 	int GetAttackPoint() { return attackPoint; }
 	void SetTarget(std::vector<Component*> _target) { targetList = _target; }
 	int GetDamagePoint() { return damagePoint; }
 	eDirection GetDirection() { return currentDirection; }
+	int GetDistance() { return iMaxMoving; }
 	eDirection GetNextDirection() { return nextDirection; }
 	eJobClass GetJobClass() { return job; }
 	void SetJobClass(eJobClass _job) { job = _job; }
 	int GetHp() { return iHp; }
 	void SetHp(int _hp) { iHp = _hp; }
+	void SetCharacterTileCell(TileCell* _targetTileCellCharacter) { targetCharacterTile = _targetTileCellCharacter; }
+	TileCell* GetCharacterTileCell() { return targetCharacterTile; }
+
 public:
 #if defined(_DEBUG_TEST)
 	void SetStateType(eStateType _type) { eType = _type; }

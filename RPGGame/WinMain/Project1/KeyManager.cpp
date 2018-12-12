@@ -24,6 +24,12 @@ void KeyManager::Release()
 {
 }
 
+void KeyManager::Reset()
+{
+	this->GetKeyUp().reset();
+	this->GetKeyDown().reset();
+}
+
 
 bool KeyManager::IsOnceKeyDown(int _key)
 {

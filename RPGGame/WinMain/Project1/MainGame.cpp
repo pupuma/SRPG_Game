@@ -60,6 +60,8 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddImage(TEXT("UI4"), TEXT("../Resource/Images/UI4.bmp"), 383, 220,true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("UI5"), TEXT("../Resource/Images/UI5.bmp"), 130, 75,true, COLOR_M);
 
+		IMAGEMANAGER->AddFrameImage(TEXT("SelectButton"), TEXT("../Resource/Images/BUTTON.bmp"), 260, 192, 2, 4, true, COLOR_M);
+
 	}
 
 	{

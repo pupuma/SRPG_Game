@@ -36,7 +36,7 @@ public:
 public:
 	
 public:
-	bool GetGharacter() { return isCharacter; }
+	bool GetCharacter() { return isCharacter; }
 	void SetPosition(POINT _pos) { position = _pos; }
 	POINT GetPosition() { return position; }
 	TilePoint GetTilePosition() { return tilePosition; }

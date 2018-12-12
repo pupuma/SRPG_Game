@@ -31,7 +31,7 @@ Character::Character(std::string _name, float _deep)
 	isTurn = false;
 	moveTime = (float)(rand() % 100 + 50) / 100.0f;
 	SetCanMove(false);
-
+	targetCharacterTile = NULL;
 
 	frameX = 0;
 	frameY = 0;

@@ -3,7 +3,6 @@
 class TileCell;
 class Animation;
 
-
 //#define TILEWIDTH 33
 //#define TILEHEIGHT 33
 
@@ -11,6 +10,7 @@ class Map
 	: public Component
 {
 private:
+
 	ImgInfo imgTileInfo;
 	ImgInfo imgObjectInfo;
 private:
@@ -79,6 +79,7 @@ public:
 public:
 	void SetViewer(Component* _com);
 	void UpdateViewer();
+	void OpenListClear();
 public:
 	TileCell* FindTileCell(TilePoint _searchTilePosision);
 

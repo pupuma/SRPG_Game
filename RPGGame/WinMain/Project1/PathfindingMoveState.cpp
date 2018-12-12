@@ -4,7 +4,7 @@
 
 #include "Character.h"
 #include "TileCell.h"
-
+#include "Map.h"
 
 PathfindingMoveState::PathfindingMoveState(Character* _character)
 	: State(_character)
@@ -67,10 +67,38 @@ void PathfindingMoveState::Update()
 		}
 		else
 		{
-			SetMove(true);
-			nextState = eStateType::ST_PATH_IDLE;
+			GAMESYS->SetMove(true);
+			if (character->GetComponetType() == eComponentType::CT_MONSTER)
+			{
+				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+				TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
+				tileCell->IsCharacter(true);
+
+				if (GAMESYS->AttackRangeCheck(character))
+				{
+					TileCell* tileCell = GAMESYS->GetTargetTileCell();
+
+
+					std::vector<Component*> targetList = map->GetComponentList(tileCell);
+
+
+					if (0 < targetList.size())
+					{
+						character->SetTarget(targetList);
+						nextState = eStateType::ST_ATTACK;
+					}
+				}
+				nextState = eStateType::ST_IDLE;
+			}
+			else
+			{
+				nextState = eStateType::ST_PATH_IDLE;
+			}
+			
 			GAMESYS->ResetTarget();
 			character->SetTargetTileCell(NULL);
+		
 		}
 
 		movingDuration += TIMEMANAGER->GetElapsedTime();

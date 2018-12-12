@@ -5,6 +5,14 @@
 class TileCell;
 class Image;
 
+enum BUTTTONDIR
+{
+	BUTTONDIR_NONE,
+	BUTTONDIR_UP,
+	BUTTONDIR_DOWN,
+
+};
+
 enum TERRAIN
 {
 	TR_CEMENT,

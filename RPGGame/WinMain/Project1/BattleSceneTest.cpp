@@ -9,6 +9,7 @@
 
 #include "Player.h"
 #include "Monster.h"
+#include "GameUI.h"
 
 BattleSceneTest::BattleSceneTest()
 {
@@ -18,13 +19,16 @@ BattleSceneTest::BattleSceneTest()
 
 BattleSceneTest::~BattleSceneTest()
 {
+	
 }
 
 bool BattleSceneTest::Init()
 {
+	gameUI = new GameUI();
+	gameUI->Init();
 #if defined(_DEBUG_TEST)
 	{
-		isTest = false;
+		/*isTest = false;
 
 		rcTopTimer = RectMake(552,0, 96, 96);
 		rcTest1 = RectMake(11, 407, 252, 123);
@@ -43,6 +47,18 @@ bool BattleSceneTest::Init()
 		imgTest6 = IMAGEMANAGER->FindImage(TEXT("UI2"));
 		imgTest7 = IMAGEMANAGER->FindImage(TEXT("UI1"));
 
+
+		rcButton1 = RectMake(326, 563, 131, 48);
+		rcButton2 = RectMake(326, 611, 131, 48);
+		rcButton3 = RectMake(326, 659, 131, 48);
+		rcButton4 = RectMake(326, 707, 131, 48);
+
+		imgSelectButton1 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
+		imgSelectButton2 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
+		imgSelectButton3 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
+		imgSelectButton4 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
+
+*/
 	}
 #endif//
 
@@ -55,6 +71,8 @@ bool BattleSceneTest::Init()
 	stageComponentList.push_back(mapTest);
 
 	test = new Player("Test",1.5f);
+	test->SetTurn(true);
+
 	test->SetTilePosition(9, 9);
 
 	if (!test->Init( ))
@@ -80,24 +98,90 @@ bool BattleSceneTest::Init()
 
 	// Monster
 	Character* monster = new Monster("Monster", 1.5f);
-	monster->SetTurn(true);
+	Character* monster1 = new Monster("Monster", 1.5f);
+	Character* monster2 = new Monster("Monster", 1.5f);
+	Character* monster3 = new Monster("Monster", 1.5f);
+	Character* monster4 = new Monster("Monster", 1.5f);
+	Character* monster5 = new Monster("Monster", 1.5f);
+	Character* monster6 = new Monster("Monster", 1.5f);
+
+	monster->SetTurn(false);
 	monster->SetTilePosition(5, 6);
 
 	if (!monster->Init())
 	{
 		return false;
 	}
+	if (!monster1->Init())
+	{
+		return false;
+	}
+
+	if (!monster2->Init())
+	{
+		return false;
+	}
+
+	if (!monster3->Init())
+	{
+		return false;
+	}
+
+	if (!monster4->Init())
+	{
+		return false;
+	}
+
+	if (!monster5->Init())
+	{
+		return false;
+	}
+
+	if (!monster6->Init())
+	{
+		return false;
+	}
+
+	monster1->SetTurn(false);
+	monster1->SetTilePosition(6, 6);
+	monster2->SetTurn(false);
+	monster2->SetTilePosition(7, 6);
+	monster3->SetTurn(false);
+	monster3->SetTilePosition(8, 6);
+	monster4->SetTurn(false);
+	monster4->SetTilePosition(9, 6);
+	monster5->SetTurn(false);
+	monster5->SetTilePosition(10, 6);
+	monster6->SetTurn(false);
+	monster6->SetTilePosition(11, 6);
+
+
 
 	stageComponentList.push_back(monster);
+	//
+	stageComponentList.push_back(monster1);
+	stageComponentList.push_back(monster2);
+	stageComponentList.push_back(monster3);
+	stageComponentList.push_back(monster4);
+	stageComponentList.push_back(monster5);
+	stageComponentList.push_back(monster6);
+
 
 	// Chacter
 	GAMESYS->AddCharacterList(test);
 	//GAMESYS->AddCharacterList(test2);
 	GAMESYS->AddCharacterList(monster);
+	GAMESYS->AddCharacterList(monster1);
+	GAMESYS->AddCharacterList(monster2);
+	GAMESYS->AddCharacterList(monster3);
+	GAMESYS->AddCharacterList(monster4);
+	GAMESYS->AddCharacterList(monster5);
+	GAMESYS->AddCharacterList(monster6);
+
 
 	//Viewer 
 	
-	mapTest->SetViewer(monster);
+	mapTest->SetViewer(test);
 	//
 	//
 	//test->AttackPattern();
@@ -116,6 +200,8 @@ void BattleSceneTest::Release()
 void BattleSceneTest::Update()
 {
 	// 
+	gameUI->Update();
+
 	COMSYS->Update();
 	//
 	std::list< Component*>::iterator it;
@@ -124,15 +210,10 @@ void BattleSceneTest::Update()
 		(*it)->Update();
 	}
 	
+
 #if defined(_DEBUG_TEST)
-	if (KEYMANAGER->IsOnceKeyDown('3'))
-	{
-		isTest = true;
-	}
-	if (KEYMANAGER->IsOnceKeyDown('4'))
-	{
-		isTest = false;
-	}
+	
+	
 #endif 
 }
 
@@ -151,7 +232,10 @@ void BattleSceneTest::Render(HDC hdc)
 		
 	}
 
+	gameUI->Render(hdc);
+
 #if defined(_DEBUG_TEST)
+
 	/*{
 		std::string testStr;
 		eStateType eType = test2->GetType();
@@ -190,26 +274,7 @@ void BattleSceneTest::Render(HDC hdc)
 */
 
 	// RECT
-	if (isTest)
-	{
-		DrawObject(hdc, rcTopTimer, 1, RGB(255, 0, 0), RECTANGLE);
-		DrawObject(hdc, rcTest1, 1, RGB(125, 0, 125), RECTANGLE);
-		DrawObject(hdc, rcTest2, 1, RGB(125, 255, 125), RECTANGLE);
-		DrawObject(hdc, rcTest3, 1, RGB(125, 125, 125), RECTANGLE);
-		DrawObject(hdc, rcTest4, 1, RGB(125, 125, 125), RECTANGLE);
-		DrawObject(hdc, rcTest5, 1, RGB(255, 255, 125), RECTANGLE);
-		DrawObject(hdc, rcTest6, 1, RGB(125, 255, 125), RECTANGLE);
-		DrawObject(hdc, rcTest7, 1, RGB(125, 0, 125), RECTANGLE);
-
-		imgTest1->Render(hdc, rcTest1.left, rcTest1.top);
-		imgTest2->Render(hdc, rcTest2.left, rcTest2.top);
-		imgTest3->Render(hdc, rcTest3.left, rcTest3.top);
-		imgTest4->Render(hdc, rcTest4.left, rcTest4.top);
-		imgTest5->Render(hdc, rcTest5.left, rcTest5.top);
-		imgTest6->Render(hdc, rcTest6.left, rcTest6.top);
-		imgTest7->Render(hdc, rcTest7.left, rcTest7.top);
-
-	}
+	
 
 #endif //
 }

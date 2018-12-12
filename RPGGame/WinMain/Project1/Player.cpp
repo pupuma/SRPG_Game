@@ -47,7 +47,7 @@ bool Player::Init()
 		//act->MoveTo(img, 50, 50, 10.0f);
 
 		InitState();
-		eType = eStateType::ST_IDLE;
+		eType = eStateType::ST_PATH_IDLE;
 		ChangeState(eType);
 
 	}

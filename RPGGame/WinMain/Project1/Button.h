@@ -1,12 +1,5 @@
 #pragma once
 
-enum BUTTTONDIR
-{
-	BUTTONDIR_NONE,
-	BUTTONDIR_UP,
-	BUTTONDIR_DOWN, 
-
-};
 
 typedef void(*FUNC)();
 //typedef std::function<void(*)()> pFunc;

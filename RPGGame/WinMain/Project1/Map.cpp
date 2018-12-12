@@ -48,6 +48,7 @@ bool Map::Init( )
 
 	// Init Info 
 	{
+
 		tileSize = 48;
 
 		renderWidth = (WINSIZEX + 350) / tileSize +1;
@@ -270,6 +271,9 @@ void Map::SetViewer(Component* _com)
 	//{
 	//	viewer->SetViewer(_com);
 	//}
+
+	OpenListClear();
+
 	viewer = _com;
 	//tileAttackList = GAMESYS->GetTileAttackList();
 	prevViewTilePosition = viewer->GetTilePosition();
@@ -379,6 +383,21 @@ void Map::UpdateViewer()
 
 	}
 	
+}
+
+void Map::OpenListClear()
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			TilePoint tilePosition;
+			tilePosition.x = x;
+			tilePosition.y = y;
+			FindTileCell(tilePosition)->ResetPathfinding();
+		}
+	}
+	tileCellOpenList.clear();
 }
 
 TileCell* Map::FindTileCell(TilePoint _searchTilePosision)
@@ -666,7 +685,7 @@ void Map::ResetPahtfinding()
 			FindTileCell(tilePosition)->ResetPathfinding();
 		}
 	}
-
+	//tileCellOpenList.clear();
 	{
 		/*std::list<TileInfo>::iterator it;
 		for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
@@ -805,7 +824,7 @@ std::vector<Component*> Map::GetComponentList(TileCell * _tileCell)
 		return componentArray;
 	}
 	
-	if (!FindTileCell(_tileCell->GetTilePosition())->GetGharacter())
+	if (!FindTileCell(_tileCell->GetTilePosition())->GetCharacter())
 	{
 		return componentArray;
 	}
@@ -817,6 +836,7 @@ std::vector<Component*> Map::GetComponentList(TileCell * _tileCell)
 		
 		componentArray.push_back((*it));
 	}
+
 	return componentArray;
 }
 

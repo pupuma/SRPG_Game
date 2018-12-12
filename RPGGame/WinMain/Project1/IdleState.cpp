@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "ComponentSystem.h"
 #include "TileCell.h"
+#include "GameTurnManager.h"
 
 IdleState::IdleState(Character* _character)
 	: State(_character)
@@ -48,11 +49,16 @@ void IdleState::Update()
 		}
 	}
 
-	if (character->GetComponetType() == eComponentType::CT_MONSTER)
+	/*if (character->GetComponetType() == eComponentType::CT_MONSTER)
 	{
 		nextState = ST_PATH_NAVI;
-	}
+	}*/
 	
+	if (character->IsTurn())
+	{
+		//GameTurnManager::GetSingleton()->NextTurn();
+
+	}
 
 	//character->UpdateAI();
 }

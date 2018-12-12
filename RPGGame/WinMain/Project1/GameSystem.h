@@ -19,6 +19,7 @@ private:
 	MoveInfo moveInfo;
 private:
 	bool isAction;
+	bool isMove;
 	bool isAttacking;
 	int round;
 	int currentCharacterIndex;
@@ -63,6 +64,9 @@ public:
 	void ResetMovefinding();
 	TileCell* CharacterPrioritySort(Character* _character);
 	TileCell* CharacterSelectTileCell(Character* _character);
+	bool AttackRangeCheck(Character* _character);
+	void AddProioritySelectList(Character* _character);
+	
 public:
 	bool IsAction() { return isAction; }
 	void SetAction(bool _isAction) { isAction = _isAction; }
@@ -72,8 +76,8 @@ public:
 	void SetTileAttackList(std::vector<TileInfo> _list) { g_TileAttackList = _list; }
 	TileCell* GetTargetTileCell() { return targetTileCell; }
 	void SetTargetTileCell(TileCell* _targetTileCell) { targetTileCell = _targetTileCell; }
-
-public:
-
+	std::vector<Character*> GetCharacterList() { return characterList; }
+	void SetMove(bool _move) { isMove = _move; }
+	bool GetMove() { return isMove; }
 };
 

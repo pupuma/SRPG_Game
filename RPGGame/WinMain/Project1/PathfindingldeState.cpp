@@ -24,7 +24,7 @@ void PathfindingldeState::Start()
 	if (character->IsTurn())
 	{
 		GAMESYS->SetAction(false);
-		if (true == GetMove())
+		if (true == GAMESYS->GetMove())
 		{
 			character->AttackPattern();
 		}
@@ -57,7 +57,7 @@ void PathfindingldeState::Update()
 		{
 			if (true == character->IsTurn())
 			{
-				if (false == GetMove())
+				if (false == GAMESYS->GetMove())
 				{
 					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 					{
@@ -100,7 +100,7 @@ void PathfindingldeState::Update()
 						tileCell->IsCharacter(false);
 
 						nextState = eStateType::ST_PATHFINDING;
-						SetMove(true);
+						GAMESYS->SetMove(true);
 					}
 				}
 				else
@@ -126,6 +126,8 @@ void PathfindingldeState::Update()
 						{
 							character->SetTarget(targetList);
 							nextState = eStateType::ST_ATTACK;
+							GAMESYS->SetMove(false);
+
 						}
 					}
 				}

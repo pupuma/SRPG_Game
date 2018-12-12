@@ -76,7 +76,7 @@ public:
 public:
 	void ChangeState(eStateType _nextState) { nextState = _nextState; }
 public:
-	void SetMove(bool _move) { isMove = _move; }
-	bool GetMove() { return isMove; }
+	//void SetMove(bool _move) { isMove = _move; }
+	//bool GetMove() { return isMove; }
 	//std::list<Image*> GetMoveTileList() { return moveTileList; }
 };
