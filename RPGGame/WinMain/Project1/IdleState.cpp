@@ -45,14 +45,12 @@ void IdleState::Update()
 		{
 #if defined(_DEBUG_TEST)
 			character->SetStateType(nextState);
+			GAMESYS->SetType(character->GetType());
+
 #endif // 
 		}
 	}
 
-	/*if (character->GetComponetType() == eComponentType::CT_MONSTER)
-	{
-		nextState = ST_PATH_NAVI;
-	}*/
 	
 	if (character->IsTurn())
 	{

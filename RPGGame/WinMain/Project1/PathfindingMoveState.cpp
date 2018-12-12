@@ -42,6 +42,8 @@ void PathfindingMoveState::Update()
 		character->ChangeState(nextState);
 #if defined(_DEBUG_TEST)
 		character->SetStateType(nextState);
+		GAMESYS->SetType(character->GetType());
+
 #endif // 
 		return;
 	}
@@ -67,18 +69,18 @@ void PathfindingMoveState::Update()
 		}
 		else
 		{
+			Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 			GAMESYS->SetMove(true);
 			if (character->GetComponetType() == eComponentType::CT_MONSTER)
 			{
-				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
 				TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
 				tileCell->IsCharacter(true);
 
 				if (GAMESYS->AttackRangeCheck(character))
 				{
-					TileCell* tileCell = GAMESYS->GetTargetTileCell();
-
+					//TileCell* tileCell = GAMESYS->GetTargetTileCell();
+					TileCell* tileCell = character->GetTargetCharacterTileCell();
 
 					std::vector<Component*> targetList = map->GetComponentList(tileCell);
 
@@ -89,13 +91,17 @@ void PathfindingMoveState::Update()
 						nextState = eStateType::ST_ATTACK;
 					}
 				}
-				nextState = eStateType::ST_IDLE;
+				else
+				{
+					nextState = eStateType::ST_IDLE;
+				}
+				//
 			}
 			else
 			{
+				map->FindTileCell(character->GetTilePosition())->IsCharacter(true);
 				nextState = eStateType::ST_PATH_IDLE;
 			}
-			
 			GAMESYS->ResetTarget();
 			character->SetTargetTileCell(NULL);
 		

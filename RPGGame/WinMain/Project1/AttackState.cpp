@@ -38,6 +38,8 @@ void AttackState::Start()
 			param.attackPoint = character->GetAttackPoint();
 			ComponentSystem::GetInstance()->SendMsg(param);
 
+			POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+			EFFECTMANAGER->Play(TEXT("Absorb"), pt);
 		}
 
 	}
@@ -57,6 +59,8 @@ void AttackState::Update()
 			character->ChangeState(nextState);
 #if defined(_DEBUG_TEST)
 			character->SetStateType(nextState);
+			GAMESYS->SetType(character->GetType());
+
 #endif // 
 			return;
 		}

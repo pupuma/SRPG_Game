@@ -39,6 +39,8 @@ public:
 	~NaviGationSystem();
 public:
 	TileCell* AStarPathFinder(Character* _startCharacter, Character* _endCharacter);
+	TileCell* AStarPathFinder(Character* _startCharacter, TileCell* _endTileCell);
+
 	void UpdatePathfinding();
 	void UpdateBuildPath();
 

@@ -46,6 +46,8 @@ void PathfindingldeState::Update()
 			character->ChangeState(nextState);
 #if defined(_DEBUG_TEST)
 			character->SetStateType(nextState);
+			GAMESYS->SetType(character->GetType());
+
 #endif // 
 			return;
 		}

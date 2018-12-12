@@ -72,6 +72,14 @@ bool MainGame::Init()
 
 		PARSING->MapDataParsing(TEXT("Map_1"));
 	}
+
+	{
+		//IMAGEMANAGER->AddFrameImage(TEXT("Absorb"), TEXT("../Resource/Images/Absorb.bmp"), 960, 960, 5, 5, true, RGB(255, 255, 255));
+
+		//EFFECTMANAGER->AddEffect(TEXT("Absorb"), TEXT("Absorb"), 960, 960, 5, 5, 1, 0.1f, 10, RGB(255, 255, 255));
+		EFFECTMANAGER->AddEffect(TEXT("Absorb"), TEXT("../Resource/Images/Absorb.bmp"), 960, 960, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
+
+	}
 	// Scene을 추가 작업 : 씬매니저를 초기화 하고 씬을 추가 하자 
 
 	// 씬 초기화 

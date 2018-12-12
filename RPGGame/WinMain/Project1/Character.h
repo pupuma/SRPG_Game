@@ -118,8 +118,8 @@ public:
 	void SetJobClass(eJobClass _job) { job = _job; }
 	int GetHp() { return iHp; }
 	void SetHp(int _hp) { iHp = _hp; }
-	void SetCharacterTileCell(TileCell* _targetTileCellCharacter) { targetCharacterTile = _targetTileCellCharacter; }
-	TileCell* GetCharacterTileCell() { return targetCharacterTile; }
+	void SetTargetCharacterTileCell(TileCell* _targetTileCellCharacter) { targetCharacterTile = _targetTileCellCharacter; }
+	TileCell* GetTargetCharacterTileCell() { return targetCharacterTile; }
 
 public:
 #if defined(_DEBUG_TEST)

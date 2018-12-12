@@ -809,7 +809,7 @@ std::vector<Component*> Map::SetAttackRange()
 	return std::vector<Component*>();
 }
 
-std::vector<Component*> Map::GetComponentList(TileCell * _tileCell)
+std::vector<Component*> Map::GetComponentList(TileCell* _tileCell)
 {
 	std::vector<Component*> componentArray;
 	if (NULL == _tileCell)
@@ -833,7 +833,6 @@ std::vector<Component*> Map::GetComponentList(TileCell * _tileCell)
 	std::list<Component*>::iterator it;
 	for (it= tileComponentList.begin(); it != tileComponentList.end(); it++)
 	{
-		
 		componentArray.push_back((*it));
 	}
 

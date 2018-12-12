@@ -17,7 +17,7 @@ NaviGationSystem::~NaviGationSystem()
 {
 }
 
-TileCell* NaviGationSystem::AStarPathFinder(Character * _startCharacter, Character * _endCharacter)
+TileCell* NaviGationSystem::AStarPathFinder(Character * _startCharacter, Character* _endCharacter)
 {
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 	map->ResetPahtfinding();
@@ -26,6 +26,43 @@ TileCell* NaviGationSystem::AStarPathFinder(Character * _startCharacter, Charact
 	TileCell* tileCell = NULL;
 	startTileCell = map->FindTileCell(_startCharacter->GetTilePosition());
 	endTileCell = map->FindTileCell(_endCharacter->GetTilePosition());
+	sPathCommand command;
+	command.tileCell = startTileCell;
+	command.heuristic = 0.0f;
+	pathfindingQueue.push(command);
+
+	updateState = eUpdateState::PATHFINDING;
+
+	while (0 != pathfindingQueue.size())
+	{
+		if (eUpdateState::BUILD_PATH == updateState)
+		{
+			break;
+		}
+		UpdatePathfinding();
+	}
+
+	UpdateBuildPath();
+
+	if (!q_Close.empty())
+	{
+		std::list<TileInfo> moveList = map->GetOpenTileCellList();
+		tileCell = DistanceTileCell(moveList);
+
+	}
+	//pathfindingQueue;
+	return tileCell;
+}
+
+TileCell * NaviGationSystem::AStarPathFinder(Character * _startCharacter, TileCell * _endTileCell)
+{
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	map->ResetPahtfinding();
+
+	Reset();
+	TileCell* tileCell = NULL;
+	startTileCell = map->FindTileCell(_startCharacter->GetTilePosition());
+	endTileCell = map->FindTileCell(_endTileCell->GetTilePosition());
 	sPathCommand command;
 	command.tileCell = startTileCell;
 	command.heuristic = 0.0f;

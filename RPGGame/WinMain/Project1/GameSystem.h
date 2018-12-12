@@ -2,6 +2,8 @@
 
 #include "SingletonBase.h"
 
+enum eStateType;
+
 class Map;
 class Component;
 class Character;
@@ -28,6 +30,7 @@ private:
 	int height;
 	//std::list<TileInfo> moveTileList;
 	TilePoint temp;
+	eStateType eType;
 private:
 	Map* g_Map;
 	TileCell* targetTileCell;
@@ -79,5 +82,6 @@ public:
 	std::vector<Character*> GetCharacterList() { return characterList; }
 	void SetMove(bool _move) { isMove = _move; }
 	bool GetMove() { return isMove; }
+	void SetType(eStateType _type) { eType = _type; }
+	eStateType GetType() { return eType; }
 };
-

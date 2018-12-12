@@ -200,6 +200,11 @@ void BattleSceneTest::Release()
 void BattleSceneTest::Update()
 {
 	// 
+
+	if (KEYMANAGER->IsOnceKeyDown('1'))
+	{
+		EFFECTMANAGER->Play(TEXT("Absorb"), 500, 500);
+	}
 	gameUI->Update();
 
 	COMSYS->Update();
@@ -209,7 +214,7 @@ void BattleSceneTest::Update()
 	{
 		(*it)->Update();
 	}
-	
+	EFFECTMANAGER->Update();
 
 #if defined(_DEBUG_TEST)
 	
@@ -236,9 +241,9 @@ void BattleSceneTest::Render(HDC hdc)
 
 #if defined(_DEBUG_TEST)
 
-	/*{
+	{
 		std::string testStr;
-		eStateType eType = test2->GetType();
+		eStateType eType = GAMESYS->GetType();
 		switch (eType)
 		{
 		case eStateType::ST_NONE:
@@ -271,7 +276,7 @@ void BattleSceneTest::Render(HDC hdc)
 		}
 		TextOut(hdc, 10, 10, testStr.c_str(), testStr.length());
 	}
-*/
+	EFFECTMANAGER->Render(hdc);
 
 	// RECT
 	

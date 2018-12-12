@@ -46,6 +46,7 @@ void NavigationState::Update()
 			character->ChangeState(nextState);
 #if defined(_DEBUG_TEST)
 			character->SetStateType(nextState);
+			GAMESYS->SetType(character->GetType());
 #endif // 
 			return;
 		}
@@ -69,6 +70,38 @@ void NavigationState::Update()
 		{
 			// Character에 자기의 타겟을 저장 시킨다. 
 			// TileCell* tileCell = GAMESYS->GetTargetTileCell();
+			TileCell* tileCell = character->GetTargetCharacterTileCell();
+			Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+			if (NULL != tileCell)
+			{
+				tileCell->IsCharacter(true);
+				std::vector<Component*> targetList = map->GetComponentList(tileCell);
+
+				if (0 < targetList.size())
+				{
+					character->SetTarget(targetList);
+					nextState = eStateType::ST_ATTACK;
+				}
+			}
+		}
+		else
+		{
+			// 공격 범위에 없다면... 이동 범위에 있는지 체크한다. 
+
+			
+			TileCell* targetMoveCell = GAMESYS->FindPriorityTarget(character);
+			character->SetTargetTileCell(targetMoveCell);
+
+			if (NULL != targetMoveCell)
+			{
+				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+				TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
+				tileCell->IsCharacter(false);
+				character->AttackPattern();
+				nextState = eStateType::ST_PATHFINDING;
+				GAMESYS->SetMove(true);
+			}
 		}
 	  
 	}

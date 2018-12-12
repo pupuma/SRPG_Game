@@ -1,7 +1,6 @@
 #pragma once
 
 class Componet;
-
 class TileCell
 {
 private:

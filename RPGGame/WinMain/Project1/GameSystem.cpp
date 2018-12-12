@@ -159,6 +159,8 @@ TileCell * GameSystem::FindPriorityTarget(Character* _character)
 
 		
 
+		
+
 		if (!selectTargetList.empty())
 		{
 			tile = CharacterPrioritySort(_character);
@@ -327,7 +329,6 @@ TileCell* GameSystem::CharacterPrioritySort(Character * _character)
 		std::list<MoveInfo>::iterator it_move;
 		for (it_move = moveList.begin(); it_move != moveList.end(); it_move++)
 		{
-
 			for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 			{
 				TilePoint currentTilePosition = selectTargetList[0]->GetTilePosition();
@@ -344,10 +345,12 @@ TileCell* GameSystem::CharacterPrioritySort(Character * _character)
 							return tileCell;
 						}
 					}
-
 				}
 			}
 		}
+
+		// 
+		tileCell = CharacterSelectTileCell(_character);
 	}
 	
 	return tileCell;
@@ -358,7 +361,57 @@ TileCell* GameSystem::CharacterSelectTileCell(Character* _character)
 	// 캐릭터 
 	//characterList[0];
 	TileCell* tileCell = NULL;
-	tileCell = NaviGationSystem::GetSingleton()->AStarPathFinder(_character, characterList[0]);
+	
+	//
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+	TileCell* target = map->FindTileCell(playerList[0]->GetTilePosition());
+
+	
+	_character->SetTargetCharacterTileCell(target);
+
+	int distanceCount = 0;
+	// 내가 갈 수 없는 상황 
+	for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+	{
+		TilePoint currentTilePosition = _character->GetTilePosition();
+		TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+		TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
+
+		if (!searchTileCell->CanMove())
+		{
+			distanceCount++;
+		}
+	}
+
+	if (distanceCount >= 4)
+	{
+		return NULL;
+	}
+
+	distanceCount = 0;
+	for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+	{
+		TilePoint currentTilePosition = _character->GetTargetCharacterTileCell()->GetTilePosition();
+		TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+		TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
+
+		if (!searchTileCell->CanMove())
+		{
+			distanceCount++;
+		}
+	}
+
+	//다른 타겟 공격 
+	if (distanceCount >= 4)
+	{
+		return NULL;
+	}
+
+
+	// 수정 1 
+	//tileCell = NaviGationSystem::GetSingleton()->AStarPathFinder(_character, characterList[0]);
+	tileCell = NaviGationSystem::GetSingleton()->AStarPathFinder(_character, _character->GetTargetCharacterTileCell());
 
 	return tileCell;
 }
@@ -367,12 +420,14 @@ bool GameSystem::AttackRangeCheck(Character* _character)
 {
 	_character->AttackPattern();
 
+	AddProioritySelectList(_character);
+	
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 	
 	std::vector<TileInfo> attackList = map->GetAttackList();
 
 
-	if(NULL == _character->GetCharacterTileCell())
+	if(NULL == _character->GetTargetCharacterTileCell())
 	{
 		if (!selectTargetList.empty())
 		{
@@ -380,65 +435,30 @@ bool GameSystem::AttackRangeCheck(Character* _character)
 			{
 				if (a.tile->GetTilePosition() == selectTargetList[0]->GetTilePosition())
 				{
-					_character->SetCharacterTileCell(map->FindTileCell(selectTargetList[0]->GetTilePosition()));
+					_character->SetTargetCharacterTileCell(map->FindTileCell(selectTargetList[0]->GetTilePosition()));
 					return true;
 				}
 			}
+		}
+		else
+		{
+			
 		}
 		
 	}
 	else
 	{
+		_character->SetTargetCharacterTileCell(map->FindTileCell(playerList[0]->GetTilePosition()));
+
 		for (auto a : attackList)
 		{
-			if (a.tile->GetTilePosition() == _character->GetCharacterTileCell()->GetTilePosition())
+			if (a.tile->GetTilePosition() == _character->GetTargetCharacterTileCell()->GetTilePosition())
 			{
 				//_character->SetCharacterTileCell(map->FindTileCell(selectTargetList[0]->GetTilePosition()));
 				return true;
 			}
 		}
 	}
-	//std::list<MoveInfo> characterMoveList = MaxMoveFinder(_character);
-	//Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-	//{
-
-	//	std::list<MoveInfo>::iterator it_move;
-
-	//	for (it_move = characterMoveList.begin(); it_move != characterMoveList.end(); it_move++)
-	//	{
-	//		for (size_t i = 0; i < playerList.size(); i++)
-	//		{
-	//			if ((*it_move).tileCell->GetTilePosition() == playerList[i]->GetTilePosition())
-	//			{
-	//				selectTargetList.push_back(playerList[i]);
-	//			}
-	//		}
-
-	//		for (size_t i = 0; i < npcList.size(); i++)
-	//		{
-	//			if ((*it_move).tileCell->GetTilePosition() == npcList[i]->GetTilePosition())
-	//			{
-	//				selectTargetList.push_back(npcList[i]);
-	//			}
-	//		}
-	//	}
-	//}
-	//if (!selectTargetList.empty())
-	//{
-	//	targetTileCell = map->FindTileCell(selectTargetList[0]->GetTilePosition());
-
-	//	std::vector<TileInfo> attackList = map->GetAttackList();
-	//	std::vector<TileInfo>::iterator it;
-
-	//	for (size_t i = 0; i < attackList.size(); i++)
-	//	{
-	//		if (attackList[i].tile->GetTilePosition() == targetTileCell->GetTilePosition())
-	//		{
-	//			return true;
-	//		}
-	//	}
-	//}
 	
 	return false;
 }
