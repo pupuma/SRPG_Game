@@ -15,6 +15,7 @@
 //
 #include "Map.h"
 #include "Animation.h"
+#include "TileCell.h"
 
 
 
@@ -368,6 +369,10 @@ void Character::SetTilePosition(int _tilePosX, int _tilePosY)
 
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 	map->SetTileComponent(tilePosition, this, true);
+
+	TileCell* _tileCell = map->FindTileCell(this->GetTilePosition());
+	_tileCell->IsCharacter(true);
+
 
 }
 

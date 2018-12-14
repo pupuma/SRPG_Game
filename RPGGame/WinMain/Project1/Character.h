@@ -8,23 +8,15 @@ enum eStateType
 	ST_IDLE,
 	ST_MOVE,
 	ST_ATTACK,
+	ST_SKILL,
 	ST_DEFENSE,
 	ST_DEAD,
 	ST_PATHFINDING,
 	ST_PATH_MOVE,
 	ST_PATH_IDLE,
 	ST_PATH_NAVI
-
 };
 
-
-enum eJobClass
-{
-	JOB_NONE,
-	JOB_WARRIOR,
-	JOB_ARCHER,
-	JOB_HEALER,
-};
 
 class State;
 class Action;
@@ -34,7 +26,7 @@ class Character
 	: public Component
 {
 protected:
-	eJobClass job;
+	//eJobClass job;
 
 protected:
 	bool isMoving;
@@ -114,8 +106,8 @@ public:
 	eDirection GetDirection() { return currentDirection; }
 	int GetDistance() { return iMaxMoving; }
 	eDirection GetNextDirection() { return nextDirection; }
-	eJobClass GetJobClass() { return job; }
-	void SetJobClass(eJobClass _job) { job = _job; }
+	//eJobClass GetJobClass() { return job; }
+	//void SetJobClass(eJobClass _job) { job = _job; }
 	int GetHp() { return iHp; }
 	void SetHp(int _hp) { iHp = _hp; }
 	void SetTargetCharacterTileCell(TileCell* _targetTileCellCharacter) { targetCharacterTile = _targetTileCellCharacter; }

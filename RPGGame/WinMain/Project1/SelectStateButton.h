@@ -2,6 +2,7 @@
 class SelectStateButton
 {
 private:
+	int index;
 	int iAttackFrameX;
 	int iAttackFrameY;
 

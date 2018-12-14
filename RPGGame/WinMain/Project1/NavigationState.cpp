@@ -22,6 +22,8 @@ void NavigationState::Start()
 	isNavi = false;
 	deltaTime = 1.f;
 
+	
+
 	if (GAMESYS->GetTargetTileCell() != NULL)
 	{
 		isNavi = true;
@@ -38,7 +40,6 @@ void NavigationState::Start()
 void NavigationState::Update()
 {
 	State::Update();
-
 
 	{
 		if (eStateType::ST_NONE != nextState)
@@ -80,6 +81,7 @@ void NavigationState::Update()
 				if (0 < targetList.size())
 				{
 					character->SetTarget(targetList);
+				
 					nextState = eStateType::ST_ATTACK;
 				}
 			}
@@ -102,81 +104,16 @@ void NavigationState::Update()
 				nextState = eStateType::ST_PATHFINDING;
 				GAMESYS->SetMove(true);
 			}
+			else
+			{
+				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+				TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
+				tileCell->IsCharacter(false);
+				nextState = eStateType::ST_IDLE;
+			}
 		}
 	  
 	}
-
-	//if (deltaTime < 0)
-	//{
-	//	deltaTime = 1.f;
-	//	if (!isNavi)
-	//	{
-	//		if (GAMESYS->AttackRangeCheck(character))
-	//		{
-	//			TileCell* tileCell = GAMESYS->GetTargetTileCell();
-
-	//			Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-	//			std::vector<Component*> targetList = map->GetComponentList(tileCell);
-
-
-	//			if (0 < targetList.size())
-	//			{
-	//				character->SetTarget(targetList);
-	//				nextState = eStateType::ST_ATTACK;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			TileCell* targetCell = GAMESYS->FindPriorityTarget(character);
-	//			// ¼±ÅÃ½Ã 
-	//			// character->SetTargetTileCell();
-	//			//TileCell* targetTileCell = character->GetTargetTileCell();
-	//			character->SetTargetTileCell(targetCell);
-	//			if (NULL != targetCell)
-	//			{
-	//				Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-	//				TileCell* tileCell = map->FindTileCell(character->GetTilePosition());
-	//				tileCell->IsCharacter(false);
-
-	//				nextState = eStateType::ST_PATHFINDING;
-	//				GAMESYS->SetMove(true);
-	//				character->AttackPattern();
-	//				isNavi = true;
-	//			}
-	//			else
-	//			{
-	//				GameTurnManager::GetSingleton()->NextTurn();
-	//			}
-	//		}
-
-	//	}
-	//	else
-	//	{
-
-	//		if (NULL != GAMESYS->GetTargetTileCell())
-	//		{
-	//			TileCell* tileCell = GAMESYS->GetTargetTileCell();
-
-	//			Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-	//			std::vector<Component*> targetList = map->GetComponentList(tileCell);
-
-
-	//			if (0 < targetList.size())
-	//			{
-	//				
-	//				character->SetTarget(targetList);
-	//				nextState = eStateType::ST_ATTACK;
-	//				
-	//			}
-	//		}
-
-
-	//	}
-	//}
-	//
 }
 
 void NavigationState::Render(HDC hdc)

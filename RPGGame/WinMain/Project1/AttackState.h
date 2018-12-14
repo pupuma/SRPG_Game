@@ -5,6 +5,8 @@
 class AttackState 
 	: public State
 {
+private:
+	float deltaTime;
 public:
 	AttackState(Character* _character);
 	~AttackState();

@@ -3,6 +3,7 @@
 
 #include "Map.h"	
 #include "State.h"
+#include "TileCell.h"
 
 Player::Player(std::string _name, float _deep)
 	: Character(_name,_deep)
@@ -19,6 +20,8 @@ Player::~Player()
 bool Player::Init()
 {
 	{
+		job = eJobClass::JOB_ARCHER;
+
 		isLive = true;
 		img = IMAGEMANAGER->FindImage("Actor1");
 		img->SetX(48);
@@ -112,5 +115,83 @@ void Player::UpdateAI()
 void Player::AttackPattern()
 {
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-	map->SetAttackRange();
+	//TileInfo tileInfo;
+	std::vector<TileInfo> attackList;
+
+	int distance = 1;
+	switch (job)
+	{
+	case eJobClass::JOB_WARRIOR:
+	{
+		for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+		{
+			TilePoint currentTilePosition = this->GetTilePosition();
+			TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+			TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
+
+			if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
+				searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
+			{
+				continue;
+			}
+			TileInfo tileInfo;
+			tileInfo.tile = searchTileCell;
+			tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("AttackTile"));
+			tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+			tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+			tileInfo.distance = distance;
+			attackList.push_back(tileInfo);
+		}
+	}
+		break;
+	case eJobClass::JOB_ARCHER:
+	{
+		//1
+		std::list<MoveInfo> maxMoveList = GAMESYS->MaxMoveFinder(this);
+		//std::list<MoveInfo>::iterator it;
+		for (auto a : maxMoveList)
+		{
+			if (a.distance == 1)
+			{
+				TileInfo tileInfo;
+				tileInfo.distance = a.distance;
+				tileInfo.tile = a.tileCell;
+				tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("AttackTile"));
+				attackList.push_back(tileInfo);
+
+			}
+		}
+
+		//2
+	}
+		break;
+	case eJobClass::JOB_HEALER:
+	{
+		for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+		{
+			TilePoint currentTilePosition = this->GetTilePosition();
+			TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+			TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
+
+			if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
+				searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
+			{
+				continue;
+			}
+			TileInfo tileInfo;
+			tileInfo.tile = searchTileCell;
+			tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("AttackTile"));
+			tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+			tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+			tileInfo.distance = distance;
+			attackList.push_back(tileInfo);
+		}
+	}
+		break;
+
+	}
+	
+	map->SetAttackRange(attackList);
+
+	attackList.clear();
 }

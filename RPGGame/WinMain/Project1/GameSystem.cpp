@@ -174,7 +174,7 @@ TileCell * GameSystem::FindPriorityTarget(Character* _character)
 	return tile;
 }
 
-std::list<GameSystem::MoveInfo> GameSystem::MaxMoveFinder(Character* _target)
+std::list<MoveInfo> GameSystem::MaxMoveFinder(Character* _target)
 {
 	{
 		width = PARSING->GetTileWidth();

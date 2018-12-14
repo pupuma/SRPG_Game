@@ -4,6 +4,7 @@
 #include "Monster.h"
 
 #include "Map.h"	
+#include "TileCell.h"
 
 
 Monster::Monster(std::string _name, float _deep)
@@ -63,8 +64,40 @@ void Monster::UpdateAI()
 
 void Monster::AttackPattern()
 {
-	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	/*Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
-	map->SetAttackRange();
+	map->SetAttackRange();*/
+
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	//TileInfo tileInfo;
+	std::vector<TileInfo> attackList;
+
+
+	int distance = 1;
+
+	for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+	{
+		TilePoint currentTilePosition = this->GetTilePosition();
+		TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+		TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
+
+		if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
+			searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
+		{
+			continue;
+		}
+		TileInfo tileInfo;
+		tileInfo.tile = searchTileCell;
+		tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("AttackTile"));
+		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+		tileInfo.distance = distance;
+		attackList.push_back(tileInfo);
+	}
+
+	map->SetAttackRange(attackList);
+
+	attackList.clear();
+
 }
 

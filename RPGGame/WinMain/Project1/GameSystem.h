@@ -2,6 +2,7 @@
 
 #include "SingletonBase.h"
 
+
 enum eStateType;
 
 class Map;
@@ -9,15 +10,16 @@ class Component;
 class Character;
 class TileCell;
 
+typedef struct tagTileMoveInfo
+{
+	TileCell* tileCell;
+	int distance;
+}MoveInfo;
+
 class GameSystem
 	: public SingletonBase<GameSystem>
 {
 private:
-	typedef struct tagTileMoveInfo
-	{
-		TileCell* tileCell;
-		int distance;
-	}MoveInfo;
 	MoveInfo moveInfo;
 private:
 	bool isAction;

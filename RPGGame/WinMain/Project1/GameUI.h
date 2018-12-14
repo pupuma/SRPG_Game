@@ -1,11 +1,13 @@
 #pragma once
 
 class SelectStateButton;
+class GameYesNoButton;
 
 class GameUI
 {
 private:
 	SelectStateButton* selectStateButton;
+	GameYesNoButton* selectYNButton;
 private:
 	bool isActive;
 private:

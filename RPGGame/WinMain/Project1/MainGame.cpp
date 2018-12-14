@@ -2,6 +2,7 @@
 #include "MainGame.h"
 
 #include "BattleSceneTest.h"
+#include "GameTurnManager.h"
 
 
 MainGame::MainGame()
@@ -50,6 +51,7 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddImage(TEXT("Select"), TEXT("../Resource/Images/Select.bmp"), 48, 48, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("SelectObject"), TEXT("../Resource/Images/SelectObject.bmp"), 96, 48, 2, 1, true, COLOR_M);
 
+		IMAGEMANAGER->AddImage(TEXT("AttackTile"),TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("TileMap_Cell_B"), TEXT("../Resource/Images/TileMap_Cell_B.bmp"), 768, 14736, 16, 307, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("TileMap_OBJ_B"), TEXT("../Resource/Images/TileMap_OBJ_B.bmp"), 768, 9216, 16, 192, true, COLOR_M);
 		backGround = IMAGEMANAGER->AddImage(TEXT("Background"), TEXT("../Resource/Images/BackGround.bmp"), 1200,800, false, COLOR_M);
@@ -58,9 +60,11 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddImage(TEXT("UI2"), TEXT("../Resource/Images/UI2.bmp"), 253, 253,true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("UI3"), TEXT("../Resource/Images/UI3.bmp"), 140, 220,true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("UI4"), TEXT("../Resource/Images/UI4.bmp"), 383, 220,true, COLOR_M);
-		IMAGEMANAGER->AddImage(TEXT("UI5"), TEXT("../Resource/Images/UI5.bmp"), 130, 75,true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("UI5"), TEXT("../Resource/Images/UI5.bmp"), 132, 75,true, COLOR_M);
 
 		IMAGEMANAGER->AddFrameImage(TEXT("SelectButton"), TEXT("../Resource/Images/BUTTON.bmp"), 260, 192, 2, 4, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("YesButton"), TEXT("../Resource/Images/YesButton.bmp"), 122, 65, 2,1, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("NoButton"), TEXT("../Resource/Images/NoButton.bmp"), 122, 65, 2, 1, true, COLOR_M);
 
 	}
 
@@ -71,6 +75,7 @@ bool MainGame::Init()
 		RESOURCEMANAGER->AddScript(TEXT("Map_1"));
 
 		PARSING->MapDataParsing(TEXT("Map_1"));
+		GameTurnManager::GetSingleton()->Init();
 	}
 
 	{

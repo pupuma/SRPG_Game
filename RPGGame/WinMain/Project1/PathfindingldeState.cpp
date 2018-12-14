@@ -24,10 +24,10 @@ void PathfindingldeState::Start()
 	if (character->IsTurn())
 	{
 		GAMESYS->SetAction(false);
-		if (true == GAMESYS->GetMove())
+		/*if (true == GAMESYS->GetMove())
 		{
 			character->AttackPattern();
-		}
+		}*/
 	}
 	else
 	{
@@ -53,13 +53,12 @@ void PathfindingldeState::Update()
 		}
 	}
 	//
-
 	{
 		if (character->GetComponetType() == eComponentType::CT_PLAYER)
 		{
 			if (true == character->IsTurn())
 			{
-				if (false == GAMESYS->GetMove())
+				if (false == GAMESYS->GetMove() && false == GAMESYS->IsAttacking())
 				{
 					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 					{
@@ -103,39 +102,44 @@ void PathfindingldeState::Update()
 
 						nextState = eStateType::ST_PATHFINDING;
 						GAMESYS->SetMove(true);
+						GAMESYS->SetAttacking(true);
+					}
+					else
+					{
+						nextState = eStateType::ST_PATH_IDLE;
+
 					}
 				}
 				else
 				{
-					GAMESYS->SetAttacking(true);
-
-
-					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+					if (GAMESYS->IsAttacking())
 					{
-						GetCursorPos(&_ptMouse);
-						ScreenToClient(_hWnd, &(_ptMouse));
-						Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
-
-						int mouseX = (int)_ptMouse.x;
-						int mouseY = (int)_ptMouse.y;
-
-						TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
-
-
-						// 공격한 타일을 저장 
-						std::vector<Component*> targetList = map->GetComponentList(tileCell);
-						if (0 < targetList.size())
+						if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 						{
-							character->SetTarget(targetList);
-							nextState = eStateType::ST_ATTACK;
-							GAMESYS->SetMove(false);
+							GetCursorPos(&_ptMouse);
+							ScreenToClient(_hWnd, &(_ptMouse));
+							Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
+							int mouseX = (int)_ptMouse.x;
+							int mouseY = (int)_ptMouse.y;
+
+							TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
+
+
+							// 공격한 타일을 저장 
+							std::vector<Component*> targetList = map->GetComponentList(tileCell);
+							if (0 < targetList.size())
+							{
+								character->SetTarget(targetList);
+								nextState = eStateType::ST_ATTACK;
+								GAMESYS->SetMove(false);
+							}
 						}
 					}
 				}
 			}
 		}
-		else
+		else if(character->GetComponetType() == eComponentType::CT_MONSTER)
 		{
 			TileCell* tileCell = GAMESYS->GetTargetTileCell();
 			Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));

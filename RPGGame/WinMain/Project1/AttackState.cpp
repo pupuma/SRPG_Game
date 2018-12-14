@@ -15,7 +15,6 @@ AttackState::~AttackState()
 void AttackState::Start()
 {
 	//GAMESYS->SetAttacking(true);
-	
 	State::Start();
 
 
@@ -38,21 +37,29 @@ void AttackState::Start()
 			param.attackPoint = character->GetAttackPoint();
 			ComponentSystem::GetInstance()->SendMsg(param);
 
-			POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
-			EFFECTMANAGER->Play(TEXT("Absorb"), pt);
+			
 		}
+		POINT pt = { (targetList[0]->GetPosition().x + 48 / 2),(targetList[0]->GetPosition().y + 48 / 2) };
+		EFFECTMANAGER->Play(TEXT("Absorb"), pt);
+
+		GAMESYS->SetAttacking(false);
+
 
 	}
+	else
+	{
+		if (character->GetComponetType() == eComponentType::CT_PLAYER)
+		{
+			nextState = eStateType::ST_PATH_IDLE;
+		}
+	}
 
-	GAMESYS->SetAttacking(false);
 }
 
 void AttackState::Update()
 {
 
 	State::Update();
-
-
 	{
 		if (eStateType::ST_NONE != nextState)
 		{

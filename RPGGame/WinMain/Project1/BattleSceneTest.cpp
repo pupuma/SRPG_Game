@@ -79,9 +79,33 @@ bool BattleSceneTest::Init()
 	{
 		return false;
 	}
-	
-
 	stageComponentList.push_back(test);
+
+	//
+	/*Character* test1 = new Player("1", 1.5f);
+	test1->SetTurn(false);
+	test1->SetTilePosition(8, 9);
+	test1->Init();
+	stageComponentList.push_back(test1);*/
+
+	////
+	//Character* test2 = new Player("2", 1.5f);
+	//test2->SetTurn(false);
+	//test2->SetTilePosition(10, 9);
+	//test2->Init();
+	////stageComponentList.push_back(test2);
+	////
+	//Character* test3 = new Player("3", 1.5f);
+	//test3->SetTurn(false);
+	//test3->SetTilePosition(9, 10);
+	//test3->Init();
+	////stageComponentList.push_back(test3);
+	////
+	//Character* test4 = new Player("4", 1.5f);
+	//test4->SetTurn(false);
+	//test4->SetTilePosition(9, 8);
+	//test4->Init();
+	////stageComponentList.push_back(test4);
 	
 	//test2 = new Player("Test2", 1.5f);
 	//test2->SetTurn(false);
@@ -203,7 +227,7 @@ void BattleSceneTest::Update()
 
 	if (KEYMANAGER->IsOnceKeyDown('1'))
 	{
-		EFFECTMANAGER->Play(TEXT("Absorb"), 500, 500);
+		//EFFECTMANAGER->Play(TEXT("Absorb"), 500, 500);
 	}
 	gameUI->Update();
 
@@ -214,6 +238,7 @@ void BattleSceneTest::Update()
 	{
 		(*it)->Update();
 	}
+
 	EFFECTMANAGER->Update();
 
 #if defined(_DEBUG_TEST)

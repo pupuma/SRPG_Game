@@ -255,6 +255,9 @@
     <ClCompile Include="SelectStateButton.cpp">
       <Filter>MainGame\UI\Button</Filter>
     </ClCompile>
+    <ClCompile Include="GameYesNoButton.cpp">
+      <Filter>MainGame\UI\Button</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -417,6 +420,9 @@
       <Filter>MainGame\UI</Filter>
     </ClInclude>
     <ClInclude Include="SelectStateButton.h">
+      <Filter>MainGame\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="GameYesNoButton.h">
       <Filter>MainGame\UI\Button</Filter>
     </ClInclude>
   </ItemGroup>

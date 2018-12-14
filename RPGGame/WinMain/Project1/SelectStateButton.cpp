@@ -48,63 +48,111 @@ void SelectStateButton::Release()
 
 void SelectStateButton::Update()
 {
-
-	GetCursorPos(&_ptMouse);
-	ScreenToClient(_hWnd, &_ptMouse);
-
-	if (PtInRect(&rcSelectAttackButton, _ptMouse))
+	if (GameTurnManager::GetSingleton()->PlayerTrun())
 	{
-		if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+		GetCursorPos(&_ptMouse);
+		ScreenToClient(_hWnd, &_ptMouse);
+
+		if (PtInRect(&rcSelectAttackButton, _ptMouse))
 		{
-			iAttackFrameX = 1;
-			direction = BUTTONDIR_DOWN;
-			
+			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+			{
+				iAttackFrameX = 1;
+				direction = BUTTONDIR_DOWN;
+
+			}
+			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+			{
+				direction = BUTTONDIR_UP;
+				iAttackFrameX = 0;
+				GameTurnManager::GetSingleton()->AttackAction();
+				GAMESYS->SetAttacking(true);
+				GAMESYS->SetMove(true);
+
+			}
+
+			if (direction == BUTTONDIR_UP)
+			{
+				iAttackFrameX = 0;
+				direction = BUTTONDIR_NONE;
+
+			}
+
+
 		}
-		
-		if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+		else
 		{
-			direction = BUTTONDIR_UP;
+			//direction = BUTTONDIR_NONE;
 			iAttackFrameX = 0;
-		}
-	
-
-	}
-	else
-	{
-		direction = BUTTONDIR_NONE;
-		iAttackFrameX = 0;
-
-	}
-
-	//
-	//
-	//
-
-	if (PtInRect(&rcSelectEndButton, _ptMouse))
-	{
-		if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
-		{
-			iEndFrameX = 1;
-			direction = BUTTONDIR_DOWN;
-			GameTurnManager::GetSingleton()->NextTurn();
 
 		}
 
-		if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+		//
+		//
+		//
+
+		if (PtInRect(&rcSelectEndButton, _ptMouse))
 		{
-			direction = BUTTONDIR_UP;
+			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+			{
+				iEndFrameX = 1;
+				direction = BUTTONDIR_DOWN;
+
+			}
+
+			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+			{
+				direction = BUTTONDIR_UP;
+				iEndFrameX = 0;
+				GameTurnManager::GetSingleton()->NextTurn();
+
+			}
+			if (direction == BUTTONDIR_UP)
+			{
+				iEndFrameX = 0;
+				direction = BUTTONDIR_NONE;
+			}
+
+		}
+		else
+		{
+			//direction = BUTTONDIR_NONE;
+			iEndFrameX = 0;
+
+		}
+
+
+		if (PtInRect(&rcSelectSkillButton, _ptMouse))
+		{
+			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+			{
+				iSkillFrameX = 1;
+				direction = BUTTONDIR_DOWN;
+
+			}
+
+			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+			{
+				direction = BUTTONDIR_UP;
+				iSkillFrameX = 0;
+
+			}
+			if (direction == BUTTONDIR_UP)
+			{
+				iSkillFrameX = 0;
+				direction = BUTTONDIR_NONE;
+			}
+
+		}
+		else
+		{
+			//direction = BUTTONDIR_NONE;
 			iEndFrameX = 0;
 		}
 
 
 	}
-	else
-	{
-		direction = BUTTONDIR_NONE;
-		iEndFrameX = 0;
-
-	}
-
+	
 
 
 	//if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
@@ -160,7 +208,7 @@ void SelectStateButton::Render(HDC hdc)
 
 
 	imgSelectAttackButton->FrameRender(hdc, rcSelectAttackButton.left, rcSelectAttackButton.top, iAttackFrameX, iAttackFrameY);
-	//imgSelectSkillButton->FrameRender(hdc, rcSelectSkillButton.left, rcSelectSkillButton.top, 0, 1);
+	imgSelectSkillButton->FrameRender(hdc, rcSelectSkillButton.left, rcSelectSkillButton.top, iSkillFrameX, iSkillFrameY);
 	//imgSelectItemButton->FrameRender(hdc, rcSelectItemButton.left, rcSelectItemButton.top, 0, 2);
 	imgSelectEndButton->FrameRender(hdc, rcSelectEndButton.left, rcSelectEndButton.top, iEndFrameX, iEndFrameY);
 }

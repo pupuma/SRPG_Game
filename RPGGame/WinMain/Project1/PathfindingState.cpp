@@ -119,26 +119,6 @@ void PathfindingState::UpdatePathfinding()
 						distanceH = distanceH * distanceH;
 						distance = sqrtf(distanceW + distanceH);
 
-						/*
-						if (distance < 10)
-						{
-							heuristic = CalcAStarHeuristic(distanceFromStart, searchTileCell, _targetTileCell);
-						}
-						else if (distance < 10)
-						{
-							heuristic = CalcComplexHeuristic(searchTileCell, _targetTileCell);
-						}
-						else if (distance < 20)
-						{
-							heuristic = CalcSimpleHeuristic(command.tileCell, searchTileCell, _targetTileCell);
-						}
-						else
-						{
-							heuristic = distanceFromStart;
-						}
-						*/
-						//heuristic = CalcAStarHeuristic(distanceFromStart, searchTileCell, _targetTileCell);
-
 						heuristic = distanceFromStart;
 
 						if (NULL == searchTileCell->GetPrevTileCell())

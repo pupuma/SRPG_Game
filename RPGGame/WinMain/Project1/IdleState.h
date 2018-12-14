@@ -7,6 +7,9 @@ class Character;
 class IdleState
 	: public State
 {
+private:
+	float deltaTime;
+
 public:
 	IdleState(Character* _character);
 	~IdleState();

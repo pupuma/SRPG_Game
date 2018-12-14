@@ -3,6 +3,8 @@
 #include "TileCell.h"
 #include "TileObject.h"
 #include "Animation.h"
+#include "GameTurnManager.h"
+
 Map::Map(std::string _name)
 	: Component(_name,0)
 {
@@ -167,32 +169,26 @@ void Map::Render(HDC hdc)
 		int iCameraX = CAMERA->GetPosition()->x;
 		int iCameraY = CAMERA->GetPosition()->y;
 
-		if (!isSelectMove)
-		{
-			mousePosImg->Render(hdc, rc.left - iCameraX, rc.top  - iCameraY);
-		}
-		else
-		{
-			mouseMovePosImg->AniRender(hdc, rc.left- iCameraX, rc.top - iCameraY, mouseMovePosAni);
-		}
+		
+			if (!isSelectMove)
+			{
+				mousePosImg->Render(hdc, rc.left - iCameraX, rc.top - iCameraY);
+			}
+			else
+			{
+				if (GameTurnManager::GetSingleton()->PlayerTrun())
+				{
+					mouseMovePosImg->AniRender(hdc, rc.left - iCameraX, rc.top - iCameraY, mouseMovePosAni);
+				}
+				else
+				{
+					mousePosImg->Render(hdc, rc.left - iCameraX, rc.top - iCameraY);
+				}
+			}
+		
 	}
 
 	{
-		/*int tileSize = 48;
-		POINT renderPos = { 10,10 };
-		for (int j = 0; j < 32; j++)
-		{
-			for (int i = 0; i < 32; i++)
-			{
-				tileArray[j][i]->SetPosition(renderPos);
-				tileArray[j][i]->Render(hdc);
-				renderPos.x += tileSize;
-			}
-			renderPos.x =10;
-			renderPos.y += tileSize;
-
-
-		}*/
 	}
 }
 
@@ -432,16 +428,6 @@ void Map::MaxTravelDistance(Component * _target)
 
 void Map::MaxTravelDistanceRender(HDC hdc)
 {
-	//this->moveTileList = GAMESYS->GetMoveTileList();
-	//std::list<TileInfo>::iterator it;
-	//if (!this->moveTileList.empty())
-	//{
-	//	for (it = moveTileList.begin(); it != moveTileList.end(); it++)
-	//	{
-	//		//(*it)->Render(hdc, (*it)->GetX(), (*it)->GetY());
-	//		(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x, (*it).tile->GetPosition().y,200);
-	//	}
-	//}
 	{
 
 		int iCameraX = CAMERA->GetPosition()->x;
@@ -461,14 +447,18 @@ void Map::MaxTravelDistanceRender(HDC hdc)
 
 		if (GAMESYS->IsAttacking())
 		{
-			std::vector<TileInfo>::iterator it;
-			if (!tileAttackList.empty())
+			if (GameTurnManager::GetSingleton()->MyTurn(viewer->GetTilePosition()))
 			{
-				for (it = tileAttackList.begin(); it != tileAttackList.end(); it++)
+				std::vector<TileInfo>::iterator it;
+				if (!tileAttackList.empty())
 				{
-					(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x - iCameraX, (*it).tile->GetPosition().y - iCameraY, 150);
+					for (it = tileAttackList.begin(); it != tileAttackList.end(); it++)
+					{
+						(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x - iCameraX, (*it).tile->GetPosition().y - iCameraY, 150);
+					}
 				}
 			}
+			
 		}
 	}
 }
@@ -732,81 +722,89 @@ void Map::ReleaseOpenList()
 
 
 }
+//
+//void Map::SetAttackRange()
+//{
+//
+//	{
+//
+//		ResetAttackList();
+//
+//		// 정보를 미리 저장 
+//		TileInfo tileInfo;
+//		
+//		TilePoint t1 = viewer->GetTilePosition();
+//		t1.x--;
+//		TileCell*  searchTileCell = FindTileCell(t1);
+//
+//		tileInfo.tile = searchTileCell;
+//		tileInfo.tileImg = new Image();
+//		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
+//
+//
+//		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+//		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+//
+//		tileAttackList.push_back(tileInfo);
+//
+//		//
+//		TilePoint t2 = viewer->GetTilePosition();
+//		t2.x++;
+//		searchTileCell = FindTileCell(t2);
+//
+//		tileInfo.tile = searchTileCell;
+//		tileInfo.tileImg = new Image();
+//		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
+//
+//
+//		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+//		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+//
+//		tileAttackList.push_back(tileInfo);
+//
+//		//
+//		//
+//		TilePoint t3 = viewer->GetTilePosition();
+//		t3.y--;
+//		searchTileCell = FindTileCell(t3);
+//
+//		tileInfo.tile = searchTileCell;
+//		tileInfo.tileImg = new Image();
+//		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
+//
+//
+//		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+//		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+//
+//		tileAttackList.push_back(tileInfo);
+//
+//		//
+//		//
+//		TilePoint t4 = viewer->GetTilePosition();
+//		t4.y++;
+//		searchTileCell = FindTileCell(t4);
+//
+//		tileInfo.tile = searchTileCell;
+//		tileInfo.tileImg = new Image();
+//		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
+//
+//
+//		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+//		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+//
+//		tileAttackList.push_back(tileInfo);
+//
+//
+//	}
+//
+//}
 
-std::vector<Component*> Map::SetAttackRange()
+void Map::SetAttackRange(std::vector<TileInfo> _attackList)
 {
+	// 이미지 파일 어차피 없으니 
+	tileAttackList.clear();
 
-	{
-		ResetAttackList();
-
-		TileInfo tileInfo;
-		
-		TilePoint t1 = viewer->GetTilePosition();
-		t1.x--;
-		TileCell*  searchTileCell = FindTileCell(t1);
-
-		tileInfo.tile = searchTileCell;
-		tileInfo.tileImg = new Image();
-		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
-
-
-		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-		tileAttackList.push_back(tileInfo);
-
-		//
-		TilePoint t2 = viewer->GetTilePosition();
-		t2.x++;
-		searchTileCell = FindTileCell(t2);
-
-		tileInfo.tile = searchTileCell;
-		tileInfo.tileImg = new Image();
-		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
-
-
-		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-		tileAttackList.push_back(tileInfo);
-
-		//
-		//
-		TilePoint t3 = viewer->GetTilePosition();
-		t3.y--;
-		searchTileCell = FindTileCell(t3);
-
-		tileInfo.tile = searchTileCell;
-		tileInfo.tileImg = new Image();
-		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
-
-
-		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-		tileAttackList.push_back(tileInfo);
-
-		//
-		//
-		TilePoint t4 = viewer->GetTilePosition();
-		t4.y++;
-		searchTileCell = FindTileCell(t4);
-
-		tileInfo.tile = searchTileCell;
-		tileInfo.tileImg = new Image();
-		tileInfo.tileImg->Init(TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
-
-
-		tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
-		tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
-
-		tileAttackList.push_back(tileInfo);
-
-
-	}
-
-
-	return std::vector<Component*>();
+	tileAttackList = _attackList;
 }
 
 std::vector<Component*> Map::GetComponentList(TileCell* _tileCell)
@@ -841,20 +839,7 @@ std::vector<Component*> Map::GetComponentList(TileCell* _tileCell)
 
 void Map::ResetAttackList()
 {
-	if (tileAttackList.size() < 1)
-	{
-		tileAttackList.clear();
-	}
-	else
-	{
-		for (auto a : tileAttackList)
-		{
-			a.tileImg->Release();
-		}
-		tileAttackList.clear();
-	}
-
-	
+	tileAttackList.clear();
 }
 
 void Map::LayerBase()
@@ -1055,7 +1040,6 @@ void Map::TileMapCreateSampleTile()
 
 void Map::TileMapCreateSampleObject()
 {
-
 	{
 		int srcX = 0;
 		int srcY = 0;
