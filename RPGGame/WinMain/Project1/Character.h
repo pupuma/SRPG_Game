@@ -14,8 +14,9 @@ enum eStateType
 	ST_PATHFINDING,
 	ST_PATH_MOVE,
 	ST_PATH_IDLE,
-	ST_PATH_NAVI
+	ST_PATH_NAVI,
 };
+
 
 
 class State;
@@ -46,6 +47,11 @@ protected:
 	std::stack<TileCell*> pathfindingCellStack;
 	std::vector<TileInfo> attackList;
 	std::vector<Component*> targetList;
+	std::vector<TileInfo> skillList1;
+	std::vector<TileInfo> skillList2;
+	std::vector<TileInfo> skillList3;
+
+	
 protected:
 	TileCell* targetCharacterTile;
 protected:
@@ -54,8 +60,12 @@ protected:
 protected:
 	int attackPoint;
 	int damagePoint;
+	int healPoint;
 
 	int iHp;
+	int iMaxHp;
+	int iMp;
+	int iMaxMp;
 public:
 	Character(std::string _name, float _deep);
 	~Character();
@@ -95,9 +105,13 @@ public:
 	void AddTarget(Component* _target);
 	void ResetTarget();
 	void DecreaseHP(int _damagePoint);
+	void InCreaseHP(int _healPoint);
+
 	void SetTilePosition(int _tilePosX, int _tilePosY);
 	void SetImgFrame(int _frameX, int _frameY);
 	void SetTurn(bool _isTurn);
+	virtual void SkillPattern(int _number);
+	void EatItem();
 public:
 	State* GetState() { return state; }
 	int GetAttackPoint() { return attackPoint; }
@@ -110,9 +124,14 @@ public:
 	//void SetJobClass(eJobClass _job) { job = _job; }
 	int GetHp() { return iHp; }
 	void SetHp(int _hp) { iHp = _hp; }
+	int MaxGetHp() { return iMaxHp; }
+	int GetMp() { return iMp; }
+	void SetMp(int _mp) { iMp = _mp; }
+	int GetMaxMp() { return iMaxMp; }
 	void SetTargetCharacterTileCell(TileCell* _targetTileCellCharacter) { targetCharacterTile = _targetTileCellCharacter; }
 	TileCell* GetTargetCharacterTileCell() { return targetCharacterTile; }
-
+	int GetHealPoint() { return healPoint; }
+	void SetHealPoint(int _heal) { healPoint = _heal; }
 public:
 #if defined(_DEBUG_TEST)
 	void SetStateType(eStateType _type) { eType = _type; }

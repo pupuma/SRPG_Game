@@ -20,7 +20,6 @@ void AttackState::Start()
 
 	std::vector<Component*> targetList = character->GetTargetList();
 
-
 	bool isTarget = GAMESYS->TargetCheck(targetList, character);
 
 	

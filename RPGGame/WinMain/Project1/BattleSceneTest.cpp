@@ -81,6 +81,17 @@ bool BattleSceneTest::Init()
 	}
 	stageComponentList.push_back(test);
 
+	Character* test2 = new Player("Test", 1.5f);
+	test2->SetTurn(true);
+		
+	test2->SetTilePosition(10, 9);
+
+	if (!test2->Init())
+	{
+		return false;
+	}
+	stageComponentList.push_back(test2);
+
 	//
 	/*Character* test1 = new Player("1", 1.5f);
 	test1->SetTurn(false);
@@ -193,7 +204,7 @@ bool BattleSceneTest::Init()
 
 	// Chacter
 	GAMESYS->AddCharacterList(test);
-	//GAMESYS->AddCharacterList(test2);
+	GAMESYS->AddCharacterList(test2);
 	GAMESYS->AddCharacterList(monster);
 	GAMESYS->AddCharacterList(monster1);
 	GAMESYS->AddCharacterList(monster2);

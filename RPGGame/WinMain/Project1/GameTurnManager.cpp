@@ -129,3 +129,24 @@ bool GameTurnManager::MyTurn(TilePoint _pos)
 	}
 	return false;
 }
+
+void GameTurnManager::SkillAction(int _number)
+{
+	std::vector<Character*> characterList = GAMESYS->GetCharacterList();
+
+
+	Character* turnCharacter = NULL;
+
+	int index = 0;
+	if (!characterList.empty())
+	{
+		for (size_t i = 0; i < characterList.size(); i++, index++)
+		{
+			if (characterList[index]->IsTurn() && characterList[i]->GetComponetType() == eComponentType::CT_PLAYER)
+			{
+				characterList[index]->SkillPattern(_number);
+				break;
+			}
+		}
+	}
+}

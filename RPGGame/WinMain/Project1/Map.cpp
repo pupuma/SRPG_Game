@@ -178,7 +178,37 @@ void Map::Render(HDC hdc)
 			{
 				if (GameTurnManager::GetSingleton()->PlayerTrun())
 				{
-					mouseMovePosImg->AniRender(hdc, rc.left - iCameraX, rc.top - iCameraY, mouseMovePosAni);
+					if (GAMESYS->GetMove())
+					{
+						GetCursorPos(&_ptMouse);
+						ScreenToClient(_hWnd, &_ptMouse);
+
+						if (GAMESYS->IsAttacking())
+						{
+							TileCell* tileCell = FindTileCellByMousePosition(_ptMouse.x, _ptMouse.y);
+							for (auto a : tileAttackList)
+							{
+								if (a.tile->GetTilePosition() == tileCell->GetTilePosition())
+								{
+									mouseMovePosImg->AniRender(hdc, rc.left - iCameraX, rc.top - iCameraY, mouseMovePosAni);
+									return;
+								}
+							}
+
+						}
+						
+						mousePosImg->Render(hdc, rc.left - iCameraX, rc.top - iCameraY);
+
+
+					}
+					
+					if(!GAMESYS->GetMove())
+					{
+						
+						mouseMovePosImg->AniRender(hdc, rc.left - iCameraX, rc.top - iCameraY, mouseMovePosAni);
+
+					}
+				
 				}
 				else
 				{
@@ -428,12 +458,13 @@ void Map::MaxTravelDistance(Component * _target)
 
 void Map::MaxTravelDistanceRender(HDC hdc)
 {
+
+	int iCameraX = CAMERA->GetPosition()->x;
+	int iCameraY = CAMERA->GetPosition()->y;
+
 	{
 
-		int iCameraX = CAMERA->GetPosition()->x;
-		int iCameraY = CAMERA->GetPosition()->y;
-
-		if (!GAMESYS->IsAction())
+		if (!GAMESYS->GetMove())
 		{
 			std::list<TileInfo>::iterator it;
 			if (!tileCellOpenList.empty())
@@ -445,21 +476,47 @@ void Map::MaxTravelDistanceRender(HDC hdc)
 			}
 		}
 
-		if (GAMESYS->IsAttacking())
+
+		{
+			
+			if (GAMESYS->IsAttacking())
+			{
+				if (GameTurnManager::GetSingleton()->MyTurn(viewer->GetTilePosition()))
+				{
+					std::vector<TileInfo>::iterator it;
+					if (!tileAttackList.empty())
+					{
+						for (it = tileAttackList.begin(); it != tileAttackList.end(); it++)
+						{
+							(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x - iCameraX, (*it).tile->GetPosition().y - iCameraY, 150);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+
+	{
+		if (GAMESYS->IsSkilling())
 		{
 			if (GameTurnManager::GetSingleton()->MyTurn(viewer->GetTilePosition()))
 			{
 				std::vector<TileInfo>::iterator it;
-				if (!tileAttackList.empty())
+				if (!tileSkillList.empty())
 				{
-					for (it = tileAttackList.begin(); it != tileAttackList.end(); it++)
+					for (it = tileSkillList.begin(); it != tileSkillList.end(); it++)
 					{
 						(*it).tileImg->AlphaRender(hdc, (*it).tile->GetPosition().x - iCameraX, (*it).tile->GetPosition().y - iCameraY, 150);
+
 					}
+
 				}
 			}
-			
+
 		}
+
+
 	}
 }
 
@@ -490,10 +547,10 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 			}
 
 			searchTileCell->SetSearchPathfinding(true);
-
+			
 			tileInfo.tile = searchTileCell;
-			tileInfo.tileImg = new Image();
-			tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+			//tileInfo.tileImg = new Image();
+			tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("TileIdle"));
 
 			tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
 			tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
@@ -538,8 +595,10 @@ void Map::MaxPathFinder(int _distance, TilePoint _pos)
 					searchTileCell->SetSearchPathfinding(true);
 
 					tileInfo.tile = searchTileCell;
-					tileInfo.tileImg = new Image();
-					tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
+					//tileInfo.tileImg = new Image();
+					tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("TileIdle"));
+
+					//tileInfo.tileImg->Init(TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
 
 					tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
 					tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
@@ -713,8 +772,8 @@ void Map::ReleaseOpenList()
 	std::list<TileInfo>::iterator it;
 	for (it = tileCellOpenList.begin(); it != tileCellOpenList.end(); it++)
 	{
-		(*it).tileImg->Release();
-		delete it->tileImg;
+		//(*it).tileImg->Release();
+		//delete it->tileImg;
 	}
 
 	
@@ -806,6 +865,16 @@ void Map::SetAttackRange(std::vector<TileInfo> _attackList)
 
 	tileAttackList = _attackList;
 }
+
+
+void Map::SetSkillRange(std::vector<TileInfo> _skillList)
+{
+	// 이미지 파일 어차피 없으니 
+	tileSkillList.clear();
+
+	tileSkillList = _skillList;
+}
+
 
 std::vector<Component*> Map::GetComponentList(TileCell* _tileCell)
 {

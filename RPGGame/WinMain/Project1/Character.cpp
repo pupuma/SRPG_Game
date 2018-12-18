@@ -12,6 +12,7 @@
 #include "PathfindingImmedateState.h"
 #include "PathfindingMoveState.h"
 #include "NavigationState.h"
+#include "SkillState.h"
 //
 #include "Map.h"
 #include "Animation.h"
@@ -40,7 +41,11 @@ Character::Character(std::string _name, float _deep)
 	//
 	damagePoint = 0;
 	iHp = 5;
-	//job = eJobClass::JOB_NONE;
+	iMaxHp = iHp;
+
+	iMp = 5;
+	iMaxMp = iMp;
+	//job = eJobClass::JOB_NONE; 
 }
 
 
@@ -211,6 +216,11 @@ void Character::InitState()
 		State* state = new NavigationState(this);
 		stateMap[eStateType::ST_PATH_NAVI] = state;
 	}
+
+	{
+		State* state = new SkillState(this);
+		stateMap[eStateType::ST_SKILL] = state;
+	}
 }
 
 void Character::ChangeState(eStateType stateType)
@@ -243,11 +253,18 @@ void Character::AttackPattern()
 	//map->FindTileCell(this->GetTilePosition());
 }
 
-void Character::ReceiveMsg(const sMessageParam & param)
+void Character::ReceiveMsg(const sMessageParam& param)
 {
 	if (TEXT("Attack") == param.message)
 	{
 		damagePoint = param.attackPoint;
+		state->ChangeState(eStateType::ST_DEFENSE);
+	}
+
+	if (TEXT("Skill") == param.message)
+	{
+		damagePoint = param.attackPoint;
+		healPoint = param.healPoint;
 		state->ChangeState(eStateType::ST_DEFENSE);
 	}
 }
@@ -357,6 +374,12 @@ void Character::DecreaseHP(int _damagePoint)
 	}
 }
 
+void Character::InCreaseHP(int _healPoint)
+{
+	iHp += _healPoint;
+
+}
+
 void Character::SetTilePosition(int _tilePosX, int _tilePosY)
 {
 	TilePoint tilePos;
@@ -393,4 +416,18 @@ void Character::SetTurn(bool _isTurn)
 	//map->ResetViewer();
 	//map->SetViewer((Component*)this);
 
+}
+
+void Character::SkillPattern(int _number)
+{
+	
+}
+
+void Character::EatItem()
+{
+	/*sMessageParam msg;
+	msg.sender = this;
+	msg.receiver = this;
+	msg.message = TEXT("Use");
+	ComponentSystem::GetInstance()->SendMsg(msg);*/
 }

@@ -50,7 +50,8 @@ private:
 	
 	std::list<TileInfo> tileCellOpenList;
 	std::vector<TileInfo> tileAttackList;
-	
+	std::vector<TileInfo> tileSkillList;
+
 	std::queue<TileCell*> pathfindingQueue;
 
 	//std::priority_queue<TileCell*> pathfindingQueue;
@@ -93,8 +94,9 @@ public:
 	void SortTile();
 	void ResetViewer();
 	void ReleaseOpenList();
-	void SetAttackRange();
+	//void SetAttackRange();
 	void SetAttackRange(std::vector<TileInfo> _attackList);
+	void SetSkillRange(std::vector<TileInfo> _skillList);
 
 	std::vector<Component*> GetComponentList(TileCell* _tileCell);
 	void ResetAttackList();
@@ -121,6 +123,8 @@ public:
 	std::vector<std::vector<TileCell*>> GetTileArray() { return tileArray; }
 	std::list<TileInfo> GetOpenTileCellList() { return tileCellOpenList; }
 	std::vector<TileInfo> GetAttackList() { return tileAttackList; }
+	std::vector<TileInfo> GetSkillList() { return tileSkillList; }
+
 
 	int GetWidth() const { return width; }	
 	int GetHeight() const { return height; }

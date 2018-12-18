@@ -4,6 +4,7 @@
 #include "Map.h"	
 #include "State.h"
 #include "TileCell.h"
+#include "SkillSystem.h"
 
 Player::Player(std::string _name, float _deep)
 	: Character(_name,_deep)
@@ -188,10 +189,126 @@ void Player::AttackPattern()
 		}
 	}
 		break;
+	case eJobClass::JOB_MAGIC:
+	{
+		for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
+		{
+			TilePoint currentTilePosition = this->GetTilePosition();
+			TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
+			TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
 
+			if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
+				searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
+			{
+				continue;
+			}
+			TileInfo tileInfo;
+			tileInfo.tile = searchTileCell;
+			tileInfo.tileImg = IMAGEMANAGER->FindImage(TEXT("AttackTile"));
+			tileInfo.tileImg->SetX(searchTileCell->GetPosition().x);
+			tileInfo.tileImg->SetY(searchTileCell->GetPosition().y);
+			tileInfo.distance = distance;
+			attackList.push_back(tileInfo);
+		}
+	}
+		
 	}
 	
+	//attackList.clear();
+	//
+	//attackList = GAMESYS->BoxSkillRange(this);
 	map->SetAttackRange(attackList);
 
 	attackList.clear();
+}
+
+void Player::SkillPattern(int _number)
+{
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+
+	if (job == eJobClass::JOB_WARRIOR)
+	{
+		switch (_number)
+		{
+		case 1:
+			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
+			map->SetSkillRange(skillList1);
+			break;
+		case 2:
+			skillList2 = SkillSystem::GetSingleton()->NomalSkillRange(this);
+			map->SetSkillRange(skillList2);
+
+			break;
+		case 3:
+			skillList3 = SkillSystem::GetSingleton()->BoxSkillRange(this);
+			map->SetSkillRange(skillList3);
+
+			break;
+		}
+	}
+	else if (job == eJobClass::JOB_ARCHER)
+	{
+		switch (_number)
+		{
+		case 1:
+			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
+			map->SetSkillRange(skillList1);
+			// Damage
+			break;
+		case 2:
+			skillList2 = SkillSystem::GetSingleton()->BoxSkillRange(this);
+			map->SetSkillRange(skillList2);
+
+			break;
+		case 3:
+			skillList3 = SkillSystem::GetSingleton()->StraightAttackSkillRange(this);
+			map->SetSkillRange(skillList3);
+
+			break;
+		}
+	}
+	else if (job == eJobClass::JOB_HEALER)
+	{
+		switch (_number)
+		{
+		case 1:
+			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
+			map->SetSkillRange(skillList1);
+
+			break;
+		case 2:
+			skillList2 = SkillSystem::GetSingleton()->BoxSkillRange(this);
+			map->SetSkillRange(skillList2);
+
+			break;
+		case 3:
+			skillList3 = SkillSystem::GetSingleton()->BuffSkillRange(this);
+			map->SetSkillRange(skillList3);
+
+			break;
+		}
+	}
+	else if (job == eJobClass::JOB_MAGIC)
+	{
+		switch (_number)
+		{
+		case 1:
+			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
+			map->SetSkillRange(skillList1);
+
+			break;
+		case 2:
+			skillList2 = SkillSystem::GetSingleton()->BoxSkillRange(this);
+			map->SetSkillRange(skillList2);
+
+			break;
+		case 3:
+			skillList3 = SkillSystem::GetSingleton()->AllAttackSkillRange(this);
+			map->SetSkillRange(skillList3);
+
+			break;
+		}
+	}
+	
 }

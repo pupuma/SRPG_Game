@@ -3,6 +3,7 @@
 #include "GameYesNoButton.h"
 
 #include "GameTurnManager.h"
+#include "ButtonManager.h"
 
 GameYesNoButton::GameYesNoButton()
 {
@@ -38,46 +39,183 @@ bool GameYesNoButton::Init()
 
 void GameYesNoButton::Update()
 {
-	if (GameTurnManager::GetSingleton()->PlayerTrun())
-	{
-		GetCursorPos(&_ptMouse);
-		ScreenToClient(_hWnd, &_ptMouse);
+	GetCursorPos(&_ptMouse);
+	ScreenToClient(_hWnd, &_ptMouse);
 
-		if (PtInRect(&rcYesButton, _ptMouse))
+
+	if (PtInRect(&rcYesButton, _ptMouse))
+	{
+		if (ButtonManager::GetSingleton()->GetSelectActive())
 		{
+			noButtonFrameX = 0;
+			if (GameTurnManager::GetSingleton()->PlayerTrun())
+			{
+				if (ButtonManager::GetSingleton()->GetButtonTypeActive() == eButtonActive::BA_ATTACK)
+				{
+					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+					{
+						yesButtonFrameX = 1;
+						direction = BUTTONDIR_DOWN;
+
+					}
+					else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+					{
+						direction = BUTTONDIR_UP;
+						yesButtonFrameX = 0;
+						//ButtonManager::GetSingleton()->SetAttackButton(false);
+						//GAMESYS->SetAction(true);
+						GameTurnManager::GetSingleton()->AttackAction();
+						GAMESYS->SetAttacking(true);
+						if (!GAMESYS->GetMove())
+						{
+							//GAMESYS->SetMove(true);
+							GAMESYS->SetAction(false);
+						}
+						else
+						{
+							GAMESYS->SetAction(true);
+						}
+
+						ButtonManager::GetSingleton()->SetSelectActive(false);
+
+					}
+
+					if (direction == BUTTONDIR_UP)
+					{
+						yesButtonFrameX = 0;
+						direction = BUTTONDIR_NONE;
+
+					}
+				}
+				else if (ButtonManager::GetSingleton()->GetButtonTypeActive() == eButtonActive::BA_SKILL)
+				{
+					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+					{
+						yesButtonFrameX = 1;
+						direction = BUTTONDIR_DOWN;
+
+					}
+					else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+					{
+						direction = BUTTONDIR_UP;
+						yesButtonFrameX = 0;
+						//ButtonManager::GetSingleton()->SetAttackButton(false);
+						//GAMESYS->SetAction(true);
+
+						GAMESYS->SetAttacking(true);
+						if (!GAMESYS->GetMove())
+						{
+							//GAMESYS->SetMove(true);
+							GAMESYS->SetAction(false);
+						}
+						else
+						{
+							GAMESYS->SetAction(true);
+						}
+
+						GAMESYS->SkillActivation();
+
+
+						ButtonManager::GetSingleton()->SetSelectActive(false);
+
+					}
+
+					if (direction == BUTTONDIR_UP)
+					{
+						yesButtonFrameX = 0;
+						direction = BUTTONDIR_NONE;
+
+					}
+				}
+				
+			}
+		}
+
+
+	}
+	else if (PtInRect(&rcNoButton, _ptMouse))
+	{
+		if (ButtonManager::GetSingleton()->GetSelectActive())
+		{
+			yesButtonFrameX = 0;
 			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 			{
-				yesButtonFrameX = 1;
+				noButtonFrameX = 1;
 				direction = BUTTONDIR_DOWN;
 
 			}
 			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
 			{
 				direction = BUTTONDIR_UP;
-				yesButtonFrameX = 0;
+				ButtonManager::GetSingleton()->SetSelectActive(false);
+
+				noButtonFrameX = 0;
+				if (GAMESYS->IsAction())
+				{
+					GAMESYS->SetAction(false);
+				}
+				else
+				{
+					if (!GAMESYS->GetMove())
+					{
+						GAMESYS->SetMove(false);
+					}
+				}
+				GAMESYS->SetAttacking(false);
+				GAMESYS->SetSkilling(false);
+
+
+
+				isAttack = false;
 			}
 
-			if (direction == BUTTONDIR_UP)
-			{
-				yesButtonFrameX = 0;
-				direction = BUTTONDIR_NONE;
+		}
 
-			}
+		if (direction == BUTTONDIR_UP)
+		{
+			noButtonFrameX = 0;
+			direction = BUTTONDIR_NONE;
+
 		}
 	}
+	else
+	{
+		yesButtonFrameX = 0;
+		noButtonFrameX = 0;
+	}
+
+	
+	
+
 }
 
 void GameYesNoButton::Render(HDC hdc)
 {
-	imgBox->Render(hdc, rcBox.left, rcBox.top);
-
-#if defined(_DEBUG_TEST)
+	if (ButtonManager::GetSingleton()->GetSelectActive())
 	{
-		DrawObject(hdc, rcYesButton, 1, RGB(125, 125, 125), RECTANGLE);
-		DrawObject(hdc, rcNoButton, 1, RGB(125, 125, 125), RECTANGLE);
+		if (GameTurnManager::GetSingleton()->PlayerTrun())
+		{
+			imgBox->Render(hdc, rcBox.left, rcBox.top);
+
+			imgYesButton->FrameRender(hdc, rcYesButton.left, rcYesButton.top, yesButtonFrameX, yesButtonFrameY);
+			imgNoButton->FrameRender(hdc, rcNoButton.left, rcNoButton.top, noButtonFrameX, noButtonFrameY);
+
+		}
+		
+
 	}
-#endif // 
-	imgYesButton->FrameRender(hdc, rcYesButton.left, rcYesButton.top, yesButtonFrameX, yesButtonFrameY);
-	imgNoButton->FrameRender(hdc, rcNoButton.left, rcNoButton.top, noButtonFrameX, noButtonFrameY);
+//		imgBox->Render(hdc, rcBox.left, rcBox.top);
+//
+//#if defined(_DEBUG_TEST)
+//		{
+//			DrawObject(hdc, rcYesButton, 1, RGB(125, 125, 125), RECTANGLE);
+//			DrawObject(hdc, rcNoButton, 1, RGB(125, 125, 125), RECTANGLE);
+//		}
+//#endif // 
+//
+//
+//		imgYesButton->FrameRender(hdc, rcYesButton.left, rcYesButton.top, yesButtonFrameX, yesButtonFrameY);
+//		imgNoButton->FrameRender(hdc, rcNoButton.left, rcNoButton.top, noButtonFrameX, noButtonFrameY);
+
 
 }

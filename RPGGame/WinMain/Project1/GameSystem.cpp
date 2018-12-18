@@ -7,7 +7,8 @@
 #include "GameSystem.h"
 
 #include "NaviGationSystem.h"
-
+#include "Player.h"
+#include "GameTurnManager.h"
 
 
 GameSystem::GameSystem()
@@ -27,6 +28,7 @@ void GameSystem::Init()
 	round = 1;
 	currentCharacterIndex = 0;
 	isMove = false;
+	isHeal = false;
 
 }
 void GameSystem::SetMousePosition(LPARAM lParam)
@@ -493,5 +495,76 @@ void GameSystem::AddProioritySelectList(Character* _character)
 	}
 }
 
+void GameSystem::SkillActivation()
+{
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+	TileCell* tileCell = NULL;
+	std::vector<Character*> characterList = GAMESYS->GetCharacterList();
+	Character* turnCharacter = NULL;
+	
+	//
 
+	std::vector<Component*> targetList;
+	std::vector<TileInfo> skillList = map->GetSkillList();
+
+
+
+	for (auto a : skillList)
+	{
+		std::list<Component*> tileComponentList = a.tile->GetTileComponentList();
+		for (auto it : tileComponentList)
+		{
+			targetList.push_back(it);
+		}
+
+	}
+
+
+
+	//
+	int index = 0;
+	if (!characterList.empty())
+	{
+		for (size_t i = 0; i < characterList.size(); i++, index++)
+		{
+			if (characterList[index]->IsTurn() && characterList[i]->GetComponetType() == eComponentType::CT_PLAYER)
+			{
+				characterList[index]->SetTarget(targetList);
+				characterList[index]->ChangeState(eStateType::ST_SKILL);
+				GAMESYS->SetMove(false);
+				break;
+			}
+		}
+	}
+
+	targetList.clear();
+
+}
+
+std::vector<Component*> GameSystem::SkillListTarget(std::vector<Component*> _list, Character* _character)
+{
+	std::vector<Component*> targetList;
+
+	for (auto a : _list)
+	{
+		if (!IsHeal())
+		{
+			if (a->GetComponetType() != _character->GetComponetType())
+			{
+				targetList.push_back(a);
+			}
+		}
+		else
+		{
+			if (a->GetComponetType() == _character->GetComponetType())
+			{
+				targetList.push_back(a);
+			}
+		}
+		
+	}
+
+
+	return targetList;
+}
 

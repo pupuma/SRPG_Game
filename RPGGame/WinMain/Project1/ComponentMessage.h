@@ -10,4 +10,5 @@ struct sMessageParam
 	Component* receiver;
 	std::string message;
 	int attackPoint;
+	int healPoint;
 };

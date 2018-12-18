@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "SelectStateButton.h"
 #include "GameTurnManager.h"
+#include "ButtonManager.h"
+#include "FontManager.h"
 
 
 SelectStateButton::SelectStateButton()
@@ -14,9 +16,12 @@ SelectStateButton::~SelectStateButton()
 
 bool SelectStateButton::Init()
 {
+	{
+		//isAttack = false;
+		characterSkillList = GAMESYS->GetCharacterSkillList();
+	}
 	//
-	direction = BUTTONDIR_NONE;
-
+	direction = BUTTTONDIR::BUTTONDIR_NONE;
 	iAttackFrameX = 0;
 	iAttackFrameY =0;
 
@@ -39,6 +44,11 @@ bool SelectStateButton::Init()
 	imgSelectItemButton = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
 	imgSelectEndButton = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
 
+	//RectMakeRectMake(498, 549, 383, 220);
+	rcSkill1 = RectMake(515, 565, 48, 48);
+	rcSkill2 = RectMake(515, 635, 48, 48);
+	rcSkill3 = RectMake(515, 705, 48, 48);
+
 	return true;
 }
 
@@ -48,153 +58,197 @@ void SelectStateButton::Release()
 
 void SelectStateButton::Update()
 {
-	if (GameTurnManager::GetSingleton()->PlayerTrun())
-	{
-		GetCursorPos(&_ptMouse);
-		ScreenToClient(_hWnd, &_ptMouse);
+	GetCursorPos(&_ptMouse);
+	ScreenToClient(_hWnd, &_ptMouse);
 
-		if (PtInRect(&rcSelectAttackButton, _ptMouse))
+	// ATTACK
+	if (PtInRect(&rcSelectAttackButton, _ptMouse))
+	{
+		iSkillFrameX = 0;
+		iEndFrameX = 0;
+		if (GameTurnManager::GetSingleton()->PlayerTrun())
 		{
 			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+			{
+				ButtonManager::GetSingleton()->SetSelectActive(false);
+
+				iAttackFrameX = 1;
+				direction = BUTTTONDIR::BUTTONDIR_DOWN;
+
+			}
+
+			if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
 			{
 				iAttackFrameX = 1;
-				direction = BUTTONDIR_DOWN;
+				direction = BUTTTONDIR::BUTTONDIR_DOWN;
 
 			}
-			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+			if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTTONDIR::BUTTONDIR_DOWN)
 			{
-				direction = BUTTONDIR_UP;
+				direction = BUTTTONDIR::BUTTONDIR_UP;
 				iAttackFrameX = 0;
-				GameTurnManager::GetSingleton()->AttackAction();
-				GAMESYS->SetAttacking(true);
-				GAMESYS->SetMove(true);
-
-			}
-
-			if (direction == BUTTONDIR_UP)
-			{
-				iAttackFrameX = 0;
-				direction = BUTTONDIR_NONE;
-
+				bActive = eButtonActive::BA_ATTACK;
+				ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
+				GAMESYS->SetSkilling(false);
 			}
 
 
 		}
-		else
-		{
-			//direction = BUTTONDIR_NONE;
-			iAttackFrameX = 0;
-
-		}
-
-		//
-		//
-		//
-
-		if (PtInRect(&rcSelectEndButton, _ptMouse))
-		{
-			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
-			{
-				iEndFrameX = 1;
-				direction = BUTTONDIR_DOWN;
-
-			}
-
-			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
-			{
-				direction = BUTTONDIR_UP;
-				iEndFrameX = 0;
-				GameTurnManager::GetSingleton()->NextTurn();
-
-			}
-			if (direction == BUTTONDIR_UP)
-			{
-				iEndFrameX = 0;
-				direction = BUTTONDIR_NONE;
-			}
-
-		}
-		else
-		{
-			//direction = BUTTONDIR_NONE;
-			iEndFrameX = 0;
-
-		}
-
-
-		if (PtInRect(&rcSelectSkillButton, _ptMouse))
+	}
+	else if (PtInRect(&rcSelectSkillButton, _ptMouse))
+	{
+		iAttackFrameX = 0;
+		iEndFrameX = 0;
+		if (GameTurnManager::GetSingleton()->PlayerTrun())
 		{
 			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
 			{
 				iSkillFrameX = 1;
-				direction = BUTTONDIR_DOWN;
+				direction = BUTTTONDIR::BUTTONDIR_DOWN;
 
 			}
 
-			else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+			if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
 			{
-				direction = BUTTONDIR_UP;
-				iSkillFrameX = 0;
+				iSkillFrameX = 1;
+				direction = BUTTTONDIR::BUTTONDIR_DOWN;
 
 			}
-			if (direction == BUTTONDIR_UP)
+
+			if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTTONDIR::BUTTONDIR_DOWN)
 			{
+				direction = BUTTTONDIR::BUTTONDIR_UP;
 				iSkillFrameX = 0;
-				direction = BUTTONDIR_NONE;
+				bActive = eButtonActive::BA_SKILL;
+				GAMESYS->SetAttacking(false);
+				ButtonManager::GetSingleton()->SetSelectActive(false, bActive);
+
 			}
 
 		}
-		else
+
+	}
+	else if (PtInRect(&rcSelectEndButton, _ptMouse))
+	{
+		iAttackFrameX = 0;
+		iSkillFrameX = 0;
+		if (GameTurnManager::GetSingleton()->PlayerTrun())
 		{
-			//direction = BUTTONDIR_NONE;
-			iEndFrameX = 0;
+			if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+			{
+				iEndFrameX = 1;
+				direction = BUTTTONDIR::BUTTONDIR_DOWN;
+
+			}
+
+			if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
+			{
+				iEndFrameX = 1;
+				direction = BUTTTONDIR::BUTTONDIR_DOWN;
+
+			}
+
+			if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTTONDIR::BUTTONDIR_DOWN)
+			{
+				direction = BUTTTONDIR::BUTTONDIR_UP;
+				iEndFrameX = 0;
+				GameTurnManager::GetSingleton()->NextTurn();
+			}
+
 		}
 
 
 	}
-	
-
-
-	//if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
-	//{
-	//	GetCursorPos(&_ptMouse);
-	//	ScreenToClient(_hWnd, &(_ptMouse));
-
-
-	//	if (PtInRect(&rcSelectAttackButton, _ptMouse))
-	//	{
-	//	}
-
-	//	if (PtInRect(&rcSelectSkillButton, _ptMouse))
-	//	{
-	//		imgSelectSkillButton->SetFrameY(1);
-
-	//	}
-
-	//	if (PtInRect(&rcSelectItemButton, _ptMouse))
-	//	{
-	//		imgSelectItemButton->SetFrameY(1);
-
-	//	}
-
-	//	if (PtInRect(&rcSelectEndButton, _ptMouse))
-	//	{
-	//		imgSelectEndButton->SetFrameY(1);
-
-	//	}
-	//}
-
-	/*if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
+	else if (bActive == eButtonActive::BA_SKILL)
 	{
+		if (PtInRect(&rcSkill1, _ptMouse))
+		{
+			if (GameTurnManager::GetSingleton()->PlayerTrun())
+			{
+				if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+				{
+					direction = BUTTTONDIR::BUTTONDIR_DOWN;
 
+				}
+
+				if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
+				{
+					direction = BUTTTONDIR::BUTTONDIR_DOWN;
+				}
+
+				if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTTONDIR::BUTTONDIR_DOWN)
+				{
+					direction = BUTTTONDIR::BUTTONDIR_UP;
+					GameTurnManager::GetSingleton()->SkillAction(1);
+					bActive = eButtonActive::BA_SKILL;
+					ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
+					GAMESYS->SetSkilling(true);
+				}
+			}
+			
+		}
+		else if (PtInRect(&rcSkill2, _ptMouse))
+		{
+			if (GameTurnManager::GetSingleton()->PlayerTrun())
+			{
+				if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+				{
+					direction = BUTTTONDIR::BUTTONDIR_DOWN;
+
+				}
+
+				if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
+				{
+					direction = BUTTTONDIR::BUTTONDIR_DOWN;
+				}
+
+				if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTTONDIR::BUTTONDIR_DOWN)
+				{
+					direction = BUTTTONDIR::BUTTONDIR_UP;
+					GameTurnManager::GetSingleton()->SkillAction(2);
+					bActive = eButtonActive::BA_SKILL;
+					ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
+					GAMESYS->SetSkilling(true);
+				}
+			}
+		
+		}
+		else if (PtInRect(&rcSkill3, _ptMouse))
+		{
+			if (GameTurnManager::GetSingleton()->PlayerTrun())
+			{
+				if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+				{
+					direction = BUTTTONDIR::BUTTONDIR_DOWN;
+
+				}
+
+				if (KEYMANAGER->IsStayKeyDown(VK_LBUTTON))
+				{
+					direction = BUTTTONDIR::BUTTONDIR_DOWN;
+				}
+
+				if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTTONDIR::BUTTONDIR_DOWN)
+				{
+					direction = BUTTTONDIR::BUTTONDIR_UP;
+					GameTurnManager::GetSingleton()->SkillAction(3);
+					bActive = eButtonActive::BA_SKILL;
+					ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
+					GAMESYS->SetSkilling(true);
+				}
+			}
+			
+		}
+	}
+	else
+	{
+		direction = BUTTTONDIR::BUTTONDIR_NONE;
+		iAttackFrameX = 0;
+		iSkillFrameX = 0;
+		iEndFrameX = 0;
 	}
 
-	if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON))
-	{
-
-	}*/
-
-	//KEYMANAGER->Reset();
+	
 }
 
 void SelectStateButton::Render(HDC hdc)
@@ -211,4 +265,21 @@ void SelectStateButton::Render(HDC hdc)
 	imgSelectSkillButton->FrameRender(hdc, rcSelectSkillButton.left, rcSelectSkillButton.top, iSkillFrameX, iSkillFrameY);
 	//imgSelectItemButton->FrameRender(hdc, rcSelectItemButton.left, rcSelectItemButton.top, 0, 2);
 	imgSelectEndButton->FrameRender(hdc, rcSelectEndButton.left, rcSelectEndButton.top, iEndFrameX, iEndFrameY);
+
+	if (bActive == eButtonActive::BA_SKILL)
+	{
+		POINT pt = { 598, 575 };
+		FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("테스트입니다."), &pt, COLOR_M);
+
+#if defined(_DEBUG_TEST)
+		DrawObject(hdc, rcSkill1, 1, RGB(25, 125, 25), RECTANGLE);
+		DrawObject(hdc, rcSkill2, 1, RGB(125, 25, 25), RECTANGLE);
+		DrawObject(hdc, rcSkill3, 1, RGB(25, 25, 125), RECTANGLE);
+
+		//
+		
+#endif
+	}
+
+
 }

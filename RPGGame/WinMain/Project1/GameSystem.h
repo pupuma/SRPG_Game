@@ -4,6 +4,7 @@
 
 
 enum eStateType;
+enum eJobClass;
 
 class Map;
 class Component;
@@ -25,6 +26,9 @@ private:
 	bool isAction;
 	bool isMove;
 	bool isAttacking;
+	bool isSkilling;
+	bool isHeal;
+
 	int round;
 	int currentCharacterIndex;
 
@@ -33,6 +37,7 @@ private:
 	//std::list<TileInfo> moveTileList;
 	TilePoint temp;
 	eStateType eType;
+	eJobClass playerJobType;
 private:
 	Map* g_Map;
 	TileCell* targetTileCell;
@@ -49,6 +54,8 @@ private:
 	std::list<MoveInfo> moveList;
 
 	std::vector<Character*> selectTargetList;
+	std::vector<Image*> characterSkillList;
+	//std::map<std::pair<eJobClass, int>, std::vector<TileInfo>> m_playerSkill;
 public:
 	GameSystem();
 	~GameSystem();
@@ -71,7 +78,8 @@ public:
 	TileCell* CharacterSelectTileCell(Character* _character);
 	bool AttackRangeCheck(Character* _character);
 	void AddProioritySelectList(Character* _character);
-	
+	void SkillActivation();
+	std::vector<Component*> SkillListTarget(std::vector<Component*> _list, Character* _character);
 public:
 	bool IsAction() { return isAction; }
 	void SetAction(bool _isAction) { isAction = _isAction; }
@@ -86,4 +94,9 @@ public:
 	bool GetMove() { return isMove; }
 	void SetType(eStateType _type) { eType = _type; }
 	eStateType GetType() { return eType; }
+	std::vector<Image*> GetCharacterSkillList() { return characterSkillList; }
+	void SetSkilling(bool _isSkill) { isSkilling = _isSkill; }
+	bool IsSkilling() { return isSkilling; }
+	bool IsHeal() { return isHeal; }
+	void SetHeal(bool _isHeal) { isHeal = _isHeal; }
 };

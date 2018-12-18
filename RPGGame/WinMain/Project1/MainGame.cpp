@@ -3,7 +3,9 @@
 
 #include "BattleSceneTest.h"
 #include "GameTurnManager.h"
-
+#include "ButtonManager.h"
+#include "FontManager.h"
+#include "SkillSystem.h"
 
 MainGame::MainGame()
 {
@@ -50,7 +52,6 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddImage(TEXT("AttackTile"), TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("Select"), TEXT("../Resource/Images/Select.bmp"), 48, 48, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("SelectObject"), TEXT("../Resource/Images/SelectObject.bmp"), 96, 48, 2, 1, true, COLOR_M);
-
 		IMAGEMANAGER->AddImage(TEXT("AttackTile"),TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("TileMap_Cell_B"), TEXT("../Resource/Images/TileMap_Cell_B.bmp"), 768, 14736, 16, 307, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("TileMap_OBJ_B"), TEXT("../Resource/Images/TileMap_OBJ_B.bmp"), 768, 9216, 16, 192, true, COLOR_M);
@@ -65,7 +66,9 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddFrameImage(TEXT("SelectButton"), TEXT("../Resource/Images/BUTTON.bmp"), 260, 192, 2, 4, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("YesButton"), TEXT("../Resource/Images/YesButton.bmp"), 122, 65, 2,1, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("NoButton"), TEXT("../Resource/Images/NoButton.bmp"), 122, 65, 2, 1, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("IconSet"), TEXT("../Resource/Images/IconSet.bmp"), 512, 5664, 16, 177, true, COLOR_M);
 
+		
 	}
 
 	{
@@ -76,6 +79,10 @@ bool MainGame::Init()
 
 		PARSING->MapDataParsing(TEXT("Map_1"));
 		GameTurnManager::GetSingleton()->Init();
+		ButtonManager::GetSingleton()->Init();
+		FontManager::GetSingleton()->Init();
+		SkillSystem::GetSingleton()->Init();
+
 	}
 
 	{

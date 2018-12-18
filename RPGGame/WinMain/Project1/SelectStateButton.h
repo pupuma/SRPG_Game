@@ -1,6 +1,18 @@
 #pragma once
+
+
+enum eButtonActive;
+
+
+
 class SelectStateButton
 {
+private:
+	int iHp;
+	int iMp;
+	int iAttackPoint;
+	int iMaxHp;
+	int iMaxMp;
 private:
 	int index;
 	int iAttackFrameX;
@@ -16,8 +28,9 @@ private:
 	int iEndFrameY;
 private:
 	BUTTTONDIR		direction;
-
-
+	eButtonActive bActive;
+	//bool isAttack;
+	
 private:
 	RECT rcSelectAttackButton;
 	RECT rcSelectSkillButton;
@@ -29,7 +42,15 @@ private:
 	Image* imgSelectSkillButton;
 	Image* imgSelectItemButton;
 	Image* imgSelectEndButton;
+private:
+	// Skill
+	RECT rcSkill1;
+	RECT rcSkill2;
+	RECT rcSkill3;
+private:
 
+private:
+	std::vector<Image*> characterSkillList;
 public:
 	SelectStateButton();
 	~SelectStateButton();

@@ -3,6 +3,7 @@
 
 #include "SelectStateButton.h"
 #include "GameYesNoButton.h"
+#include "FontManager.h"
 GameUI::GameUI()
 {
 }
@@ -66,6 +67,9 @@ void GameUI::Update()
 		selectYNButton->Update();
 
 	}
+
+
+
 }
 
 void GameUI::Render(HDC hdc)
@@ -93,9 +97,21 @@ void GameUI::Render(HDC hdc)
 		imgTest7->Render(hdc, rcTest7.left, rcTest7.top);
 
 		//
-		
 		selectStateButton->Render(hdc);
 		selectYNButton->Render(hdc);
 
+#if defined(_DEBUG_TEST)
+		{
+			POINT pt = { 27, 420 };
+			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("HP"), &pt, RGB(255,0,0));
+
+			POINT pt2 = { 27, 475 };
+			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("MP"), &pt2, RGB(255, 0, 0));
+
+		}
+#endif//
 	}
+
+	
+
 }

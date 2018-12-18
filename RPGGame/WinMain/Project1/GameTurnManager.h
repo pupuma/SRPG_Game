@@ -15,5 +15,6 @@ public:
 	void AttackAction();
 	bool PlayerTrun();
 	bool MyTurn(TilePoint _pos);
+	void SkillAction(int _number);
 };
 

@@ -21,7 +21,9 @@ void DefenseState::Start()
 	// Damage
 	int damagePoint = character->GetDamagePoint();
 	character->DecreaseHP(damagePoint);
-	//
+	//HEAL
+	int healPoint = character->GetHealPoint();
+	character->InCreaseHP(healPoint);
 
 	if (false == character->IsLive())
 	{

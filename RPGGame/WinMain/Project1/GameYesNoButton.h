@@ -11,7 +11,8 @@ private:
 	Image* imgBox;
 	Image* imgYesButton;
 	Image* imgNoButton;
-
+private:
+	bool isAttack;
 private:
 	int yesButtonFrameX;
 	int yesButtonFrameY;

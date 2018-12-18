@@ -148,8 +148,10 @@
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BackBuffer.cpp" />
+    <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="BattleSceneTest.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CollisionFunction.cpp" />
@@ -159,6 +161,7 @@
     <ClCompile Include="DefenseState.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GameTurnManager.cpp" />
@@ -167,7 +170,9 @@
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="KeyManager.cpp" />
+    <ClCompile Include="LogoScene.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Monster.cpp" />
@@ -181,15 +186,19 @@
     <ClCompile Include="PathfindingState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProgressBar.cpp" />
+    <ClCompile Include="QusetScene.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SelectStateButton.cpp" />
+    <ClCompile Include="SkillState.cpp" />
+    <ClCompile Include="SkillSystem.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="TileCell.cpp" />
     <ClCompile Include="TileObject.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
@@ -199,8 +208,10 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BackBuffer.h" />
+    <ClInclude Include="BattleScene.h" />
     <ClInclude Include="BattleSceneTest.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ButtonManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CollisionFunction.h" />
@@ -213,6 +224,7 @@
     <ClInclude Include="DefenseState.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="FontManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameNode.h" />
     <ClInclude Include="GameSystem.h" />
@@ -222,7 +234,9 @@
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="LogoScene.h" />
     <ClInclude Include="MacroDefine.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Map.h" />
@@ -237,16 +251,20 @@
     <ClInclude Include="PathfindingState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ProgressBar.h" />
+    <ClInclude Include="QusetScene.h" />
     <ClInclude Include="RandomFunction.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectStateButton.h" />
     <ClInclude Include="SingletonBase.h" />
+    <ClInclude Include="SkillState.h" />
+    <ClInclude Include="SkillSystem.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="TileCell.h" />
     <ClInclude Include="TileObject.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

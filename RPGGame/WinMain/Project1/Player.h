@@ -9,6 +9,7 @@ enum eJobClass
 	JOB_WARRIOR,
 	JOB_ARCHER,
 	JOB_HEALER,
+	JOB_MAGIC,
 };
 
 
@@ -26,5 +27,6 @@ public:
 public:
 	void UpdateAI();
 	void AttackPattern();
+	void SkillPattern(int _number);
 };
 

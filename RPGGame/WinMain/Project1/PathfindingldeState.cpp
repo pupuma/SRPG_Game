@@ -7,7 +7,7 @@
 #include "Map.h"
 #include "ComponentSystem.h"
 #include "TileCell.h"
-
+#include "ButtonManager.h"
 PathfindingldeState::PathfindingldeState(Character* _character)
 	: State(_character)
 {
@@ -102,7 +102,7 @@ void PathfindingldeState::Update()
 
 						nextState = eStateType::ST_PATHFINDING;
 						GAMESYS->SetMove(true);
-						GAMESYS->SetAttacking(true);
+						//GAMESYS->SetAttacking(true);
 					}
 					else
 					{
@@ -130,7 +130,7 @@ void PathfindingldeState::Update()
 							std::vector<Component*> targetList = map->GetComponentList(tileCell);
 							if (0 < targetList.size())
 							{
-								character->SetTarget(targetList);
+								character->SetTarget(targetList);	
 								nextState = eStateType::ST_ATTACK;
 								GAMESYS->SetMove(false);
 							}
