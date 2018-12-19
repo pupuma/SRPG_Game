@@ -59,3 +59,4 @@ typedef  std::string		tstring;   //std::basic_string<char>
 #define	RESOURCEMANAGER	ResourceManager::GetSingleton()
 #define GAMESYS			GameSystem::GetSingleton()
 #define PARSING			ParsingSystem::GetSingleton()
+#define EVENTSYS		EventSystem::GetSingleton()

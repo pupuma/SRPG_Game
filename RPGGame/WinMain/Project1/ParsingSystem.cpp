@@ -14,6 +14,22 @@ ParsingSystem::~ParsingSystem()
 
 void ParsingSystem::MapDataParsing(std::string _fileName)
 {
+	while (!q_TileMapLayerBase.empty())
+	{
+		q_TileMapLayerBase.pop();
+	}
+
+	while (!q_TileMapLayerTile.empty())
+	{
+		q_TileMapLayerTile.pop();
+	}
+
+	while (!q_TileMapLayerObject.empty())
+	{
+		q_TileMapLayerObject.pop();
+	}
+
+
 	std::vector<std::string> recordList = RESOURCEMANAGER->FindScript(_fileName);
 
 	TCHAR record[1000];

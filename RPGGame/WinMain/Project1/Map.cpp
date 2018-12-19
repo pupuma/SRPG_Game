@@ -4,6 +4,8 @@
 #include "TileObject.h"
 #include "Animation.h"
 #include "GameTurnManager.h"
+#include "EventSystem.h"
+
 
 Map::Map(std::string _name)
 	: Component(_name,0)
@@ -142,11 +144,15 @@ void Map::Render(HDC hdc)
 	}
 
 	{
-		if (viewer != NULL)
+		if (EventSystem::GetSingleton()->GetGameType() == eGameType::GT_BATTLE)
 		{
-			// 캐릭터 이동 거리 
-			MaxTravelDistanceRender(hdc);
+			if (viewer != NULL)
+			{
+				// 캐릭터 이동 거리 
+				MaxTravelDistanceRender(hdc);
+			}
 		}
+		
 
 #if defined (_DEBUG_TEST)
 		//std::vector<RECT>::iterator it;
@@ -163,6 +169,7 @@ void Map::Render(HDC hdc)
 #endif // Rect
 	}
 
+	if(EventSystem::GetSingleton()->GetGameType() == eGameType::GT_BATTLE)
 	{
 		// Mouse
 
@@ -299,7 +306,6 @@ void Map::SetViewer(Component* _com)
 	//}
 
 	OpenListClear();
-
 	viewer = _com;
 	//tileAttackList = GAMESYS->GetTileAttackList();
 	prevViewTilePosition = viewer->GetTilePosition();
@@ -322,6 +328,7 @@ void Map::UpdateViewer()
 
 
 	// 마우스 
+	if(EventSystem::GetSingleton()->GetGameType() == eGameType::GT_BATTLE)
 	{
 		GetCursorPos(&_ptMouse);
 		ScreenToClient(_hWnd, &(_ptMouse));
@@ -408,7 +415,55 @@ void Map::UpdateViewer()
 		mouseMovePosAni->FrameUpdate(TIMEMANAGER->GetElapsedTime() * 10);
 
 	}
-	
+	else
+	{
+		GetCursorPos(&_ptMouse);
+		ScreenToClient(_hWnd, &(_ptMouse));
+		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+		int mouseX = (int)_ptMouse.x;
+		int mouseY = (int)_ptMouse.y;
+
+		if (mouseX < 0)
+		{
+			mouseX = 0;
+		}
+		if (mouseX > WINSIZEX)
+		{
+			mouseX = WINSIZEX;
+		}
+
+		if (mouseY < 0)
+		{
+			mouseY = 0;
+		}
+		if (mouseY > WINSIZEY)
+		{
+			mouseY = WINSIZEY;
+		}
+
+
+		TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
+
+		if (tileCell != NULL)
+		{
+			mouseTargetX = tileCell->GetTilePosition().x;
+			mouseTargetY = tileCell->GetTilePosition().y;
+		}
+		else
+		{
+			mouseTargetX = 0;
+			mouseTargetY = 0;
+		}
+
+		if (tileCell != NULL)
+		{
+			isSelectMove = false;
+
+			rc = RectMake(tileCell->GetPosition().x, tileCell->GetPosition().y, 48, 48);
+			mouseMovePosAni->Stop();
+		}
+	}
 }
 
 void Map::OpenListClear()

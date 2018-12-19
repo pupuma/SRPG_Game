@@ -55,7 +55,6 @@ void FontManager::RenderText(HDC hdc, const std::string fontName, const std::str
 
 	//SetBkMode(hdc, TRANSPARENT);
 
-
 	TCHAR szStr[256] = { 0, };
 	HFONT oldFont;
 
@@ -72,8 +71,31 @@ void FontManager::RenderText(HDC hdc, const std::string fontName, const std::str
 
 		SelectObject(hdc, oldFont);
 		SetTextColor(hdc, oldColor);
-
 	
+	}
+}
+
+void FontManager::RenderTextBox(HDC hdc, const std::string fontName, const std::string strText, RECT * rc, COLORREF color)
+{
+	SetBkMode(hdc, TRANSPARENT);
+
+	TCHAR szStr[256] = { 0, };
+	HFONT oldFont;
+
+	it_Font = fontMap.find(fontName);
+	if (it_Font != fontMap.end())
+	{
+		HFONT font = (HFONT)(it_Font->second);
+		oldFont = (HFONT)SelectObject(hdc, font);
+		COLORREF oldColor = SetTextColor(hdc, color);
+
+		//DrawText(hdc, vString.c_str(), _tcslen(vString.c_str()), &rcText, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+		DrawText(hdc, strText.c_str(), strText.size(), rc, DT_SINGLELINE | DT_LEFT | DT_VCENTER);
+		//TextOut(hdc, pos->x, pos->y, strText.c_str(), strText.size());
+
+		SelectObject(hdc, oldFont);
+		SetTextColor(hdc, oldColor);
+
 	}
 }
 

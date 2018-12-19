@@ -63,15 +63,12 @@ void State::Direction()
 		break;
 	case eDirection::DIR_RIGHT:
 		character->SetImgFrame(1, 2);
-
 		break;
 	case eDirection::DIR_UP:
 		character->SetImgFrame(1, 3);
-
 		break;
 	case eDirection::DIR_DOWN:
 		character->SetImgFrame(1, 0);
-
 		break;
 	}
 

@@ -161,6 +161,7 @@
     <ClCompile Include="DefenseState.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="GameSystem.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="ProgressBar.cpp" />
     <ClCompile Include="QusetScene.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SelectStateButton.cpp" />
     <ClCompile Include="SkillState.cpp" />
@@ -224,6 +226,7 @@
     <ClInclude Include="DefenseState.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="EventSystem.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameNode.h" />
@@ -254,6 +257,7 @@
     <ClInclude Include="QusetScene.h" />
     <ClInclude Include="RandomFunction.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectStateButton.h" />
     <ClInclude Include="SingletonBase.h" />

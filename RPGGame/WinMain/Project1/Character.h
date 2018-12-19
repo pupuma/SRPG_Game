@@ -37,6 +37,8 @@ protected:
 	int frameX;
 	int frameY;
 
+	std::string name;
+	
 	eStateType eType;
 	eDirection nextDirection;
 	eDirection currentDirection;
@@ -132,6 +134,7 @@ public:
 	TileCell* GetTargetCharacterTileCell() { return targetCharacterTile; }
 	int GetHealPoint() { return healPoint; }
 	void SetHealPoint(int _heal) { healPoint = _heal; }
+	std::string GetName() { return name; }
 public:
 #if defined(_DEBUG_TEST)
 	void SetStateType(eStateType _type) { eType = _type; }

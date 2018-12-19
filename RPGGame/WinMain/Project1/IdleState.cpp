@@ -6,6 +6,7 @@
 #include "ComponentSystem.h"
 #include "TileCell.h"
 #include "GameTurnManager.h"
+#include "EventSystem.h"
 
 IdleState::IdleState(Character* _character)
 	: State(_character)
@@ -55,17 +56,30 @@ void IdleState::Update()
 		}
 	}
 
-	deltaTime -= TIMEMANAGER->GetElapsedTime();
 
-	if (deltaTime < 0)
+	if (EVENTSYS->GetGameType() == eGameType::GT_EVENT)
 	{
-		deltaTime = 1.5f;
-		if (character->IsTurn())
-		{
-			GameTurnManager::GetSingleton()->NextTurn();
+		character->UpdateAI();
 
+	}
+
+	if (EVENTSYS->GetGameType() == eGameType::GT_BATTLE)
+	{
+		deltaTime -= TIMEMANAGER->GetElapsedTime();
+
+		if (deltaTime < 0)
+		{
+			deltaTime = 1.5f;
+			if (character->IsTurn())
+			{
+				GameTurnManager::GetSingleton()->NextTurn();
+
+			}
 		}
 	}
+
+
+	
 	
 
 	//character->UpdateAI();

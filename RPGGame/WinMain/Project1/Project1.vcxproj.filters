@@ -291,6 +291,12 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>MainGame\01.Scene</Filter>
     </ClCompile>
+    <ClCompile Include="EventSystem.cpp">
+      <Filter>2DFrameWork\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>MainGame\01.Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -483,6 +489,12 @@
       <Filter>MainGame\01.Scene</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
+      <Filter>MainGame\01.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem.h">
+      <Filter>2DFrameWork\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene.h">
       <Filter>MainGame\01.Scene</Filter>
     </ClInclude>
   </ItemGroup>

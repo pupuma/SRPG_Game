@@ -7,6 +7,13 @@
 #include "FontManager.h"
 #include "SkillSystem.h"
 
+//Scene
+#include "LogoScene.h"
+#include "TitleScene.h"
+#include "QusetScene.h"
+#include "BattleScene.h"
+#include "EventSystem.h"
+
 MainGame::MainGame()
 {
 }
@@ -67,17 +74,31 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddFrameImage(TEXT("YesButton"), TEXT("../Resource/Images/YesButton.bmp"), 122, 65, 2,1, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("NoButton"), TEXT("../Resource/Images/NoButton.bmp"), 122, 65, 2, 1, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("IconSet"), TEXT("../Resource/Images/IconSet.bmp"), 512, 5664, 16, 177, true, COLOR_M);
-
-		
+		IMAGEMANAGER->AddImage(TEXT("Map002"), TEXT("../Resource/Images/Map002.bmp"), 600, 600, true, COLOR_M);
 	}
+
+	{
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor1_Face"), TEXT("../Resource/Images/Actor1_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor1_Face_B"), TEXT("../Resource/Images/Actor1_Face_B.bmp"), 1152, 576, 4, 2, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor2_Face"), TEXT("../Resource/Images/Actor2_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor3_Face"), TEXT("../Resource/Images/Actor3_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Monster_Face"), TEXT("../Resource/Images/Monster_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
+
+
+	}
+
 
 	{
 		RESOURCEMANAGER->AddScript(TEXT("MapData"));
 		RESOURCEMANAGER->AddScript(TEXT("MapData_Layer01"));
 		RESOURCEMANAGER->AddScript(TEXT("MapData_Layer02"));
 		RESOURCEMANAGER->AddScript(TEXT("Map_1"));
+		RESOURCEMANAGER->AddScript(TEXT("Map_2"));
+
 
 		PARSING->MapDataParsing(TEXT("Map_1"));
+		PARSING->MapDataParsing(TEXT("Map_2"));
+
 		GameTurnManager::GetSingleton()->Init();
 		ButtonManager::GetSingleton()->Init();
 		FontManager::GetSingleton()->Init();
@@ -95,6 +116,7 @@ bool MainGame::Init()
 	// Scene을 추가 작업 : 씬매니저를 초기화 하고 씬을 추가 하자 
 
 	// 씬 초기화 
+	EventSystem::GetSingleton()->Init();
 	SCENEMANAGER->Init();
 
 	// 씬 추가 
@@ -103,13 +125,17 @@ bool MainGame::Init()
 	//
 
 	SCENEMANAGER->AddScene(TEXT("BattleSceneTest"), new BattleSceneTest());
-
-
+	
+	//
+	SCENEMANAGER->AddScene(TEXT("LogoScene"), new LogoScene());
+	SCENEMANAGER->AddScene(TEXT("TitleScene"), new TitleScene());
+	SCENEMANAGER->AddScene(TEXT("QusetScene"), new QusetScene());
+	SCENEMANAGER->AddScene(TEXT("BattleScene"), new BattleScene());
 
 
 
 	// 첫 씬의 설정 
-	SCENEMANAGER->ChangeScene(TEXT("BattleSceneTest"));
+	SCENEMANAGER->ChangeScene(TEXT("QusetScene"));
 
 	return true;
 
