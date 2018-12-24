@@ -111,18 +111,18 @@ typedef struct tagImgInfo
 }ImgInfo;
 
 
-typedef struct tagSkillInfo
-{
-	Image* imgSkill;
-	std::string skillName;
-	int frameX;
-	int frameY;
-	int damage;
-	int consumeMp;
-
-	//std::string skillInfo;
-	//Image* imgSkillEffect;
-}SkillInfo;
+//typedef struct tagSkillInfo
+//{
+//	Image* imgSkill;
+//	std::string skillName;
+//	int frameX;
+//	int frameY;
+//	int damage;
+//	int consumeMp;
+//
+//	//std::string skillInfo;
+//	//Image* imgSkillEffect;
+//}SkillInfo;
 
 //
 //bool operator==(const TilePoint &a, const TilePoint &b)

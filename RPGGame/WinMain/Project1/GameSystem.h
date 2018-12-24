@@ -10,6 +10,8 @@ class Map;
 class Component;
 class Character;
 class TileCell;
+class HpBar;
+class MpBar;
 
 typedef struct tagTileMoveInfo
 {
@@ -17,18 +19,32 @@ typedef struct tagTileMoveInfo
 	int distance;
 }MoveInfo;
 
+typedef struct tagSkillInfo
+{
+	eJobClass jobs;
+	int number;
+	int damage;
+	std::string text;
+}SkillInfo;
+
 class GameSystem
 	: public SingletonBase<GameSystem>
 {
 private:
+	HpBar* hpBar;
+	MpBar* mpBar;
+private:
 	MoveInfo moveInfo;
+	SkillInfo skillInfo;
+	POINT saveClickMousePos;
+	TileCell* saveClickTile;
 private:
 	bool isAction;
 	bool isMove;
 	bool isAttacking;
 	bool isSkilling;
 	bool isHeal;
-
+	bool isClickCharacter;
 	int round;
 	int currentCharacterIndex;
 
@@ -42,6 +58,7 @@ private:
 	Map* g_Map;
 	TileCell* targetTileCell;
 private:
+	std::map<int, SkillInfo> m_Skill;
 	std::vector<TileInfo> g_TileAttackList;
 	std::vector<Character*> characterList;
 
@@ -61,6 +78,7 @@ public:
 	~GameSystem();
 public:
 	void Init();
+	void Update();
 public:
 	void SetMousePosition(LPARAM lParam);
 	POINT GetMousePosition();
@@ -70,7 +88,7 @@ public:
 	bool TargetCheck(std::vector<Component*> _list, Character* _character);
 	void AddCharacterList(Character* _character);
 	void GameTurn();
-	eDirection LookAtCharacter(std::vector<Component*> _list,  Character* _character);
+	eDirection LookAtCharacter(std::vector<Component*> _list, Character* _character);
 	TileCell* FindPriorityTarget(Character* _character);
 	std::list<MoveInfo> MaxMoveFinder(Character* _target);
 	void ResetMovefinding();
@@ -80,6 +98,10 @@ public:
 	void AddProioritySelectList(Character* _character);
 	void SkillActivation();
 	std::vector<Component*> SkillListTarget(std::vector<Component*> _list, Character* _character);
+	bool GameOver();
+	bool GameClear();
+	Image* FindCharacterImage(int _index, Character* _character);
+	void DeleteCharacter(Character* _character);
 public:
 	bool IsAction() { return isAction; }
 	void SetAction(bool _isAction) { isAction = _isAction; }
@@ -99,4 +121,20 @@ public:
 	bool IsSkilling() { return isSkilling; }
 	bool IsHeal() { return isHeal; }
 	void SetHeal(bool _isHeal) { isHeal = _isHeal; }
+	std::vector<Character*> GetPlayerList() { return playerList; }
+	std::vector<Character*> GetMonsterList() { return monsterList; }
+	std::vector<Character*> GetNPCList() { return npcList; }
+
+	void SetPlayerList(std::vector<Character*>  _player) { playerList = _player; }
+	void SetMonsterList(std::vector<Character*>  _monster) { monsterList = _monster; }
+	void SetNPCList(std::vector<Character*>  _npc) { npcList = _npc; }
+
+	void AddPlayer(Character* _player) { playerList.push_back(_player); }
+	void AddMonster(Character* _monster) { playerList.push_back(_monster); }
+	void AddNPC(Character* _npc) { playerList.push_back(_npc); }
+	void SetHpBar(HpBar* _hpBar) { hpBar = _hpBar; }
+	void SetMpBar(MpBar* _mpBar) { mpBar = _mpBar; }
+	bool IsClickCharacter() { return isClickCharacter; }
+	TileCell* GetSaveClickTileCell() { return saveClickTile; }
+	std::map<int, SkillInfo> GetSkillMap() { return m_Skill; }
 };

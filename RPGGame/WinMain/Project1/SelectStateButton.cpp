@@ -49,6 +49,7 @@ bool SelectStateButton::Init()
 	rcSkill2 = RectMake(515, 635, 48, 48);
 	rcSkill3 = RectMake(515, 705, 48, 48);
 
+	skillIndex = 0;
 	return true;
 }
 
@@ -183,6 +184,7 @@ void SelectStateButton::Update()
 					bActive = eButtonActive::BA_SKILL;
 					ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
 					GAMESYS->SetSkilling(true);
+					skillIndex = 1;
 				}
 			}
 			
@@ -209,6 +211,8 @@ void SelectStateButton::Update()
 					bActive = eButtonActive::BA_SKILL;
 					ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
 					GAMESYS->SetSkilling(true);
+					skillIndex = 2;
+
 				}
 			}
 		
@@ -235,6 +239,9 @@ void SelectStateButton::Update()
 					bActive = eButtonActive::BA_SKILL;
 					ButtonManager::GetSingleton()->SetSelectActive(true, bActive);
 					GAMESYS->SetSkilling(true);
+
+					skillIndex = 3;
+
 				}
 			}
 			
@@ -268,8 +275,18 @@ void SelectStateButton::Render(HDC hdc)
 
 	if (bActive == eButtonActive::BA_SKILL)
 	{
-		POINT pt = { 598, 575 };
-		FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("테스트입니다."), &pt, COLOR_M);
+		POINT pt1 = { 598, 575 };
+		std::string str1 = GameTurnManager::GetSingleton()->SkillText(1);
+		FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG_S"), str1, &pt1, COLOR_M);
+
+		POINT pt2 = { 598, 645 };
+		std::string str2 = GameTurnManager::GetSingleton()->SkillText(2);
+		FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG_S"), str2, &pt2, COLOR_M);
+
+		POINT pt3 = { 598, 715 };
+		std::string str3 = GameTurnManager::GetSingleton()->SkillText(3);
+		FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG_S"), str3, &pt3, COLOR_M);
+
 
 #if defined(_DEBUG_TEST)
 		DrawObject(hdc, rcSkill1, 1, RGB(25, 125, 25), RECTANGLE);

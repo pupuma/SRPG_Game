@@ -15,12 +15,38 @@ Map::Map(std::string _name)
 
 Map::~Map()
 {
+	//img = NULL;
+	//mousePosImg = NULL;
+	//mouseMovePosImg = NULL;
+	//mouseMovePosAni = NULL;
+
+	//tileSkillList.clear();
+	//tileAttackList.clear();
+	//tileCellOpenList.clear();
+	//
+	//viewer = NULL;
+	//
+	////imgObjectList
+	//std::vector<std::vector<TileCell*>>::iterator it;
+	//std::vector<TileCell*>::iterator iter;
+
+	//for (it = tileArray.begin(); it != tileArray.end(); it++)
+	//{
+	//	for (iter = (*it).begin(); iter != (*it).end(); iter++)
+	//	{
+	//		(*iter)->Release();
+	//		(*iter) = NULL;
+	//	}
+	//}
+	//tileArray.clear();
 }
 
 bool Map::Init( )
 {
 	//width = TILEWIDTH;
 	//height = TILEHEIGHT;
+	Deinit();
+
 	width = PARSING->GetTileWidth();
 	height = PARSING->GetTIleHeight();
 	
@@ -64,11 +90,36 @@ bool Map::Init( )
 
 void Map::Deinit()
 {
+	//EVENTSYS->SetGameType(eGameType::GT_BATTLE);
+	img = NULL;
+	mousePosImg = NULL;
+	mouseMovePosImg = NULL;
+	mouseMovePosAni = NULL;
+
+	tileSkillList.clear();
+	tileAttackList.clear();
+	tileCellOpenList.clear();
+
+	viewer = NULL;
+	GAMESYS->Init();
+	GameTurnManager::GetSingleton()->Init();
+	//imgObjectList
+	std::vector<std::vector<TileCell*>>::iterator it;
+	std::vector<TileCell*>::iterator iter;
+
+	for (it = tileArray.begin(); it != tileArray.end(); it++)
+	{
+		for (iter = (*it).begin(); iter != (*it).end(); iter++)
+		{
+			(*iter)->Release();
+			(*iter) = NULL;
+		}
+	}
+	tileArray.clear();
 }
 
 void Map::Update()
 {
-
 #if defined(_DEBUG_TEST)
 	RECT rc1, rcClient;
 	GetClientRect(_hWnd, &rc1);
@@ -239,10 +290,7 @@ void Map::Reset()
 
 void Map::CreateTileMap()
 {
-	//LayerBase();
-	//LayerTile();
-	//LayerObject();
-	//
+	
 	switch (PARSING->GetLayerSize())
 	{
 	case 1:
@@ -258,7 +306,6 @@ void Map::CreateTileMap()
 		LayerObject();
 		break;
 	}
-
 	{
 		// 
 		POINT renderPos;
@@ -287,7 +334,7 @@ void Map::SetTileComponent(TilePoint tilePosition, Component * component)
 
 }
 
-void Map::SetTileComponent(TilePoint tilePosition, Component * component, bool _isCharacter)
+void Map::SetTileComponent(TilePoint tilePosition, Component* component, bool _isCharacter)
 {
 	tileArray[tilePosition.y][tilePosition.x]->AddComponent(component);
 	tileArray[tilePosition.y][tilePosition.x]->IsCharacter(_isCharacter);
@@ -332,7 +379,7 @@ void Map::UpdateViewer()
 	{
 		GetCursorPos(&_ptMouse);
 		ScreenToClient(_hWnd, &(_ptMouse));
-		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+		//Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
 		int mouseX = (int)_ptMouse.x;
 		int mouseY = (int)_ptMouse.y;
@@ -356,7 +403,8 @@ void Map::UpdateViewer()
 		}
 
 
-		TileCell* tileCell = map->FindTileCellByMousePosition(mouseX, mouseY);
+
+		TileCell* tileCell = FindTileCellByMousePosition(mouseX, mouseY);
 
 		if (tileCell != NULL)
 		{

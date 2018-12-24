@@ -297,6 +297,15 @@
     <ClCompile Include="ResultScene.cpp">
       <Filter>MainGame\01.Scene</Filter>
     </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>MainGame\02.GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="MpBar.cpp">
+      <Filter>MainGame\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="HpBar.cpp">
+      <Filter>MainGame\UI\Button</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -458,9 +467,6 @@
     <ClInclude Include="GameUI.h">
       <Filter>MainGame\UI</Filter>
     </ClInclude>
-    <ClInclude Include="SelectStateButton.h">
-      <Filter>MainGame\UI\Button</Filter>
-    </ClInclude>
     <ClInclude Include="GameYesNoButton.h">
       <Filter>MainGame\UI\Button</Filter>
     </ClInclude>
@@ -496,6 +502,18 @@
     </ClInclude>
     <ClInclude Include="ResultScene.h">
       <Filter>MainGame\01.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>MainGame\02.GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="HpBar.h">
+      <Filter>MainGame\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="MpBar.h">
+      <Filter>MainGame\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectStateButton.h">
+      <Filter>MainGame\UI\Button</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

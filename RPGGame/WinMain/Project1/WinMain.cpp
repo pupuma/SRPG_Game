@@ -19,7 +19,6 @@ LPCTSTR		_lpszClass = TEXT("Win32API");
 
 void setWindowsSize(int x, int y, int width, int height);
 
-
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 //=====================================================================================================
@@ -70,7 +69,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lPszCm
 		return 0;
 
 	ShowWindow(_hWnd, cmdShow);
-
+	//TIMEMANAGER->Init();
 	//MoveWindow(_hWnd, 0, 0, WINSIZEX, WINSIZEY, TRUE);
 	HDC hdc = GetDC(_hWnd);
 

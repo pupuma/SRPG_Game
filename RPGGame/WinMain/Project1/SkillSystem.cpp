@@ -220,6 +220,7 @@ std::vector<TileInfo> SkillSystem::StraightAttackSkillRange(Character * _charact
 		if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
 			searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
 		{
+			count--;
 			continue;
 		}
 		TileInfo tileInfo;
@@ -249,6 +250,8 @@ std::vector<TileInfo> SkillSystem::StraightAttackSkillRange(Character * _charact
 		if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
 			searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
 		{
+			count--;
+
 			continue;
 		}
 		TileInfo tileInfo;
@@ -276,6 +279,7 @@ std::vector<TileInfo> SkillSystem::StraightAttackSkillRange(Character * _charact
 		if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
 			searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
 		{
+			count--;
 			continue;
 		}
 		TileInfo tileInfo;
@@ -303,6 +307,7 @@ std::vector<TileInfo> SkillSystem::StraightAttackSkillRange(Character * _charact
 		if (searchTilePosision.x < 0 || searchTilePosision.x >= map->GetWidth() ||
 			searchTilePosision.y < 0 || searchTilePosision.y >= map->GetHeight())
 		{
+			count--;
 			continue;
 		}
 		TileInfo tileInfo;

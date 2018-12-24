@@ -49,11 +49,13 @@ bool MainGame::Init()
 	// 이미지 매니져 초기화 
 	IMAGEMANAGER->Init();
 	IMAGEMANAGER->AddImage(TEXT("Player"), TEXT("../Resource/SpaceShip/rocket.bmp"), 52, 64, true, COLOR_M);
-	GAMESYS->Init();
 	// 이미지 프레임
 	{
 		IMAGEMANAGER->AddFrameImage(TEXT("Actor1"), TEXT("../Resource/Images/Actor1.bmp"), 573, 384, 12, 8, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor2"), TEXT("../Resource/Images/Actor2.bmp"), 573, 384, 12, 8, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor3"), TEXT("../Resource/Images/Actor3.bmp"), 573, 384, 12, 8, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("Evil"), TEXT("../Resource/Images/Evil.bmp"), 573, 384, 12, 8, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Monster"), TEXT("../Resource/Images/Monster.bmp"), 573, 384, 12, 8, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("Outside_A2"), TEXT("../Resource/Images/Outside_A2.bmp"), 768, 576, 16, 12, true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("TileIdle"), TEXT("../Resource/Images/TileIdle.bmp"), 48, 48, true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("AttackTile"), TEXT("../Resource/Images/AttackTile.bmp"), 48, 48, true, COLOR_M);
@@ -75,16 +77,17 @@ bool MainGame::Init()
 		IMAGEMANAGER->AddFrameImage(TEXT("NoButton"), TEXT("../Resource/Images/NoButton.bmp"), 122, 65, 2, 1, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("IconSet"), TEXT("../Resource/Images/IconSet.bmp"), 512, 5664, 16, 177, true, COLOR_M);
 		IMAGEMANAGER->AddImage(TEXT("Map002"), TEXT("../Resource/Images/Map002.bmp"), 600, 600, true, COLOR_M);
+		IMAGEMANAGER->AddImage(TEXT("TextBox"), TEXT("../Resource/Images/TextBox.bmp"), (WINSIZEX - 200), 300, true, COLOR_M);
 	}
 
 	{
 		IMAGEMANAGER->AddFrameImage(TEXT("Actor1_Face"), TEXT("../Resource/Images/Actor1_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("Actor1_Face_B"), TEXT("../Resource/Images/Actor1_Face_B.bmp"), 1152, 576, 4, 2, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor2_Face_B"), TEXT("../Resource/Images/Actor2_Face_B.bmp"), 1152, 576, 4, 2, true, COLOR_M);
+		IMAGEMANAGER->AddFrameImage(TEXT("Actor3_Face_B"), TEXT("../Resource/Images/Actor3_Face_B.bmp"), 1152, 576, 4, 2, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("Actor2_Face"), TEXT("../Resource/Images/Actor2_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("Actor3_Face"), TEXT("../Resource/Images/Actor3_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
 		IMAGEMANAGER->AddFrameImage(TEXT("Monster_Face"), TEXT("../Resource/Images/Monster_Face.bmp"), 576, 288, 4, 2, true, COLOR_M);
-
-
 	}
 
 
@@ -94,10 +97,13 @@ bool MainGame::Init()
 		RESOURCEMANAGER->AddScript(TEXT("MapData_Layer02"));
 		RESOURCEMANAGER->AddScript(TEXT("Map_1"));
 		RESOURCEMANAGER->AddScript(TEXT("Map_2"));
-
+		RESOURCEMANAGER->AddScript(TEXT("Talk"));
+		RESOURCEMANAGER->AddScript(TEXT("SkillInfo"));
 
 		PARSING->MapDataParsing(TEXT("Map_1"));
-		PARSING->MapDataParsing(TEXT("Map_2"));
+		//PARSING->MapDataParsing(TEXT("Map_2"));
+		//PARSING->MapDataParsing(TEXT("Map_1"));
+		PARSING->TalkParsing(TEXT("Talk"));
 
 		GameTurnManager::GetSingleton()->Init();
 		ButtonManager::GetSingleton()->Init();
@@ -111,6 +117,11 @@ bool MainGame::Init()
 
 		//EFFECTMANAGER->AddEffect(TEXT("Absorb"), TEXT("Absorb"), 960, 960, 5, 5, 1, 0.1f, 10, RGB(255, 255, 255));
 		EFFECTMANAGER->AddEffect(TEXT("Absorb"), TEXT("../Resource/Images/Absorb.bmp"), 960, 960, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
+		EFFECTMANAGER->AddEffect(TEXT("Breath"), TEXT("../Resource/Images/Breath.bmp"), 960, 576, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
+		EFFECTMANAGER->AddEffect(TEXT("ClawSpecial2"), TEXT("../Resource/Images/ClawSpecial2.bmp"), 960, 576, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
+		EFFECTMANAGER->AddEffect(TEXT("ClawSpecial1"), TEXT("../Resource/Images/ClawSpecial1.bmp"), 960, 960, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
+		EFFECTMANAGER->AddEffect(TEXT("Darkness1"), TEXT("../Resource/Images/Darkness1.bmp"), 960, 768, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
+		EFFECTMANAGER->AddEffect(TEXT("Darkness2"), TEXT("../Resource/Images/Darkness2.bmp"), 960, 960, 192, 192, 1, 1.0f, 10, RGB(255, 255, 255));
 
 	}
 	// Scene을 추가 작업 : 씬매니저를 초기화 하고 씬을 추가 하자 
@@ -118,6 +129,7 @@ bool MainGame::Init()
 	// 씬 초기화 
 	EventSystem::GetSingleton()->Init();
 	SCENEMANAGER->Init();
+	GAMESYS->Init();
 
 	// 씬 추가 
 
@@ -136,7 +148,7 @@ bool MainGame::Init()
 
 	// 첫 씬의 설정 
 	SCENEMANAGER->ChangeScene(TEXT("QusetScene"));
-
+	
 	return true;
 
 }

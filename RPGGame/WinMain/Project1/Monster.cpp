@@ -6,7 +6,6 @@
 #include "Map.h"	
 #include "TileCell.h"
 
-
 Monster::Monster(std::string _name, float _deep)
 	: Character(_name, _deep)
 {
@@ -52,9 +51,35 @@ bool Monster::Init()
 		eType = eStateType::ST_PATH_NAVI;
 		ChangeState(eType);
 
+		//GAMESYS->SetMpBar();
 	}
 	return true;
 }
+
+
+bool Monster::Init(int _index)
+{
+	{
+		currentDirection = eDirection::DIR_DOWN;
+		faceNumber = _index;
+
+		isLive = true;
+		img = GAMESYS->FindCharacterImage(_index, this);
+		img->SetX(48);
+		img->SetY(48);
+		img->SetFrameX(0);
+		img->SetFrameY(0);
+
+		InitState();
+		eType = eStateType::ST_PATH_IDLE;
+		ChangeState(eType);
+		iMaxHp = 10;
+		iHp = 10;
+	}
+
+	return true;
+}
+
 
 void Monster::UpdateAI()
 {

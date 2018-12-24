@@ -80,3 +80,24 @@ void ParsingSystem::MapDataParsing(std::string _fileName)
 	}
 	recordList.clear();
 }
+
+void ParsingSystem::TalkParsing(std::string _fileName)
+{
+	while (!q_Talk.empty())
+	{
+		q_Talk.pop();
+	}
+
+	std::vector<std::string> recordList = RESOURCEMANAGER->FindScript(_fileName);
+
+
+
+
+	int iLine = 2;
+	int iCount = 0;
+	while (iLine != recordList.size() - 1)
+	{
+		q_Talk.push(recordList[iLine-1]);
+		iLine++;
+	}
+}

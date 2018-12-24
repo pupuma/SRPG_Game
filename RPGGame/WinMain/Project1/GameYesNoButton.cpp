@@ -33,7 +33,6 @@ bool GameYesNoButton::Init()
 	imgYesButton = IMAGEMANAGER->FindImage(TEXT("YesButton"));
 	imgNoButton = IMAGEMANAGER->FindImage(TEXT("NoButton"));
 	
-	
 	return true;
 }
 

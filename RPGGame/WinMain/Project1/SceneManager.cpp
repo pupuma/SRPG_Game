@@ -92,20 +92,18 @@ bool SceneManager::ChangeScene(std::string sceneName)
 		return false;
 	}
 
-	if (it->second == currentScene)
+	if (currentScene)
 	{
-		return false;
-	}
-
-	if (it->second->Init())
-	{
-		if (currentScene)
-		{
-			currentScene->Release();
-
-		}
+		currentScene->Release();
+		currentScene = NULL;
 		currentScene = it->second;
-
+		currentScene->Init();
+		return true;
+	}
+	else
+	{
+		currentScene = it->second;
+		currentScene->Init();
 		return true;
 	}
 

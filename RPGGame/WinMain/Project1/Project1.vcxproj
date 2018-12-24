@@ -168,6 +168,7 @@
     <ClCompile Include="GameTurnManager.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="GameYesNoButton.cpp" />
+    <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
@@ -178,8 +179,10 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MoveState.cpp" />
+    <ClCompile Include="MpBar.cpp" />
     <ClCompile Include="NavigationState.cpp" />
     <ClCompile Include="NaviGationSystem.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="ParsingSystem.cpp" />
     <ClCompile Include="PathfindingImmedateState.cpp" />
     <ClCompile Include="PathfindingldeState.cpp" />
@@ -234,6 +237,7 @@
     <ClInclude Include="GameTurnManager.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="GameYesNoButton.h" />
+    <ClInclude Include="HpBar.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
@@ -245,8 +249,10 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MoveState.h" />
+    <ClInclude Include="MpBar.h" />
     <ClInclude Include="NavigationState.h" />
     <ClInclude Include="NaviGationSystem.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="ParsingSystem.h" />
     <ClInclude Include="PathfindingImmedateState.h" />
     <ClInclude Include="PathfindingldeState.h" />

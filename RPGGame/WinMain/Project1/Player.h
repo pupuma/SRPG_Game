@@ -23,10 +23,12 @@ public:
 	~Player();
 public:
 	bool Init();
+	bool Init(int _index);
 	//void Render(HDC hdc);
 public:
 	void UpdateAI();
 	void AttackPattern();
 	void SkillPattern(int _number);
+	eJobClass GetJobs() { return job; }
 };
 

@@ -27,6 +27,17 @@ void ComponentSystem::Update()
 	ProcessMsgQueue();
 }
 
+void ComponentSystem::Release()
+{
+	for (auto a : c_ComponentMap)
+	{
+		//a.second->Release();
+		a.second = NULL;
+		delete a.second;
+	}
+	c_ComponentMap.clear();
+}
+
 void ComponentSystem::AddComponent(std::string _name, Component * _component)
 {
 	std::map<std::string, Component*>::iterator it = c_ComponentMap.find(_name);

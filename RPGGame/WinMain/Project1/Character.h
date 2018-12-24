@@ -37,6 +37,10 @@ protected:
 	int frameX;
 	int frameY;
 
+	int faceNumberX;
+	int faceNumberY;
+	int faceNumber;
+
 	std::string name;
 	
 	eStateType eType;
@@ -73,6 +77,8 @@ public:
 	~Character();
 public:
 	virtual bool Init();
+	virtual bool Init(int _index);
+
 	void Deinit();
 	void Update();
 	void Render(HDC hdc);
@@ -115,6 +121,14 @@ public:
 	virtual void SkillPattern(int _number);
 	void EatItem();
 public:
+	void SetFrameX(int _frameX) { frameX = _frameX; }
+	void SetFrameY(int _frameY) { frameY = _frameY; }
+	void SetFaceFrameX(int _faceX) { faceNumberX = _faceX; }
+	void SetFaceFrameY(int _faceY) { faceNumberY = _faceY; }
+	int GetFaceFrameX() { return faceNumberX; }
+	int GetFaceFrameY() { return faceNumberY; }
+	int GetFaceNumber() { return faceNumber; }
+
 	State* GetState() { return state; }
 	int GetAttackPoint() { return attackPoint; }
 	void SetTarget(std::vector<Component*> _target) { targetList = _target; }

@@ -2,9 +2,20 @@
 
 class SelectStateButton;
 class GameYesNoButton;
-
+class Character;
 class GameUI
 {
+private:
+	Character* turnChar;
+	Character* clickChar;
+private:
+	Image* turnImg;
+	Image* clickImg;
+private:
+	int leftHp;
+	int leftMaxHp;
+	int rightHp;
+	int rightMaxHp;
 private:
 	SelectStateButton* selectStateButton;
 	GameYesNoButton* selectYNButton;

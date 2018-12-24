@@ -8,13 +8,14 @@ TileCell::TileCell()
 	position = { 0,0 };
 	pathfindingSearch = false;
 	isCharacter = false;
+	//componentList.clear();
 	//deep = 0.0f;
 }
 
 
 TileCell::~TileCell()
 {
-
+	componentList.clear();
 }
 
 bool TileCell::Init(int _tileX, int _tileY)
@@ -59,6 +60,20 @@ void TileCell::Render(HDC hdc)
 
 void TileCell::Release()
 {
+	if (!componentList.empty())
+	{
+		std::list<Component*>::iterator it;
+
+
+		for (it = componentList.begin(); it != componentList.end() ; )
+		{
+			(*it)->Release();
+			it = componentList.erase(it);
+			it++;
+		}
+	}
+	
+	componentList.clear();
 }
 
 void TileCell::Reset()

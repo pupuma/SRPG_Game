@@ -24,44 +24,8 @@ BattleSceneTest::~BattleSceneTest()
 
 bool BattleSceneTest::Init()
 {
-	gameUI = new GameUI();
-	gameUI->Init();
-#if defined(_DEBUG_TEST)
-	{
-		/*isTest = false;
-
-		rcTopTimer = RectMake(552,0, 96, 96);
-		rcTest1 = RectMake(11, 407, 252, 123);
-		rcTest2 = RectMake(31, 533, 253, 253);
-		rcTest3 = RectMake(320, 549, 140, 220);
-		rcTest4 = RectMake(498, 549, 383, 220);
-		rcTest5 = RectMake(535, 465, 130, 75);
-		rcTest6 = RectMake(917, 533, 253, 253);
-		rcTest7 = RectMake(937, 407, 252, 123);
-
-		imgTest1 = IMAGEMANAGER->FindImage(TEXT("UI1"));
-		imgTest2 = IMAGEMANAGER->FindImage(TEXT("UI2"));
-		imgTest3 = IMAGEMANAGER->FindImage(TEXT("UI3"));
-		imgTest4 = IMAGEMANAGER->FindImage(TEXT("UI4"));
-		imgTest5 = IMAGEMANAGER->FindImage(TEXT("UI5"));
-		imgTest6 = IMAGEMANAGER->FindImage(TEXT("UI2"));
-		imgTest7 = IMAGEMANAGER->FindImage(TEXT("UI1"));
-
-
-		rcButton1 = RectMake(326, 563, 131, 48);
-		rcButton2 = RectMake(326, 611, 131, 48);
-		rcButton3 = RectMake(326, 659, 131, 48);
-		rcButton4 = RectMake(326, 707, 131, 48);
-
-		imgSelectButton1 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
-		imgSelectButton2 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
-		imgSelectButton3 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
-		imgSelectButton4 = IMAGEMANAGER->FindImage(TEXT("SelectButton"));
-
-*/
-	}
-#endif//
-
+	EVENTSYS->SetGameType(eGameType::GT_BATTLE);
+	
 	mapTest = new Map("Map");
 
 	if (!mapTest->Init())
@@ -73,9 +37,9 @@ bool BattleSceneTest::Init()
 	test = new Player("Test",1.5f);
 	test->SetTurn(true);
 
-	test->SetTilePosition(9, 9);
+	test->SetTilePosition(11, 9);
 
-	if (!test->Init( ))
+	if (!test->Init(1))
 	{
 		return false;
 	}
@@ -86,50 +50,13 @@ bool BattleSceneTest::Init()
 		
 	test2->SetTilePosition(10, 9);
 
-	if (!test2->Init())
+	if (!test2->Init(2))
 	{
 		return false;
 	}
 	stageComponentList.push_back(test2);
 
-	//
-	/*Character* test1 = new Player("1", 1.5f);
-	test1->SetTurn(false);
-	test1->SetTilePosition(8, 9);
-	test1->Init();
-	stageComponentList.push_back(test1);*/
-
-	////
-	//Character* test2 = new Player("2", 1.5f);
-	//test2->SetTurn(false);
-	//test2->SetTilePosition(10, 9);
-	//test2->Init();
-	////stageComponentList.push_back(test2);
-	////
-	//Character* test3 = new Player("3", 1.5f);
-	//test3->SetTurn(false);
-	//test3->SetTilePosition(9, 10);
-	//test3->Init();
-	////stageComponentList.push_back(test3);
-	////
-	//Character* test4 = new Player("4", 1.5f);
-	//test4->SetTurn(false);
-	//test4->SetTilePosition(9, 8);
-	//test4->Init();
-	////stageComponentList.push_back(test4);
 	
-	//test2 = new Player("Test2", 1.5f);
-	//test2->SetTurn(false);
-	//test2->SetTilePosition(6, 6);
-
-	//if (!test2->Init())
-	//{
-	//	return false;
-	//}
-	//test2->ChangeState(eStateType::ST_IDLE);
-
-	//stageComponentList.push_back(test2);
-
 
 	// Monster
 	Character* monster = new Monster("Monster", 1.5f);
@@ -143,36 +70,36 @@ bool BattleSceneTest::Init()
 	monster->SetTurn(false);
 	monster->SetTilePosition(5, 6);
 
-	if (!monster->Init())
+	if (!monster->Init(1))
 	{
 		return false;
 	}
-	if (!monster1->Init())
-	{
-		return false;
-	}
-
-	if (!monster2->Init())
+	if (!monster1->Init(1))
 	{
 		return false;
 	}
 
-	if (!monster3->Init())
+	if (!monster2->Init(1))
 	{
 		return false;
 	}
 
-	if (!monster4->Init())
+	if (!monster3->Init(1))
 	{
 		return false;
 	}
 
-	if (!monster5->Init())
+	if (!monster4->Init(1))
 	{
 		return false;
 	}
 
-	if (!monster6->Init())
+	if (!monster5->Init(2))
+	{
+		return false;
+	}
+
+	if (!monster6->Init(2))
 	{
 		return false;
 	}
@@ -225,6 +152,11 @@ bool BattleSceneTest::Init()
 
 	// Test
 	GAMESYS->SetMap(mapTest);
+
+	gameUI = new GameUI();
+	gameUI->Init();
+
+
 	return true;
 }
 
@@ -243,6 +175,7 @@ void BattleSceneTest::Update()
 	gameUI->Update();
 
 	COMSYS->Update();
+	GAMESYS->Update();
 	//
 	std::list< Component*>::iterator it;
 	for(it = stageComponentList.begin(); it != stageComponentList.end(); it++)
@@ -252,10 +185,6 @@ void BattleSceneTest::Update()
 
 	EFFECTMANAGER->Update();
 
-#if defined(_DEBUG_TEST)
-	
-	
-#endif 
 }
 
 void BattleSceneTest::Render(HDC hdc)

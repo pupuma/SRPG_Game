@@ -59,6 +59,11 @@ bool Character::Init( )
 	return true;
 }
 
+bool Character::Init(int _index)
+{
+	return false;
+}
+
 void Character::Deinit()
 {
 }
@@ -66,12 +71,18 @@ void Character::Deinit()
 void Character::Update()
 {
 	//act->Update();
-	state->Update();
-
-	if (KEYMANAGER->IsOnceKeyDown(VK_F1))
+	if (eStateType::ST_DEAD != eType)
 	{
-		GAMESYS->GameTurn();
+		if (IsLive())
+		{
+			state->Update();
+		}
 	}
+
+	//if (KEYMANAGER->IsOnceKeyDown(VK_F1))
+	//{
+	//	GAMESYS->GameTurn();
+	//}
 }
 
 void Character::Render(HDC hdc)
@@ -79,85 +90,103 @@ void Character::Render(HDC hdc)
 	//img->Render(hdc);
 	state->Render(hdc);
 
-	img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y,
-		frameX, frameY);
+	if (eStateType::ST_DEAD != eType)
+	{
+		if (IsLive())
+		{
+			img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y,
+				frameX, frameY);
+		}
 
-
+	}
+	
 #if defined(_DEBUG_TEST)
-	// HP
-	TCHAR str[256];
-	_stprintf(str, TEXT("HP : %d "), iHp);
-	TextOut(hdc, position.x, position.y, str, _tcslen(str));
+	//// HP
+	//TCHAR str[256];
+	//_stprintf(str, TEXT("HP : %d "), iHp);
+	//TextOut(hdc, position.x, position.y, str, _tcslen(str));
 
-	memset(str, 0, sizeof(TCHAR) * 256);
+	//memset(str, 0, sizeof(TCHAR) * 256);
 
-	//
-	std::string testStr;
-	switch (currentDirection)
-	{
-	case eDirection::DIR_LEFT:
-		testStr = TEXT("State : LEFT");
-		break;
-	case eDirection::DIR_RIGHT:
-		testStr = TEXT("State : RIGHT");
-		break;
-	case eDirection::DIR_UP:
-		testStr = TEXT("State : UP");
-		break;
-	case eDirection::DIR_DOWN:
-		testStr = TEXT("State : DOWN");
-		break;
-	case eDirection::DIR_NONE:
-		testStr = TEXT("State : NONE");
-		break;
-	}
+	////
+	//std::string testStr;
+	//switch (currentDirection)
+	//{
+	//case eDirection::DIR_LEFT:
+	//	testStr = TEXT("State : LEFT");
+	//	break;
+	//case eDirection::DIR_RIGHT:
+	//	testStr = TEXT("State : RIGHT");
+	//	break;
+	//case eDirection::DIR_UP:
+	//	testStr = TEXT("State : UP");
+	//	break;
+	//case eDirection::DIR_DOWN:
+	//	testStr = TEXT("State : DOWN");
+	//	break;
+	//case eDirection::DIR_NONE:
+	//	testStr = TEXT("State : NONE");
+	//	break;
+	//}
 
-	TextOut(hdc, position.x - 15, position.y -15, testStr.c_str(), testStr.length());
+	//TextOut(hdc, position.x - 15, position.y -15, testStr.c_str(), testStr.length());
 
-	testStr.clear();
+	//testStr.clear();
 
-	//
-	eStateType eType = GetType();
-	switch (eType)
-	{
-	case eStateType::ST_NONE:
-		testStr = TEXT("State : STATE_NONE");
-		break;
-	case eStateType::ST_IDLE:
-		testStr = TEXT("State : STATE_IDLE");
-		break;
-	case eStateType::ST_MOVE:
-		testStr = TEXT("State : STATE_MOVE");
-		break;
-	case eStateType::ST_ATTACK:
-		testStr = TEXT("State : STATE_ATTACK");
-		break;
-	case eStateType::ST_DEFENSE:
-		testStr = TEXT("State : STATE_DEFFENSE");
-		break;
-	case eStateType::ST_DEAD:
-		testStr = TEXT("State : STATE_DEAD");
-		break;
-	case eStateType::ST_PATHFINDING:
-		testStr = TEXT("State : PATHFINDING");
-		break;
-	case eStateType::ST_PATH_IDLE:
-		testStr = TEXT("State : PATH_IDLE");
-		break;
-	case eStateType::ST_PATH_MOVE:
-		testStr = TEXT("State : PATH_MOVE");
-	case eStateType::ST_PATH_NAVI:
-		testStr = TEXT("State : PATH_NAVI");
-		break;
-	}
+	////
+	//eStateType eType = GetType();
+	//switch (eType)
+	//{
+	//case eStateType::ST_NONE:
+	//	testStr = TEXT("State : STATE_NONE");
+	//	break;
+	//case eStateType::ST_IDLE:
+	//	testStr = TEXT("State : STATE_IDLE");
+	//	break;
+	//case eStateType::ST_MOVE:
+	//	testStr = TEXT("State : STATE_MOVE");
+	//	break;
+	//case eStateType::ST_ATTACK:
+	//	testStr = TEXT("State : STATE_ATTACK");
+	//	break;
+	//case eStateType::ST_DEFENSE:
+	//	testStr = TEXT("State : STATE_DEFFENSE");
+	//	break;
+	//case eStateType::ST_DEAD:
+	//	testStr = TEXT("State : STATE_DEAD");
+	//	break;
+	//case eStateType::ST_PATHFINDING:
+	//	testStr = TEXT("State : PATHFINDING");
+	//	break;
+	//case eStateType::ST_PATH_IDLE:
+	//	testStr = TEXT("State : PATH_IDLE");
+	//	break;
+	//case eStateType::ST_PATH_MOVE:
+	//	testStr = TEXT("State : PATH_MOVE");
+	//case eStateType::ST_PATH_NAVI:
+	//	testStr = TEXT("State : PATH_NAVI");
+	//	break;
+	//}
 
-	TextOut(hdc, position.x - 30, position.y - 30, testStr.c_str(), testStr.length());
+	//TextOut(hdc, position.x - 30, position.y - 30, testStr.c_str(), testStr.length());
 
 #endif // Text Render
 }
 
 void Character::Release()
 {
+	for (auto a : stateMap)
+	{
+		a.second->Release();
+		delete a.second;
+	}
+
+	stateMap.clear();
+
+	targetCharacterTile->Release();
+	targetCharacterTile = NULL;
+	img->Release();
+	img = NULL;
 }
 
 void Character::Reset()
@@ -367,7 +396,7 @@ void Character::ResetTarget()
 void Character::DecreaseHP(int _damagePoint)
 {
 	iHp -= _damagePoint;
-	if (iHp < 0)
+	if (iHp <= 0)
 	{
 		isLive = false;
 		iHp = 0;

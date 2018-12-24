@@ -60,7 +60,6 @@ void IdleState::Update()
 	if (EVENTSYS->GetGameType() == eGameType::GT_EVENT)
 	{
 		character->UpdateAI();
-
 	}
 
 	if (EVENTSYS->GetGameType() == eGameType::GT_BATTLE)
@@ -73,7 +72,6 @@ void IdleState::Update()
 			if (character->IsTurn())
 			{
 				GameTurnManager::GetSingleton()->NextTurn();
-
 			}
 		}
 	}

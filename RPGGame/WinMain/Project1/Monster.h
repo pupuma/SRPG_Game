@@ -9,7 +9,9 @@ public:
 	~Monster();
 public:
 	bool Init();
+	bool Init(int _index);
 public:
+
 	void UpdateAI();
 	void AttackPattern();
 };

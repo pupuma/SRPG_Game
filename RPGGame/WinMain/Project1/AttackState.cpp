@@ -35,11 +35,17 @@ void AttackState::Start()
 			param.message = TEXT("Attack");
 			param.attackPoint = character->GetAttackPoint();
 			ComponentSystem::GetInstance()->SendMsg(param);
-
 			
 		}
 		POINT pt = { (targetList[0]->GetPosition().x + 48 / 2),(targetList[0]->GetPosition().y + 48 / 2) };
-		EFFECTMANAGER->Play(TEXT("Absorb"), pt);
+		if (character->GetComponetType() == eComponentType::CT_PLAYER)
+		{
+			EFFECTMANAGER->Play(TEXT("ClawSpecial1"), pt);
+		}
+		else if (character->GetComponetType() == eComponentType::CT_MONSTER)
+		{
+			EFFECTMANAGER->Play(TEXT("Absorb"), pt);
+		}
 
 		GAMESYS->SetAttacking(false);
 

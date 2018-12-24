@@ -78,10 +78,11 @@ void NavigationState::Update()
 				tileCell->IsCharacter(true);
 				std::vector<Component*> targetList = map->GetComponentList(tileCell);
 
+
+
 				if (0 < targetList.size())
 				{
 					character->SetTarget(targetList);
-				
 					nextState = eStateType::ST_ATTACK;
 				}
 			}

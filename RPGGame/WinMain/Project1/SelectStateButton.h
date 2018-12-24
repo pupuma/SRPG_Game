@@ -4,7 +4,6 @@
 enum eButtonActive;
 
 
-
 class SelectStateButton
 {
 private:
@@ -13,6 +12,7 @@ private:
 	int iAttackPoint;
 	int iMaxHp;
 	int iMaxMp;
+	int skillIndex;
 private:
 	int index;
 	int iAttackFrameX;

@@ -38,8 +38,12 @@ void SkillState::Start()
 
 
 	}
-	POINT pt = { (targetList[0]->GetPosition().x + 48 / 2),(targetList[0]->GetPosition().y + 48 / 2) };
-	//EFFECTMANAGER->Play(TEXT("Absorb"), pt);
+	for (size_t i = 0; i < targetList.size(); i++)
+	{
+		POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+		EFFECTMANAGER->Play(TEXT("Darkness1"), pt);
+
+	}
 
 	GAMESYS->SetSkilling(false);
 

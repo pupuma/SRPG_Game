@@ -37,6 +37,7 @@ void TileObject::Render(HDC hdc)
 
 void TileObject::Release()
 {
+	image = NULL;
 }
 
 void TileObject::Reset()

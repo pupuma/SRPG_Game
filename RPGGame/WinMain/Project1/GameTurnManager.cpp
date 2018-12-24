@@ -3,6 +3,7 @@
 #include "GameTurnManager.h"
 
 #include "Character.h"
+#include "Player.h"
 #include "Map.h"
 #include "ComponentSystem.h"
 
@@ -35,22 +36,27 @@ void GameTurnManager::NextTurn()
 		{
 			if (characterList[index]->IsTurn())
 			{
-				characterList[index]->SetTurn(false);
-				if (index + 1 == characterList.size())
+				if (characterList[index]->IsLive())
 				{
-					index = 0;
-					characterList[index]->SetTurn(true);
-					turnCharacter = characterList[index];
-					characterIndex = 0;
-				}
-				else
-				{
-					characterList[index + 1]->SetTurn(true);
-					turnCharacter = characterList[index + 1];
-					characterIndex = index + 1;
-				}
+					characterList[index]->SetTurn(false);
+					if (index + 1 == characterList.size())
+					{
 
-				break;
+						index = 0;
+						characterList[index]->SetTurn(true);
+						turnCharacter = characterList[index];
+						characterIndex = 0;
+					}
+					else
+					{
+						characterList[index + 1]->SetTurn(true);
+						turnCharacter = characterList[index + 1];
+						characterIndex = index + 1;
+					}
+
+					break;
+				}
+				
 			}
 		}
 	}
@@ -149,4 +155,159 @@ void GameTurnManager::SkillAction(int _number)
 			}
 		}
 	}
+}
+
+Character * GameTurnManager::GetTurn()
+{
+	turnCharacter = NULL;
+	std::vector<Character*> characterList = GAMESYS->GetCharacterList();
+	for (auto a : characterList)
+	{
+		if (a->IsTurn())
+		{
+			turnCharacter = a;
+			break;
+		}
+	}
+	return turnCharacter;
+}
+
+Image * GameTurnManager::GetFaceImg()
+{
+	Image* img = NULL;
+	if (turnCharacter != NULL)
+	{
+		if (turnCharacter->GetComponetType() == eComponentType::CT_PLAYER)
+		{
+			int number = turnCharacter->GetFaceNumber();
+			switch (number)
+			{
+			case 1:
+				img = IMAGEMANAGER->FindImage(TEXT("Actor1_Face"));
+				break;
+			case 2:
+				img = IMAGEMANAGER->FindImage(TEXT("Actor2_Face"));
+				break;
+			case 3:
+				img = IMAGEMANAGER->FindImage(TEXT("Actor3_Face"));
+				break;
+	
+			}
+		}
+		else if (turnCharacter->GetComponetType() == eComponentType::CT_MONSTER)
+		{
+			int number = turnCharacter->GetFaceNumber();
+			switch (number)
+			{
+			case 1:
+				img = IMAGEMANAGER->FindImage(TEXT("Monster_Face"));
+
+				break;
+			case 2:
+				img = IMAGEMANAGER->FindImage(TEXT("Monster_Face"));
+
+				break;
+			case 3:
+				img = IMAGEMANAGER->FindImage(TEXT("Monster_Face"));
+				break;
+
+			}
+		}
+		else if (turnCharacter->GetComponetType() == eComponentType::CT_NPC)
+		{
+			int number = turnCharacter->GetFaceNumber();
+			switch (number)
+			{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+
+			}
+		}
+
+	}
+	return img;
+}
+
+Image * GameTurnManager::FindFaceImg(Character * _click)
+{
+	Image* img = NULL;
+	if (_click != NULL)
+	{
+		if (_click->GetComponetType() == eComponentType::CT_PLAYER)
+		{
+			int number = _click->GetFaceNumber();
+			switch (number)
+			{
+			case 1:
+				img = IMAGEMANAGER->FindImage(TEXT("Actor1_Face"));
+				break;
+			case 2:
+				img = IMAGEMANAGER->FindImage(TEXT("Actor2_Face"));
+				break;
+			case 3:
+				img = IMAGEMANAGER->FindImage(TEXT("Actor3_Face"));
+				break;
+
+			}
+		}
+		else if (_click->GetComponetType() == eComponentType::CT_MONSTER)
+		{
+			int number = _click->GetFaceNumber();
+			switch (number)
+			{
+			case 1:
+				img = IMAGEMANAGER->FindImage(TEXT("Monster_Face"));
+
+				break;
+			case 2:
+				img = IMAGEMANAGER->FindImage(TEXT("Monster_Face"));
+
+				break;
+			case 3:
+				img = IMAGEMANAGER->FindImage(TEXT("Monster_Face"));
+				break;
+
+			}
+		}
+		else if (_click->GetComponetType() == eComponentType::CT_NPC)
+		{
+			int number = _click->GetFaceNumber();
+			switch (number)
+			{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+
+			}
+		}
+
+	}
+	return img;
+}
+
+std::string GameTurnManager::SkillText(int _index)
+{
+	Player* player = (Player*)GetTurn();
+	std::map<int, SkillInfo> skillMap = GAMESYS->GetSkillMap();
+	std::string str;
+	for (auto a : skillMap)
+	{
+		if (a.second.jobs == player->GetJobs())
+		{
+			if (a.second.number == _index)
+			{
+				str = a.second.text;
+				break;
+			}
+		}
+	}
+
+	return str;
 }

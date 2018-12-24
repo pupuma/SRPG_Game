@@ -6,6 +6,8 @@
 #include "TileCell.h"
 #include "SkillSystem.h"
 
+
+
 Player::Player(std::string _name, float _deep)
 	: Character(_name,_deep)
 {
@@ -25,7 +27,7 @@ bool Player::Init()
 		job = eJobClass::JOB_ARCHER;
 
 		isLive = true;
-		img = IMAGEMANAGER->FindImage("Actor1");
+		img = IMAGEMANAGER->FindImage(TEXT("Actor1"));
 		img->SetX(48);
 		img->SetY(48);
 		img->SetFrameX(0);
@@ -34,13 +36,36 @@ bool Player::Init()
 		InitState();
 		eType = eStateType::ST_PATH_IDLE;
 		ChangeState(eType);
-
+		iMaxHp = 100;
+		iHp = 100;
 	}
 
-	// Attack List
+	return true;
+}
+
+bool Player::Init(int _index)
+{
+
 	{
+		job = eJobClass::JOB_WARRIOR;
+		faceNumber = _index;
+		isLive = true;
+		img = GAMESYS->FindCharacterImage(_index,this);
+		img->SetX(48);
+		img->SetY(48);
+		img->SetFrameX(0);
+		img->SetFrameY(0);
 
+		InitState();
+		eType = eStateType::ST_PATH_IDLE;
+		ChangeState(eType);
+		iMaxHp = 100;
+		iHp = 100;
+		iMaxMp = 50;
+		iMp = 50;
+		attackPoint = 10;
 	}
+
 	return true;
 }
 

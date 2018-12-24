@@ -16,6 +16,7 @@ public:
 	~ComponentSystem();
 public:
 	void Update();
+	void Release();
 public:
 	void AddComponent(std::string _name, Component* _component);
 	Component* FindComponent(std::string _name);

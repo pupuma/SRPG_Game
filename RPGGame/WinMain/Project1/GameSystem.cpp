@@ -9,6 +9,7 @@
 #include "NaviGationSystem.h"
 #include "Player.h"
 #include "GameTurnManager.h"
+#include "Component.h"
 
 
 GameSystem::GameSystem()
@@ -29,7 +30,81 @@ void GameSystem::Init()
 	currentCharacterIndex = 0;
 	isMove = false;
 	isHeal = false;
+	isClickCharacter = false;
 
+	{
+
+		std::vector<std::string> recordList = RESOURCEMANAGER->FindScript(TEXT("SkillInfo"));
+
+		TCHAR record[1000];
+		TCHAR* token;
+		eJobClass job;
+		int skillNumber;
+		int skillDamage;
+		std::string text;
+		int iLine = 1;
+
+		while (iLine != recordList.size() - 1)
+		{
+			strcpy_s(record, recordList[iLine].c_str());
+
+			token = strtok(record, ",");
+			job = (eJobClass)atoi(token);
+
+			token = strtok(NULL, ",");
+			skillNumber = atoi(token);
+
+			token = strtok(NULL, ",");
+			skillDamage = atoi(token);
+
+			token = strtok(NULL, ",");
+			text = token;
+
+			skillInfo.jobs = job;
+			skillInfo.number = skillNumber;
+			skillInfo.damage = skillDamage;
+			skillInfo.text = text;
+			m_Skill[iLine] = skillInfo;
+			iLine++;
+		}
+	}
+}
+void GameSystem::Update()
+{
+	GetCursorPos(&_ptMouse);
+	ScreenToClient(_hWnd, &_ptMouse);
+
+	if (KEYMANAGER->IsOnceKeyDown(VK_RBUTTON))
+	{
+		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
+
+		TileCell* tile = map->FindTileCellByMousePosition(_ptMouse.x, _ptMouse.y);
+		if (tile != NULL)
+		{
+			saveClickTile = tile;
+			std::list<Component*>::iterator it;
+			std::list<Component*> comList = tile->GetTileComponentList();
+
+			for (it = comList.begin(); it != comList.end(); it++)
+			{
+				if (comList.size() >= 2)
+				{
+					if ((*it)->GetComponetType() == eComponentType::CT_PLAYER ||
+						(*it)->GetComponetType() == eComponentType::CT_MONSTER ||
+						(*it)->GetComponetType() == eComponentType::CT_NPC)
+					{
+						//saveClickMousePos = _ptMouse;
+
+						isClickCharacter = true;
+						return;
+					}
+				}
+			}
+		}
+	}
+	
+	// 저장된 정보를 출력
+	// 이미지 정보 및 체력, MP, AP 정보 출력 
 }
 void GameSystem::SetMousePosition(LPARAM lParam)
 {
@@ -102,16 +177,6 @@ void GameSystem::AddCharacterList(Character * _character)
 	
 void GameSystem::GameTurn()
 {
-	/*unsigned int characterSize = characterList.size();
-
-	characterList[currentCharacterIndex]->SetTurn(true);
-	currentCharacterIndex++;
-	round++;
-
-	if (currentCharacterIndex >= characterSize)
-	{
-		currentCharacterIndex = 0;
-	}*/
 
 	characterList[0]->SetTurn(true);
 	characterList[1]->SetTurn(false);
@@ -380,6 +445,14 @@ TileCell* GameSystem::CharacterSelectTileCell(Character* _character)
 		TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
 		TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
 
+		if (searchTilePosision.x < 0 || searchTilePosision.x >= width ||
+			searchTilePosision.y < 0 || searchTilePosision.y >= height)
+		{
+			distanceCount++;
+			continue;
+		}
+
+
 		if (!searchTileCell->CanMove())
 		{
 			distanceCount++;
@@ -397,6 +470,15 @@ TileCell* GameSystem::CharacterSelectTileCell(Character* _character)
 		TilePoint currentTilePosition = _character->GetTargetCharacterTileCell()->GetTilePosition();
 		TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
 		TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
+
+		if (searchTilePosision.x < 0 || searchTilePosision.x >= width ||
+			searchTilePosision.y < 0 || searchTilePosision.y >= height)
+		{
+			distanceCount++;
+
+			continue;
+		}
+
 
 		if (!searchTileCell->CanMove())
 		{
@@ -479,7 +561,7 @@ void GameSystem::AddProioritySelectList(Character* _character)
 	{
 		for (size_t i = 0; i < playerList.size(); i++)
 		{
-			if ((*it_move).tileCell->GetTilePosition() == playerList[i]->GetTilePosition())
+			if ((*it_move).tileCell->GetTilePosition() == playerList[i]->GetTilePosition() && playerList[i]->IsLive())
 			{
 				selectTargetList.push_back(playerList[i]);
 			}
@@ -487,7 +569,7 @@ void GameSystem::AddProioritySelectList(Character* _character)
 
 		for (size_t i = 0; i < npcList.size(); i++)
 		{
-			if ((*it_move).tileCell->GetTilePosition() == npcList[i]->GetTilePosition())
+			if ((*it_move).tileCell->GetTilePosition() == npcList[i]->GetTilePosition() || npcList[i]->IsLive())
 			{
 				selectTargetList.push_back(npcList[i]);
 			}
@@ -566,5 +648,114 @@ std::vector<Component*> GameSystem::SkillListTarget(std::vector<Component*> _lis
 
 
 	return targetList;
+}
+
+bool GameSystem::GameOver()
+{
+	if (!playerList.empty())
+	{
+		int iCount = playerList.size();
+		for (auto a : playerList)
+		{
+			if (!a->IsLive())
+			{
+				iCount--;
+			}
+		}
+
+		if (iCount <= 0)
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+bool GameSystem::GameClear()
+{
+	if (!monsterList.empty())
+	{
+		int iCount = monsterList.size();
+		for (auto a : monsterList)
+		{
+			if (!a->IsLive())
+			{
+				iCount--;
+			}
+		}
+		
+		if (iCount <= 0)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+Image* GameSystem::FindCharacterImage(int _index, Character* _character)
+{
+	Image* img = NULL;
+	if (_character->GetComponetType() == eComponentType::CT_PLAYER)
+	{
+		switch (_index)
+		{
+		case 1:
+			img = IMAGEMANAGER->FindImage(TEXT("Actor1"));
+			break;
+		case 2:
+			img = IMAGEMANAGER->FindImage(TEXT("Actor2"));
+			break;
+		case 3:
+			img = IMAGEMANAGER->FindImage(TEXT("Actor3"));
+			break;
+		}
+	}
+	else if (_character->GetComponetType() == eComponentType::CT_MONSTER)
+	{
+		switch (_index)
+		{
+		case 1:
+			img = IMAGEMANAGER->FindImage(TEXT("Monster"));
+			break;
+		case 2:
+			img = IMAGEMANAGER->FindImage(TEXT("Evil"));
+			break;
+		case 3:
+			img = IMAGEMANAGER->FindImage(TEXT("Evil"));
+			break;
+		}
+	}
+	else if (_character->GetComponetType() == eComponentType::CT_NPC)
+	{
+		switch (_index)
+		{
+		case 1:
+			img = IMAGEMANAGER->FindImage(TEXT("Actor2"));
+			break;
+		case 2:
+			img = IMAGEMANAGER->FindImage(TEXT("Actor2"));
+			break;
+		case 3:
+			img = IMAGEMANAGER->FindImage(TEXT("Actor2"));
+			break;
+		}
+	}
+	return img;
+
+}
+
+void GameSystem::DeleteCharacter(Character * _character)
+{
+	std::vector<Character*>::iterator it;
+	for (it = characterList.begin(); it != characterList.end();it++ )
+	{
+		if ((*it) == _character)
+		{
+			it = characterList.erase(it++);
+			break;
+		}
+	}
 }
 

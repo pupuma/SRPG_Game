@@ -10,7 +10,6 @@ class Map
 	: public Component
 {
 private:
-
 	ImgInfo imgTileInfo;
 	ImgInfo imgObjectInfo;
 private:

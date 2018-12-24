@@ -30,6 +30,7 @@ void DefenseState::Start()
 		character->SetCanMove(true);
 		character->MoveStop();
 		ChangeState(eStateType::ST_DEAD);
+		GAMESYS->DeleteCharacter(character);
 	}
 	else
 	{
