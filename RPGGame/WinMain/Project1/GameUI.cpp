@@ -52,6 +52,18 @@ bool GameUI::Init()
 	return false;
 }
 
+void GameUI::Release()
+{
+	selectYNButton->Release();
+	selectStateButton->Release();
+
+	SAFE_DELETE(selectYNButton);
+	SAFE_DELETE(selectStateButton);
+
+
+}
+
+
 void GameUI::Update()
 {
 	if (KEYMANAGER->IsOnceKeyDown('3'))
@@ -70,6 +82,10 @@ void GameUI::Update()
 
 		leftMaxHp = GameTurnManager::GetSingleton()->GetTurn()->MaxGetHp();
 		leftHp = GameTurnManager::GetSingleton()->GetTurn()->GetHp();
+
+		leftMaxMp = GameTurnManager::GetSingleton()->GetTurn()->GetMaxMp();
+		leftMp = GameTurnManager::GetSingleton()->GetTurn()->GetMp();
+
 		TileCell* tile = GAMESYS->GetSaveClickTileCell();
 
 		if (tile != NULL)
@@ -92,6 +108,9 @@ void GameUI::Update()
 				{
 					rightHp = clickChar->GetHp();
 					rightMaxHp = clickChar->MaxGetHp();
+
+					rightMp = clickChar->GetMp();
+					rightMaxMp = clickChar->GetMaxMp();
 				}
 			}
 			
@@ -112,11 +131,11 @@ void GameUI::Render(HDC hdc)
 {
 	if (isActive)
 	{
-		DrawObject(hdc, rcTopTimer, 1, RGB(255, 0, 0), RECTANGLE);
-		DrawObject(hdc, rcTest1, 1, RGB(125, 0, 125), RECTANGLE);
-		DrawObject(hdc, rcTest2, 1, RGB(125, 255, 125), RECTANGLE);
-		DrawObject(hdc, rcTest3, 1, RGB(125, 125, 125), RECTANGLE);
-		DrawObject(hdc, rcTest4, 1, RGB(125, 125, 125), RECTANGLE);
+		//DrawObject(hdc, rcTopTimer, 1, RGB(255, 0, 0), RECTANGLE);
+		//DrawObject(hdc, rcTest1, 1, RGB(125, 0, 125), RECTANGLE);
+		//DrawObject(hdc, rcTest2, 1, RGB(125, 255, 125), RECTANGLE);
+		//DrawObject(hdc, rcTest3, 1, RGB(125, 125, 125), RECTANGLE);
+		//DrawObject(hdc, rcTest4, 1, RGB(125, 125, 125), RECTANGLE);
 		//DrawObject(hdc, rcTest5, 1, RGB(255, 255, 125), RECTANGLE);
 		//DrawObject(hdc, rcTest6, 1, RGB(125, 255, 125), RECTANGLE);
 		//DrawObject(hdc, rcTest7, 1, RGB(125, 0, 125), RECTANGLE);
@@ -128,6 +147,7 @@ void GameUI::Render(HDC hdc)
 		imgTest2->Render(hdc, rcTest2.left, rcTest2.top);
 		imgTest3->Render(hdc, rcTest3.left, rcTest3.top);
 		imgTest4->Render(hdc, rcTest4.left, rcTest4.top);
+	
 		//imgTest5->Render(hdc, rcTest5.left, rcTest5.top);
 		//
 		//
@@ -140,28 +160,61 @@ void GameUI::Render(HDC hdc)
 			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("HP"), &pt, RGB(255, 0, 0));
 
 			POINT pt2 = { WINSIZEX - 250, 475 };
-			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("MP"), &pt2, RGB(255, 0, 0));
+			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("Attack"), &pt2, RGB(0, 0, 0));
 
-			RECT rc = RectMake(WINSIZEX - 250, 450, 170, 30);
+			RECT rc = RectMake(WINSIZEX - 200, 420, 170, 30);
 			FontManager::GetSingleton()->TextGaugeRender(hdc, rightHp, rightMaxHp, &rc, RGB(0, 0, 0));
+
+			rc = RectMake(WINSIZEX - 200, 495, 475, 30);
+			//FontManager::GetSingleton()->TextGaugeRender(hdc, rightMp, rightMaxMp, &rc, RGB(0, 0, 0));
+		
 
 			if (clickImg != NULL)
 			{
-				clickImg->FrameRender(hdc, rcTest6.left + 60, rcTest6.top +20, 0,0);
+				if (clickChar != NULL)
+				{
+					if (clickChar->IsLive())
+					{
+						clickImg->FrameRender(hdc, rcTest6.left + 60, rcTest6.top + 20, clickChar->GetFaceFrameX(), clickChar->GetFaceFrameY());
+						POINT pt = { rcTest6.left + 50 ,rcTest6.bottom - 70 };
+						std::string name = clickChar->GetName();
+						FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), name, &pt, RGB(255, 0, 255));
+
+						TCHAR str[256];
+
+						_stprintf(str, TEXT("%d"), clickChar->GetAttackPoint());
+						POINT pt3 = { WINSIZEX - 100, 475 };
+						FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), str, &pt3, RGB(0, 0, 0));
+
+					}
+
+
+				}
 			}
 		}
 
 		if (turnImg != NULL)
 		{
-			turnImg->FrameRender(hdc, rcTest2.left + 60, rcTest2.top + 20, 0, 0);
+			turnChar = GameTurnManager::GetSingleton()->GetTurn();
+			if (turnChar != NULL)
+			{
+				turnImg->FrameRender(hdc, rcTest2.left + 60, rcTest2.top + 20, turnChar->GetFaceFrameX(), turnChar->GetFaceFrameY());
+				POINT pt = { rcTest2.left +  50 , rcTest2.bottom - 70 };
+				std::string name = turnChar->GetName();
+				FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), name, &pt, RGB(255, 0, 255));
+
+			}
 		}
 		//
 		selectStateButton->Render(hdc);
 		selectYNButton->Render(hdc);
 
 		{
-			RECT rc = RectMake(70, 450, 170, 30);
+			RECT rc = RectMake(70, 420, 170, 30);
 			FontManager::GetSingleton()->TextGaugeRender(hdc, leftHp, leftMaxHp, &rc, RGB(0, 0, 0));
+			
+			rc = RectMake(70, 475, 170, 30);
+			FontManager::GetSingleton()->TextGaugeRender(hdc, leftMp, leftMaxMp, &rc, RGB(0, 0, 0));
 
 
 		}
@@ -171,7 +224,7 @@ void GameUI::Render(HDC hdc)
 			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("HP"), &pt, RGB(255,0,0));
 
 			POINT pt2 = { 27, 475 };
-			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("MP"), &pt2, RGB(255, 0, 0));
+			FontManager::GetSingleton()->RenderText(hdc, TEXT("NBG"), TEXT("MP"), &pt2, RGB(0, 0, 255));
 			
 		}
 #endif//

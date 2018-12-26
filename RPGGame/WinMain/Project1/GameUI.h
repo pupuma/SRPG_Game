@@ -16,6 +16,11 @@ private:
 	int leftMaxHp;
 	int rightHp;
 	int rightMaxHp;
+
+	int leftMp;
+	int leftMaxMp;
+	int rightMp;
+	int rightMaxMp;
 private:
 	SelectStateButton* selectStateButton;
 	GameYesNoButton* selectYNButton;
@@ -47,6 +52,7 @@ public:
 	~GameUI();
 public:
 	bool Init();
+	void Release();
 	void Update();
 	void Render(HDC hdc);
 };

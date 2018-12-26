@@ -396,17 +396,51 @@ void Character::ResetTarget()
 void Character::DecreaseHP(int _damagePoint)
 {
 	iHp -= _damagePoint;
+
 	if (iHp <= 0)
 	{
 		isLive = false;
 		iHp = 0;
+		SetHp(iHp);
+	}
+	else
+	{
+		SetHp(iHp);
 	}
 }
 
 void Character::InCreaseHP(int _healPoint)
 {
 	iHp += _healPoint;
+	if (iHp >= iMaxHp)
+	{
+		iHp = iMaxHp;
+		SetHp(iHp);
+	}
+	else
+	{
+		SetHp(iHp);
 
+	}
+
+}
+
+void Character::DecreaseMp(int _mp)
+{
+	iMp -= _mp;
+	if (iMp <= 0)
+	{
+		iMp = 0;
+	}
+}
+
+void Character::InCreaseMp(int _mp)
+{
+	iMp += _mp;
+	if (iMaxMp <= iMp)
+	{
+		iMp = iMaxMp;
+	}
 }
 
 void Character::SetTilePosition(int _tilePosX, int _tilePosY)

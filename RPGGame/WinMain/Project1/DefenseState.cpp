@@ -19,12 +19,24 @@ void DefenseState::Start()
 	State::Start();
 
 	// Damage
-	int damagePoint = character->GetDamagePoint();
-	character->DecreaseHP(damagePoint);
+	
 	//HEAL
-	int healPoint = character->GetHealPoint();
-	character->InCreaseHP(healPoint);
+	if (true == character->IsLive())
+	{
+		if (GAMESYS->IsHeal())
+		{
+			int healPoint = character->GetHealPoint();
+			character->InCreaseHP(healPoint);
+			GAMESYS->SetHeal(false);
+		}
+		else
+		{
+			int damagePoint = character->GetDamagePoint();
+			character->DecreaseHP(damagePoint);
+		}
+	}
 
+	
 	if (false == character->IsLive())
 	{
 		character->SetCanMove(true);

@@ -311,3 +311,43 @@ std::string GameTurnManager::SkillText(int _index)
 
 	return str;
 }
+
+int GameTurnManager::GetIconFrameX(int _index)
+{
+	Player* player = (Player*)GetTurn();
+	std::map<int, SkillInfo> skillMap = GAMESYS->GetSkillMap();
+	int frameX = 0;
+	for (auto a : skillMap)
+	{
+		if (a.second.jobs == player->GetJobs())
+		{
+			if (a.second.number == _index)
+			{
+				frameX = a.second.frameX;
+				break;
+			}
+		}
+
+	}
+	return frameX;
+}
+
+int GameTurnManager::GetIconFrameY(int _index)
+{
+	Player* player = (Player*)GetTurn();
+	std::map<int, SkillInfo> skillMap = GAMESYS->GetSkillMap();
+	int frameY = 0;
+	for (auto a : skillMap)
+	{
+		if (a.second.jobs == player->GetJobs())
+		{
+			if (a.second.number == _index)
+			{
+				frameY = a.second.frameY;
+				break;
+			}
+		}
+
+	}
+	return frameY;
+}

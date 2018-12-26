@@ -10,6 +10,7 @@ public:
 public:
 	bool Init();
 	bool Init(int _index);
+	void Render(HDC hdc);
 public:
 
 	void UpdateAI();

@@ -161,6 +161,7 @@
     <ClCompile Include="DefenseState.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="DefenseState.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="EndScene.h" />
     <ClInclude Include="EventSystem.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="Game.h" />

@@ -18,6 +18,15 @@ enum eStateType
 };
 
 
+enum eJobClass
+{
+	JOB_NONE,
+	JOB_WARRIOR,
+	JOB_ARCHER,
+	JOB_HEALER,
+	JOB_MAGIC,
+};
+
 
 class State;
 class Action;
@@ -42,7 +51,8 @@ protected:
 	int faceNumber;
 
 	std::string name;
-	
+	eJobClass job;
+
 	eStateType eType;
 	eDirection nextDirection;
 	eDirection currentDirection;
@@ -67,6 +77,7 @@ protected:
 	int attackPoint;
 	int damagePoint;
 	int healPoint;
+	int skillDamagePoint;
 
 	int iHp;
 	int iMaxHp;
@@ -114,6 +125,8 @@ public:
 	void ResetTarget();
 	void DecreaseHP(int _damagePoint);
 	void InCreaseHP(int _healPoint);
+	void DecreaseMp(int _mp);
+	void InCreaseMp(int _mp);
 
 	void SetTilePosition(int _tilePosX, int _tilePosY);
 	void SetImgFrame(int _frameX, int _frameY);
@@ -123,6 +136,8 @@ public:
 public:
 	void SetFrameX(int _frameX) { frameX = _frameX; }
 	void SetFrameY(int _frameY) { frameY = _frameY; }
+	int GetFrameX() { return frameX; }
+	int GetFrameY() { return frameY; }
 	void SetFaceFrameX(int _faceX) { faceNumberX = _faceX; }
 	void SetFaceFrameY(int _faceY) { faceNumberY = _faceY; }
 	int GetFaceFrameX() { return faceNumberX; }
@@ -131,6 +146,7 @@ public:
 
 	State* GetState() { return state; }
 	int GetAttackPoint() { return attackPoint; }
+	void SetAttackPoint(int _point) { attackPoint = _point; }
 	void SetTarget(std::vector<Component*> _target) { targetList = _target; }
 	int GetDamagePoint() { return damagePoint; }
 	eDirection GetDirection() { return currentDirection; }
@@ -144,6 +160,9 @@ public:
 	int GetMp() { return iMp; }
 	void SetMp(int _mp) { iMp = _mp; }
 	int GetMaxMp() { return iMaxMp; }
+	void SetDamagePoint(int _damage) { damagePoint = _damage; }
+	void SetMaxHp(int _hp) { iMaxHp = _hp; }
+	void SetMaxMp(int _mp) { iMaxMp = _mp; }
 	void SetTargetCharacterTileCell(TileCell* _targetTileCellCharacter) { targetCharacterTile = _targetTileCellCharacter; }
 	TileCell* GetTargetCharacterTileCell() { return targetCharacterTile; }
 	int GetHealPoint() { return healPoint; }
@@ -157,4 +176,8 @@ public:
 	
 	
 #endif // StateTYpe Render Test 
+	void SetJobs(eJobClass _job) { job = _job; }
+	eJobClass GetJobs() { return job; }
+	int GetSkillDamgePoint() { return skillDamagePoint; }
+	void SetSkillDamagePoint(int _damage) { skillDamagePoint = _damage; }
 };

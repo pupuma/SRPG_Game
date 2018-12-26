@@ -25,6 +25,7 @@ public:
 	~GameYesNoButton();
 public:
 	bool Init();
+	void Release();
 	void Update();
 	void Render(HDC hdc);
 };

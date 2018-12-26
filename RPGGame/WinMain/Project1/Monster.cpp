@@ -5,11 +5,13 @@
 
 #include "Map.h"	
 #include "TileCell.h"
+#include "State.h"
 
 Monster::Monster(std::string _name, float _deep)
 	: Character(_name, _deep)
 {
 	type = CT_MONSTER;
+	name = _name;
 
 }
 
@@ -67,17 +69,36 @@ bool Monster::Init(int _index)
 		img = GAMESYS->FindCharacterImage(_index, this);
 		img->SetX(48);
 		img->SetY(48);
-		img->SetFrameX(0);
-		img->SetFrameY(0);
+		img->SetFrameX(frameX);
+		img->SetFrameY(frameY);
 
 		InitState();
 		eType = eStateType::ST_PATH_IDLE;
 		ChangeState(eType);
 		iMaxHp = 10;
 		iHp = 10;
+		iMp = 0;
+		iMaxMp = 0;
 	}
 
 	return true;
+}
+
+void Monster::Render(HDC hdc)
+{
+	//img->Render(hdc);
+	state->Render(hdc);
+
+	if (eStateType::ST_DEAD != eType)
+	{
+		if (IsLive())
+		{
+			img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y,
+				frameX, frameY);
+		}
+
+	}
+		
 }
 
 

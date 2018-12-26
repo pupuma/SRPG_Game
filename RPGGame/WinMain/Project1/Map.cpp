@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "GameTurnManager.h"
 #include "EventSystem.h"
+#include "Monster.h"
 
 
 Map::Map(std::string _name)
@@ -987,6 +988,7 @@ std::vector<Component*> Map::GetComponentList(TileCell* _tileCell)
 		return componentArray;
 	}
 
+
 	// 범위 체크 (맵 안에 있는지)
 	if (_tileCell->GetTilePosition().x < 0 || width <= _tileCell->GetTilePosition().x ||
 		_tileCell->GetTilePosition().y < 0 || height <= _tileCell->GetTilePosition().y)
@@ -999,10 +1001,26 @@ std::vector<Component*> Map::GetComponentList(TileCell* _tileCell)
 		return componentArray;
 	}
 
+	std::vector<Character*> list = GAMESYS->GetCharacterList();
+	for (auto a : list)
+	{
+		if (a->GetComponetType() == eComponentType::CT_MONSTER)
+		{
+			if (_tileCell->GetTilePosition() == a->GetTilePosition())
+			{
+				if (!a->IsLive())
+				{
+					return componentArray;
+				}
+			}
+		}
+	}
+
 	std::list<Component*> tileComponentList = FindTileCell(_tileCell->GetTilePosition())->GetTileComponentList();
 	std::list<Component*>::iterator it;
 	for (it= tileComponentList.begin(); it != tileComponentList.end(); it++)
 	{
+		
 		componentArray.push_back((*it));
 	}
 

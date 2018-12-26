@@ -55,20 +55,57 @@ void State::Reset()
 void State::Direction()
 {
 	eDirection dir = character->GetDirection();
-
+	int frameX = character->GetFrameX();
+	int frameY = character->GetFrameY();
+	
 	switch (dir)
 	{
 	case eDirection::DIR_LEFT:
-		character->SetImgFrame(1, 1);
+		if (frameY <= 3)
+		{
+			character->SetImgFrame(frameX, 1);
+
+		}
+		else
+		{
+			character->SetImgFrame(frameX, 5);
+
+		}
 		break;
 	case eDirection::DIR_RIGHT:
-		character->SetImgFrame(1, 2);
+		if (frameY <= 3)
+		{
+			character->SetImgFrame(frameX, 2);
+
+		}
+		else
+		{
+			character->SetImgFrame(frameX, 6);
+
+		}
 		break;
 	case eDirection::DIR_UP:
-		character->SetImgFrame(1, 3);
+		if (frameY <= 3)
+		{
+			character->SetImgFrame(frameX, 3);
+
+		}
+		else
+		{
+			character->SetImgFrame(frameX, 7);
+
+		}
 		break;
 	case eDirection::DIR_DOWN:
-		character->SetImgFrame(1, 0);
+		if (frameY <= 3)
+		{
+			character->SetImgFrame(frameX, 0);
+		}
+		else
+		{
+			character->SetImgFrame(frameX, 4);
+
+		}
 		break;
 	}
 

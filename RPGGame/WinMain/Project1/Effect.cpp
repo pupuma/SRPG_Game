@@ -10,6 +10,17 @@ Effect::Effect()
 {
 }
 
+Effect::Effect(const Effect & effect)
+{
+	_effectImage = effect._effectImage;
+	_effectAnimation = nullptr;
+	_x = effect._x;
+	_y = effect._y;
+	_fps = effect._fps;
+	_elapsedTime = effect._elapsedTime;
+	_isRunning = false;
+}
+
 
 Effect::~Effect()
 {
@@ -25,7 +36,7 @@ bool Effect::Init(Image * effectImage, int frameW, int frameH, int fps, float el
 	_isRunning = false;
 	_effectImage = effectImage;
 	_elapsedTime = elapsedTime;
-
+	_fps = fps;
 	if (!_effectAnimation)
 	{
 		_effectAnimation = new Animation();

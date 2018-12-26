@@ -12,7 +12,11 @@ class Character;
 class TileCell;
 class HpBar;
 class MpBar;
-
+enum eItemType
+{
+	ITEM_HP,
+	ITEM_MP,
+};
 typedef struct tagTileMoveInfo
 {
 	TileCell* tileCell;
@@ -25,14 +29,20 @@ typedef struct tagSkillInfo
 	int number;
 	int damage;
 	std::string text;
+	int frameX;
+	int frameY;
 }SkillInfo;
 
 class GameSystem
 	: public SingletonBase<GameSystem>
 {
 private:
+	eItemType item;
+
 	HpBar* hpBar;
 	MpBar* mpBar;
+	int hpDrinkCount;
+	int mpDrinkCount;
 private:
 	MoveInfo moveInfo;
 	SkillInfo skillInfo;
@@ -50,6 +60,8 @@ private:
 
 	int width;
 	int height;
+	int index;
+	bool isItem;
 	//std::list<TileInfo> moveTileList;
 	TilePoint temp;
 	eStateType eType;
@@ -79,6 +91,7 @@ public:
 public:
 	void Init();
 	void Update();
+	void Reset();
 public:
 	void SetMousePosition(LPARAM lParam);
 	POINT GetMousePosition();
@@ -102,6 +115,8 @@ public:
 	bool GameClear();
 	Image* FindCharacterImage(int _index, Character* _character);
 	void DeleteCharacter(Character* _character);
+	bool SkillCheck(int _index);
+	TileCell* NextTarget();
 public:
 	bool IsAction() { return isAction; }
 	void SetAction(bool _isAction) { isAction = _isAction; }
@@ -137,4 +152,12 @@ public:
 	bool IsClickCharacter() { return isClickCharacter; }
 	TileCell* GetSaveClickTileCell() { return saveClickTile; }
 	std::map<int, SkillInfo> GetSkillMap() { return m_Skill; }
+	bool IsItem() { return isItem; }
+	void SetItem(bool _isItem) { isItem = _isItem; }
+	int GetHpDrinkCount(){ return hpDrinkCount; }
+	int GetMpDrinkCount(){ return mpDrinkCount; }
+	void SetHpDrinkCount(int _count) {hpDrinkCount = _count; }
+	void SetMpDrinkCount(int _count) { mpDrinkCount = _count; }
+	void SetItemType(eItemType _type) { item = _type; }
+	eItemType GetItemType() { return item; }
 };

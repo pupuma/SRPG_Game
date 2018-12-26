@@ -11,6 +11,7 @@ private:
 
 private:
 	int characterIndex;
+	int skillIndex;
 public:
 	GameTurnManager();
 	~GameTurnManager();
@@ -25,5 +26,10 @@ public:
 	Image* GetFaceImg();
 	Image* FindFaceImg(Character* _click);
 	std::string SkillText(int _index);
+	int GetIconFrameX(int _index);
+	int GetIconFrameY(int _index);
+public:
+	int GetSkillIndex() { return skillIndex; }
+	void SetSkillIndex(int _index) { skillIndex = _index; }
 };
 

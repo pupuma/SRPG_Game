@@ -70,7 +70,7 @@ public:
 	void Update();
 	void Render(HDC hdc);
 	void DeInit();
-
+	void Reset();
 public:
 	void MapDataInit();
 	void QusetInit();

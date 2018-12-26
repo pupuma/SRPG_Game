@@ -38,14 +38,25 @@ FontManager::~FontManager()
 void FontManager::Init()
 {
 	AddFontResource(TEXT("../Resource/Text/NanumBarunGothic.ttf"));
+	AddFontResource(TEXT("../Resource/Text/NanumBarunGothicBold.ttf"));
+
 	HFONT font = CreateFont(30, 0, 0, 0, 300, 0, 0, 0, DEFAULT_CHARSET | HANGEUL_CHARSET,
-		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("NanumBarunGothic"));
+		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("³ª´®¹Ù¸¥°íµñ"));
 	
 	fontMap.insert({ TEXT("NBG"), font });
 
 	font = CreateFont(15, 0, 0, 0, 300, 0, 0, 0, DEFAULT_CHARSET,
-		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("NanumBarunGothic"));
+		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("³ª´®¹Ù¸¥°íµñ"));
 	fontMap.insert({ TEXT("NBG_S"), font });
+	
+	font = CreateFont(50, 0, 0, 0, 300, 0, 0, 0, DEFAULT_CHARSET,
+		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("³ª´®¹Ù¸¥°íµñ"));
+	fontMap.insert({ TEXT("NBG_B"), font });
+
+	font = CreateFont(150, 100, 180, 180, 500, 1, 0, 0, DEFAULT_CHARSET | HANGEUL_CHARSET,
+		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("³ª´®¹Ù¸¥°íµñ Bold"));
+
+	fontMap.insert({ TEXT("NBB"), font });
 
 	font = CreateFont(15, 0, 0, 0, 300, 0, 0, 0, HANGEUL_CHARSET,
 		OUT_STRING_PRECIS, CLIP_CHARACTER_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_SWISS, TEXT("µ¸¿ò"));

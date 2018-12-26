@@ -11,6 +11,7 @@
 #include "Monster.h"
 #include "GameUI.h"
 
+
 BattleScene::BattleScene()
 {
 
@@ -24,9 +25,10 @@ BattleScene::~BattleScene()
 bool BattleScene::Init()
 {
 	//
+	GAMESYS->Reset();
 	EventSystem::GetSingleton()->SetGameType(eGameType::GT_BATTLE);
 	//
-
+	deltaTime = 1.5f;
 	map = new Map("Map");
 
 	if (!map->Init())
@@ -56,7 +58,6 @@ bool BattleScene::Init()
 		{
 			stageComponentList.push_back(playerList[i]);
 			playerList[i]->SetTurn(false);
-
 		}
 		playerList[0]->ChangeState(eStateType::ST_PATH_IDLE);
 		playerList[0]->SetTurn(true);
@@ -68,6 +69,7 @@ bool BattleScene::Init()
 		{
 			monsterList[i]->SetTurn(false);
 			stageComponentList.push_back(monsterList[i]);
+
 		}
 
 	}
@@ -97,37 +99,78 @@ bool BattleScene::Init()
 	GAMESYS->SetMap(map);
 	gameUI = new GameUI();
 	gameUI->Init();
+	pause = false;
 	return true;
 }
 
 void BattleScene::Release()
 {
+	gameUI->Release();
+	SAFE_DELETE(gameUI);
+	map->Release();
+	delete map;
+	map = NULL;
+	ComponentSystem::GetInstance()->Release();
+	stageComponentList.clear();
+
+	playerList.clear();
+	monsterList.clear();
+	npcList.clear();
+	
 }
 
 void BattleScene::Update()
 {
-
-	gameUI->Update();
-
-	COMSYS->Update();
-	GAMESYS->Update();
-	//
-	std::list< Component*>::iterator it;
-	for (it = stageComponentList.begin(); it != stageComponentList.end(); it++)
-	{
-		(*it)->Update();
-	}
-
-	EFFECTMANAGER->Update();
 	if (GAMESYS->GameOver())
 	{
-		SCENEMANAGER->ChangeScene(TEXT("TitleScene"));
+		pause = true;
+		deltaTime -= TIMEMANAGER->GetElapsedTime();
+		if (deltaTime <= 0)
+		{
+			SCENEMANAGER->ChangeScene(TEXT("TitleScene"));
+			deltaTime = 1.5f;
+			return;
+		}
 	}
 
 	if (GAMESYS->GameClear())
 	{
-		SCENEMANAGER->ChangeScene(TEXT("QusetScene"));
+		pause = true;
+		deltaTime -= TIMEMANAGER->GetElapsedTime();
+		if (deltaTime <= 0)
+		{
+			deltaTime = 1.5f;
+			if (EVENTSYS->GetQusetNumber() >= 4)
+			{
+				SCENEMANAGER->ChangeScene(TEXT("EndScene"));
+
+			}
+			else
+			{
+				SCENEMANAGER->ChangeScene(TEXT("QusetScene"));
+				return;
+
+			}
+		}
 	}
+	gameUI->Update();
+
+	COMSYS->Update();
+	GAMESYS->Update();
+
+	if (!pause)
+	{
+		//
+		std::list< Component*>::iterator it;
+		for (it = stageComponentList.begin(); it != stageComponentList.end(); it++)
+		{
+			(*it)->Update();
+		}
+	}
+	
+
+	EFFECTMANAGER->Update();
+
 
 }
 

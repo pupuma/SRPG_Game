@@ -14,7 +14,7 @@
 
 GameSystem::GameSystem()
 {
-	
+
 }
 
 
@@ -24,14 +24,17 @@ GameSystem::~GameSystem()
 
 void GameSystem::Init()
 {
+	hpDrinkCount = 0;
+	mpDrinkCount = 0;
 	isAction = false;
 	isAttacking = false;
 	round = 1;
+	index = 0;
 	currentCharacterIndex = 0;
 	isMove = false;
 	isHeal = false;
 	isClickCharacter = false;
-
+	isItem = false;
 	{
 
 		std::vector<std::string> recordList = RESOURCEMANAGER->FindScript(TEXT("SkillInfo"));
@@ -42,9 +45,11 @@ void GameSystem::Init()
 		int skillNumber;
 		int skillDamage;
 		std::string text;
+		int frameX;
+		int frameY;
 		int iLine = 1;
 
-		while (iLine != recordList.size() - 1)
+		while (iLine <= recordList.size() - 1)
 		{
 			strcpy_s(record, recordList[iLine].c_str());
 
@@ -60,12 +65,25 @@ void GameSystem::Init()
 			token = strtok(NULL, ",");
 			text = token;
 
+			token = strtok(NULL, ",");
+			frameX = atoi(token);
+
+
+			token = strtok(NULL, ",");
+			frameY = atoi(token);
+
+
+
 			skillInfo.jobs = job;
 			skillInfo.number = skillNumber;
 			skillInfo.damage = skillDamage;
 			skillInfo.text = text;
+			skillInfo.frameX = frameX;
+			skillInfo.frameY = frameY;
+			
 			m_Skill[iLine] = skillInfo;
 			iLine++;
+
 		}
 	}
 }
@@ -105,6 +123,28 @@ void GameSystem::Update()
 	
 	// 저장된 정보를 출력
 	// 이미지 정보 및 체력, MP, AP 정보 출력 
+}
+void GameSystem::Reset()
+{
+	for (auto a : playerList)
+	{
+		//a->Release();
+	}
+	playerList.clear();
+
+	for (auto a :npcList)
+	{
+	//	a->Release();
+	}
+	npcList.clear();
+
+	for (auto a : monsterList)
+	{
+		//a->Release();
+	}
+	monsterList.clear();
+
+	characterList.clear();
 }
 void GameSystem::SetMousePosition(LPARAM lParam)
 {
@@ -381,13 +421,38 @@ TileCell* GameSystem::CharacterPrioritySort(Character * _character)
 		}
 	}
 
+
+	std::vector<int> dataList;
+	int data = 0;
+	for (auto a : selectTargetList)
+	{
+		data = UTIL::GetDistance(_character->GetTilePosition().x, _character->GetTilePosition().y,
+			a->GetTilePosition().x, a->GetTilePosition().y);
+		dataList.push_back(data);
+	}
+
+	int count = 0;
+	Character* temp2 = 0;
+	for (size_t i = 0; i < dataList.size(); i++)
+	{
+		for (size_t j = 0; j < dataList.size() - 1; j++)
+		{
+			if (dataList[i] < dataList[j])
+			{
+				temp2 = selectTargetList[j];
+				selectTargetList[j] = selectTargetList[j + 1];
+				selectTargetList[j + 1] = temp2;            // 다음 요소로 보냄
+			}
+		}
+	}
+
 	//
 	TileCell* tileCell = NULL;
 
 
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
-	targetTileCell = map->FindTileCell(selectTargetList[0]->GetTilePosition());
+	targetTileCell = map->FindTileCell(selectTargetList[index]->GetTilePosition());
 	std::list<TileInfo> finderList = map->GetOpenTileCellList();
 
 	map->MapSearchClear();
@@ -398,7 +463,7 @@ TileCell* GameSystem::CharacterPrioritySort(Character * _character)
 		{
 			for (int direction = 0; direction < (int)eDirection::DIR_NONE; direction++)
 			{
-				TilePoint currentTilePosition = selectTargetList[0]->GetTilePosition();
+				TilePoint currentTilePosition = selectTargetList[index]->GetTilePosition();
 				TilePoint searchTilePosision = map->GetSearchTilePositionByDirection(currentTilePosition, (eDirection)direction);
 				TileCell*  searchTileCell = map->FindTileCell(searchTilePosision);
 
@@ -432,10 +497,43 @@ TileCell* GameSystem::CharacterSelectTileCell(Character* _character)
 	//
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(TEXT("Map"));
 
-	TileCell* target = map->FindTileCell(playerList[0]->GetTilePosition());
+	std::vector<int> dataList;
+	int data = 0;
+	for (auto a : playerList)
+	{
+		data = UTIL::GetDistance(_character->GetTilePosition().x, _character->GetTilePosition().y,
+			a->GetTilePosition().x, a->GetTilePosition().y);
+		dataList.push_back(data);
+	}
 
-	
+	int count = 0;
+	Character* temp2 = 0;
+	for (size_t i = 0; i < dataList.size(); i++)
+	{
+		for (size_t j = 0; j < dataList.size() - 1; j++)
+		{
+			if (dataList[i] < dataList[j])
+			{
+				temp2 = playerList[j];
+				playerList[j] = playerList[j + 1];
+				playerList[j + 1] = temp2;            // 다음 요소로 보냄
+			}
+		}
+	}
+
+	TileCell* target;
+	if (temp2 != NULL)
+	{
+		target = map->FindTileCell(temp2->GetTilePosition());
+
+	}
+	else
+	{
+		target = map->FindTileCell(playerList[0]->GetTilePosition());
+
+	}
 	_character->SetTargetCharacterTileCell(target);
+
 
 	int distanceCount = 0;
 	// 내가 갈 수 없는 상황 
@@ -510,6 +608,29 @@ bool GameSystem::AttackRangeCheck(Character* _character)
 	
 	std::vector<TileInfo> attackList = map->GetAttackList();
 
+	std::vector<int> dataList;
+	int data = 0;
+	for (auto a : selectTargetList)
+	{
+		data = UTIL::GetDistance(_character->GetTilePosition().x, _character->GetTilePosition().y,
+			a->GetTilePosition().x, a->GetTilePosition().y);
+		dataList.push_back(data);
+	}
+
+	int count = 0;
+	Character* temp = 0;
+	for (size_t i = 0; i < dataList.size(); i++)
+	{
+		for (size_t j = 0; j < dataList.size() - 1; j++)
+		{
+			if (dataList[i] > dataList[j])
+			{
+				temp = selectTargetList[j];
+				selectTargetList[j] = selectTargetList[j + 1];
+				selectTargetList[j + 1] = temp;            // 다음 요소로 보냄
+			}
+		}
+	}
 
 	if(NULL == _character->GetTargetCharacterTileCell())
 	{
@@ -517,9 +638,9 @@ bool GameSystem::AttackRangeCheck(Character* _character)
 		{
 			for (auto a : attackList)
 			{
-				if (a.tile->GetTilePosition() == selectTargetList[0]->GetTilePosition())
+				if (a.tile->GetTilePosition() == selectTargetList[index]->GetTilePosition())
 				{
-					_character->SetTargetCharacterTileCell(map->FindTileCell(selectTargetList[0]->GetTilePosition()));
+					_character->SetTargetCharacterTileCell(map->FindTileCell(selectTargetList[index]->GetTilePosition()));
 					return true;
 				}
 			}
@@ -532,7 +653,18 @@ bool GameSystem::AttackRangeCheck(Character* _character)
 	}
 	else
 	{
-		_character->SetTargetCharacterTileCell(map->FindTileCell(playerList[0]->GetTilePosition()));
+		if (!selectTargetList.empty())
+		{
+			for (auto a : attackList)
+			{
+				if (a.tile->GetTilePosition() == selectTargetList[index]->GetTilePosition())
+				{
+					_character->SetTargetCharacterTileCell(map->FindTileCell(selectTargetList[index]->GetTilePosition()));
+					break;
+				}
+			}
+		}
+		//_character->SetTargetCharacterTileCell(map->FindTileCell(playerList[0]->GetTilePosition()));
 
 		for (auto a : attackList)
 		{
@@ -757,5 +889,33 @@ void GameSystem::DeleteCharacter(Character * _character)
 			break;
 		}
 	}
+}
+
+bool GameSystem::SkillCheck(int _index)
+{
+	Character* character = GameTurnManager::GetSingleton()->GetTurn();
+
+	switch (_index)
+	{
+	case 1:
+		if (character->GetMp() >= 10)
+		{
+			return true;
+		}
+		break;
+	case 2:
+		if (character->GetMp() >= 20)
+		{
+			return true;
+		}
+		break;
+	case 3:
+		if (character->GetMp() >= 30)
+		{
+			return true;
+		}
+		break;
+	}
+	return false;
 }
 

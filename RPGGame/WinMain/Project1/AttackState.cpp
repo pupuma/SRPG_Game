@@ -40,7 +40,18 @@ void AttackState::Start()
 		POINT pt = { (targetList[0]->GetPosition().x + 48 / 2),(targetList[0]->GetPosition().y + 48 / 2) };
 		if (character->GetComponetType() == eComponentType::CT_PLAYER)
 		{
-			EFFECTMANAGER->Play(TEXT("ClawSpecial1"), pt);
+			if (character->GetJobs() == eJobClass::JOB_WARRIOR)
+			{
+				EFFECTMANAGER->Play(TEXT("ClawSpecial1"), pt);
+			}
+			else if (character->GetJobs() == eJobClass::JOB_ARCHER)
+			{
+				EFFECTMANAGER->Play(TEXT("ClawSpecial2"), pt);
+			}
+			else if (character->GetJobs() == eJobClass::JOB_HEALER)
+			{
+				EFFECTMANAGER->Play(TEXT("Cure1"), pt);
+			}
 		}
 		else if (character->GetComponetType() == eComponentType::CT_MONSTER)
 		{

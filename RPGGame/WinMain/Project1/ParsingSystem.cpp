@@ -93,11 +93,11 @@ void ParsingSystem::TalkParsing(std::string _fileName)
 
 
 
-	int iLine = 2;
+	int iLine = 1;
 	int iCount = 0;
-	while (iLine != recordList.size() - 1)
+	while (iLine != recordList.size())
 	{
-		q_Talk.push(recordList[iLine-1]);
+		q_Talk.push(recordList[iLine]);
 		iLine++;
 	}
 }

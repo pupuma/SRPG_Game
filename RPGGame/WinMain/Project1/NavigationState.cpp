@@ -104,6 +104,7 @@ void NavigationState::Update()
 				character->AttackPattern();
 				nextState = eStateType::ST_PATHFINDING;
 				GAMESYS->SetMove(true);
+				targetMoveCell = NULL;
 			}
 			else
 			{

@@ -9,7 +9,8 @@ class BattleScene
 private:
 	GameUI* gameUI;
 	Map* map;
-
+	float deltaTime;
+	bool pause;
 private:
 	std::list<Component*> stageComponentList;
 

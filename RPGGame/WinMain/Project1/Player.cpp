@@ -53,8 +53,8 @@ bool Player::Init(int _index)
 		img = GAMESYS->FindCharacterImage(_index,this);
 		img->SetX(48);
 		img->SetY(48);
-		img->SetFrameX(0);
-		img->SetFrameY(0);
+		img->SetFrameX(frameX);
+		img->SetFrameY(frameY);
 
 		InitState();
 		eType = eStateType::ST_PATH_IDLE;
@@ -67,6 +67,25 @@ bool Player::Init(int _index)
 	}
 
 	return true;
+}
+
+void Player::Render(HDC hdc)
+{
+	{
+		//img->Render(hdc);
+		state->Render(hdc);
+
+		if (eStateType::ST_DEAD != eType)
+		{
+			if (IsLive())
+			{
+				img->FrameRender(hdc, position.x - CAMERA->GetPosition()->x, position.y - CAMERA->GetPosition()->y,
+					frameX, frameY);
+			}
+
+		}
+
+	}
 }
 
 void Player::UpdateAI()
@@ -230,41 +249,50 @@ void Player::SkillPattern(int _number)
 
 	if (job == eJobClass::JOB_WARRIOR)
 	{
+		GAMESYS->SetHeal(false);
+
 		switch (_number)
 		{
 		case 1:
 			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
 			map->SetSkillRange(skillList1);
+			SetSkillDamagePoint(10);
 			break;
 		case 2:
 			skillList2 = SkillSystem::GetSingleton()->NomalSkillRange(this);
 			map->SetSkillRange(skillList2);
-
+			SetSkillDamagePoint(20);
 			break;
 		case 3:
 			skillList3 = SkillSystem::GetSingleton()->BoxSkillRange(this);
 			map->SetSkillRange(skillList3);
-
+			SetSkillDamagePoint(30);
 			break;
 		}
 	}
 	else if (job == eJobClass::JOB_ARCHER)
 	{
+		GAMESYS->SetHeal(false);
+
 		switch (_number)
 		{
 		case 1:
 			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
 			map->SetSkillRange(skillList1);
+			SetSkillDamagePoint(10);
+
 			// Damage
 			break;
 		case 2:
 			skillList2 = SkillSystem::GetSingleton()->BoxSkillRange(this);
 			map->SetSkillRange(skillList2);
+			SetSkillDamagePoint(20);
 
 			break;
 		case 3:
 			skillList3 = SkillSystem::GetSingleton()->StraightAttackSkillRange(this);
 			map->SetSkillRange(skillList3);
+			SetSkillDamagePoint(30);
 
 			break;
 		}
@@ -276,22 +304,30 @@ void Player::SkillPattern(int _number)
 		case 1:
 			skillList1 = SkillSystem::GetSingleton()->NomalSkillRange(this);
 			map->SetSkillRange(skillList1);
+			healPoint = 10;
+			GAMESYS->SetHeal(true);
 
 			break;
 		case 2:
 			skillList2 = SkillSystem::GetSingleton()->BoxSkillRange(this);
 			map->SetSkillRange(skillList2);
+			healPoint = 20;
+			GAMESYS->SetHeal(true);
 
 			break;
 		case 3:
 			skillList3 = SkillSystem::GetSingleton()->BuffSkillRange(this);
 			map->SetSkillRange(skillList3);
+			healPoint = 30;
+			GAMESYS->SetHeal(true);
 
 			break;
 		}
 	}
 	else if (job == eJobClass::JOB_MAGIC)
 	{
+		GAMESYS->SetHeal(false);
+
 		switch (_number)
 		{
 		case 1:

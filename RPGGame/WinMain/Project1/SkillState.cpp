@@ -2,7 +2,7 @@
 #include "SkillState.h"
 
 #include "Character.h"
-
+#include "GameTurnManager.h"
 
 SkillState::SkillState(Character* _character)
 	: State(_character)
@@ -17,7 +17,24 @@ SkillState::~SkillState()
 void SkillState::Start()
 {
 	State::Start();
-
+	int index = GameTurnManager::GetSingleton()->GetSkillIndex();
+	int dcMp;
+	switch (index)
+	{
+	case 1:
+		dcMp = 10;
+		break;
+	case 2:
+		dcMp = 20;
+		break;
+	case 3:
+		dcMp = 30;
+		break;
+	default:
+		dcMp = 0;
+		break;
+	}
+	character->DecreaseMp(dcMp);
 	std::vector<Component*> targetList = GAMESYS->SkillListTarget(character->GetTargetList(), character);
 
 
@@ -32,18 +49,107 @@ void SkillState::Start()
 		param.sender = character;
 		param.receiver = targetList[i];
 		param.message = TEXT("Skill");
-		param.attackPoint = character->GetAttackPoint();
-		param.healPoint = character->GetHealPoint();
+		if (character->GetHealPoint() > 0)
+		{
+			param.healPoint = character->GetHealPoint();
+			param.attackPoint = 0;
+		}
+		else
+		{
+			param.healPoint = 0;
+			param.attackPoint = character->GetSkillDamgePoint();
+		}
 		ComponentSystem::GetInstance()->SendMsg(param);
 
 
 	}
-	for (size_t i = 0; i < targetList.size(); i++)
-	{
-		POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
-		EFFECTMANAGER->Play(TEXT("Darkness1"), pt);
 
+	character->SetHealPoint(0);
+
+	if (character->GetJobs() == eJobClass::JOB_WARRIOR)
+	{
+		if (GameTurnManager::GetSingleton()->GetSkillIndex() == 1)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Darkness1"), pt);
+			}
+		}
+		else if (GameTurnManager::GetSingleton()->GetSkillIndex() == 2)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Darkness2"), pt);
+			}
+		}
+		else if (GameTurnManager::GetSingleton()->GetSkillIndex() == 3)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Darkness3"), pt);
+			}
+		}
+		
 	}
+	else if (character->GetJobs() == eJobClass::JOB_ARCHER)
+	{
+		if (GameTurnManager::GetSingleton()->GetSkillIndex() == 1)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Fire1"), pt);
+			}
+		}
+		else if (GameTurnManager::GetSingleton()->GetSkillIndex() == 2)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Fire1"), pt);
+			}
+		}
+		else if (GameTurnManager::GetSingleton()->GetSkillIndex() == 3)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Fire1"), pt);
+			}
+		}
+	}
+	else if (character->GetJobs() == eJobClass::JOB_HEALER)
+	{
+		if (GameTurnManager::GetSingleton()->GetSkillIndex() == 1)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Holy1"), pt);
+			}
+		}
+		else if (GameTurnManager::GetSingleton()->GetSkillIndex() == 2)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Holy2"), pt);
+			}
+		}
+		else if (GameTurnManager::GetSingleton()->GetSkillIndex() == 3)
+		{
+			for (size_t i = 0; i < targetList.size(); i++)
+			{
+				POINT pt = { (targetList[i]->GetPosition().x + 48 / 2),(targetList[i]->GetPosition().y + 48 / 2) };
+				EFFECTMANAGER->Play(TEXT("Holy3"), pt);
+			}
+		}
+	}
+
+	
 
 	GAMESYS->SetSkilling(false);
 

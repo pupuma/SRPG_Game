@@ -24,6 +24,7 @@ bool QusetScene::Init()
 {
 	EventSystem::GetSingleton()->NextQusetNumber();
 	EventSystem::GetSingleton()->SetGameType(eGameType::GT_EVENT);
+
 	// map Parsing
 	EVENTSYS->MapDataInit();
 	frameX = 0;
@@ -46,15 +47,8 @@ bool QusetScene::Init()
 	monsterList = EVENTSYS->GetMonsterList();
 	npcList = EVENTSYS->GetNPCList();
 
-	//player = new Player(TEXT("Player"),0);
-	//player->SetTilePosition(6, 8);
 
-	//if (!player->Init())
-	//{
-	//	return false;
-	//}
 
-	//player->ChangeState(eStateType::ST_IDLE);
 	if (!playerList.empty())
 	{
 		for (size_t i = 0; i < playerList.size(); i++)
@@ -95,7 +89,7 @@ bool QusetScene::Init()
 	// 기본 세팅 
 	rcTextBox = RectMake(100, 480, (WINSIZEX-200), 300);
 	rcCharacterBox = RectMake(100, 180, 288, 288);
-	rcNameBox = RectMake(1000, 410, 100, 50);
+	rcNameBox = RectMake(1000, 410, 125, 50);
 	rcDrawText = RectMake(120, 500, (WINSIZEX - 240), 260);
 	EVENTSYS->SetEvent(true);
 
@@ -210,7 +204,7 @@ void QusetScene::Render(HDC hdc)
 
 		//
 		FontManager::GetSingleton()->RenderTextBox(hdc, TEXT("NBG"), characterName, &rcNameBox, RGB(255, 255, 255));
-		FontManager::GetSingleton()->RenderTextBox(hdc, TEXT("NBG"), count, text, &rcDrawText, RGB(255, 0, 0));
+		FontManager::GetSingleton()->RenderTextBox(hdc, TEXT("NBG"), count, text, &rcDrawText, RGB(0, 0, 0));
 		if (deltaTime > 0)
 		{
 			//FontManager::GetSingleton()->RenderTextBox(hdc, TEXT("NBG"), text, &rcDrawText, RGB(100, 100, 100));

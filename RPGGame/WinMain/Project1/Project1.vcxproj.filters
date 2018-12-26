@@ -282,9 +282,6 @@
     <ClCompile Include="BattleScene.cpp">
       <Filter>MainGame\01.Scene</Filter>
     </ClCompile>
-    <ClCompile Include="LogoScene.cpp">
-      <Filter>MainGame\01.Scene</Filter>
-    </ClCompile>
     <ClCompile Include="QusetScene.cpp">
       <Filter>MainGame\01.Scene</Filter>
     </ClCompile>
@@ -305,6 +302,12 @@
     </ClCompile>
     <ClCompile Include="HpBar.cpp">
       <Filter>MainGame\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="LogoScene.cpp">
+      <Filter>MainGame\01.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EndScene.cpp">
+      <Filter>MainGame\01.Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,9 +491,6 @@
     <ClInclude Include="BattleScene.h">
       <Filter>MainGame\01.Scene</Filter>
     </ClInclude>
-    <ClInclude Include="LogoScene.h">
-      <Filter>MainGame\01.Scene</Filter>
-    </ClInclude>
     <ClInclude Include="QusetScene.h">
       <Filter>MainGame\01.Scene</Filter>
     </ClInclude>
@@ -514,6 +514,12 @@
     </ClInclude>
     <ClInclude Include="SelectStateButton.h">
       <Filter>MainGame\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="LogoScene.h">
+      <Filter>MainGame\01.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EndScene.h">
+      <Filter>MainGame\01.Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

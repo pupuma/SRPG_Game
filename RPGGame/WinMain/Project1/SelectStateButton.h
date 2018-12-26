@@ -42,11 +42,23 @@ private:
 	Image* imgSelectSkillButton;
 	Image* imgSelectItemButton;
 	Image* imgSelectEndButton;
+
+private:
+	Image* imgSkill1;
+	Image* imgSkill2;
+	Image* imgSkill3;
 private:
 	// Skill
 	RECT rcSkill1;
 	RECT rcSkill2;
 	RECT rcSkill3;
+
+	RECT rcItem1;
+	RECT rcItem2;
+
+	Image* imgItem1;
+	Image* imgItem2;
+
 private:
 
 private:

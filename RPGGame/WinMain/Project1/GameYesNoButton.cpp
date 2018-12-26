@@ -4,7 +4,7 @@
 
 #include "GameTurnManager.h"
 #include "ButtonManager.h"
-
+#include "Character.h"
 GameYesNoButton::GameYesNoButton()
 {
 
@@ -34,6 +34,11 @@ bool GameYesNoButton::Init()
 	imgNoButton = IMAGEMANAGER->FindImage(TEXT("NoButton"));
 	
 	return true;
+}
+
+void GameYesNoButton::Release()
+{
+	
 }
 
 void GameYesNoButton::Update()
@@ -126,7 +131,50 @@ void GameYesNoButton::Update()
 
 					}
 				}
-				
+				else if (ButtonManager::GetSingleton()->GetButtonTypeActive() == eButtonActive::BA_ITEM)
+				{
+					if (KEYMANAGER->IsOnceKeyDown(VK_LBUTTON))
+					{
+						yesButtonFrameX = 1;
+						direction = BUTTONDIR_DOWN;
+
+					}
+					else if (KEYMANAGER->IsOnceKeyUp(VK_LBUTTON) && direction == BUTTONDIR_DOWN)
+					{
+						direction = BUTTONDIR_UP;
+						yesButtonFrameX = 0;
+						//ButtonManager::GetSingleton()->SetAttackButton(false);
+						//GAMESYS->SetAction(true);
+
+						GAMESYS->SetAttacking(true);
+						if (!GAMESYS->GetMove())
+						{
+							//GAMESYS->SetMove(true);
+							if (GAMESYS->GetItemType() == eItemType::ITEM_HP)
+							{
+								GameTurnManager::GetSingleton()->GetTurn()->InCreaseHP(30);
+								GAMESYS->SetHpDrinkCount(GAMESYS->GetHpDrinkCount() - 1);
+							}
+							else if (GAMESYS->GetItemType() == eItemType::ITEM_MP)
+							{
+								GameTurnManager::GetSingleton()->GetTurn()->InCreaseMp(30);
+								GAMESYS->SetMpDrinkCount(GAMESYS->GetMpDrinkCount() - 1);
+
+							}
+						}
+
+						ButtonManager::GetSingleton()->SetSelectActive(false);
+
+					}
+
+					if (direction == BUTTONDIR_UP)
+					{
+						yesButtonFrameX = 0;
+						direction = BUTTONDIR_NONE;
+
+					}
+				}
+
 			}
 		}
 
